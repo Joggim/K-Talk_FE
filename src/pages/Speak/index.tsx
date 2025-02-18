@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   Container,
@@ -34,6 +34,8 @@ const SpeakPage: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [userText, setUserText] = useState<string | null>(null);
+  const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
@@ -44,6 +46,7 @@ const SpeakPage: React.FC = () => {
   const startRecording = async () => {
     setRecordedAudio(null);
     setFeedback(null);
+    setUserText(null);
     setIsRecording(true);
     audioChunksRef.current = [];
 
@@ -81,8 +84,32 @@ const SpeakPage: React.FC = () => {
 
   const analyzeAudio = () => {
     setTimeout(() => {
+      setUserText(dummyAudio.analysis.data.text);
       setFeedback(dummyAudio.analysis.data.feedback);
     }, 2000);
+  };
+
+  const compareText = (original: string, userText: string) => {
+    if (!userText) return [];
+    return original.split('').map((char, index) => ({
+      char,
+      correct: userText[index] === char, // 해당 글자가 맞으면 true, 틀리면 false
+    }));
+  };
+  const comparedText = userText ? compareText(korean, userText) : null;
+
+  useEffect(() => {
+    if (recordedAudio && audioPlayerRef.current) {
+      audioPlayerRef.current.src = recordedAudio;
+    }
+  }, [recordedAudio]);
+
+  const playRecordedAudio = () => {
+    if (recordedAudio && audioPlayerRef.current) {
+      audioPlayerRef.current.play().catch((error) => {
+        console.error('오디오 재생 오류:', error);
+      });
+    }
   };
 
   const handlePrev = () => {
@@ -97,8 +124,26 @@ const SpeakPage: React.FC = () => {
     <Container>
       <TopBar />
       <Card>
-        <Korean $variant="headingXL" color={theme.colors.text.tertiary}>
-          {korean}
+        <Korean>
+          {!comparedText ? (
+            <StyledText $variant="headingXL" color={theme.colors.text.tertiary}>
+              {korean}
+            </StyledText>
+          ) : (
+            comparedText.map((charInfo, index) => (
+              <StyledText
+                key={index}
+                $variant="headingXL"
+                color={
+                  charInfo.correct
+                    ? theme.colors.state.success // 맞으면 초록색
+                    : theme.colors.state.error // 틀리면 빨간색
+                }
+              >
+                {charInfo.char}
+              </StyledText>
+            ))
+          )}
         </Korean>
 
         {feedback && (
@@ -120,7 +165,7 @@ const SpeakPage: React.FC = () => {
             </AudioItem>
           )}
           {recordedAudio && (
-            <AudioItem>
+            <AudioItem onClick={playRecordedAudio}>
               <MySound color={theme.colors.brand.primary} />
               <StyledText
                 $variant="bodyMediumRegular"

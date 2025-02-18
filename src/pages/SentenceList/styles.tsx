@@ -21,5 +21,5 @@ export const SentenceList = styled.div`
   flex-shrink: 0;
   margin-top: 46px;
   padding-bottom: 140px;
-  background-color: ${({ theme }) => theme.colors.background.black3};
+  background-color: ${({ theme }) => theme.colors.bg.black3};
 `;
