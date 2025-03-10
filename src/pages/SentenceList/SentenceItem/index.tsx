@@ -5,11 +5,15 @@ import { SentenceItemProps } from './dto';
 import { StyledText } from '../../../components/StyledText/StyledText.styles';
 import theme from '../../../styles/theme';
 
-const SentenceItem: React.FC<SentenceItemProps> = ({ korean, translation }) => {
+const SentenceItem: React.FC<SentenceItemProps> = ({
+  korean,
+  translation,
+  index,
+}) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/speak/', { state: { korean, translation } });
+    navigate('/speak', { state: { korean, translation, index } });
   };
 
   return (

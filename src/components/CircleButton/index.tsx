@@ -7,10 +7,16 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   bgColor,
   icon,
   onClick,
+  disabled = false,
 }) => {
   return (
-    <Container size={size} bgColor={bgColor} onClick={onClick}>
-      <IconWrapper size={size}>{icon}</IconWrapper>
+    <Container
+      $size={size}
+      $bgColor={bgColor}
+      onClick={!disabled ? onClick : undefined}
+      disabled={disabled}
+    >
+      <IconWrapper $size={size}>{icon}</IconWrapper>
     </Container>
   );
 };

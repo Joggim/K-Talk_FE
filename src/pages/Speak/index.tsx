@@ -21,14 +21,19 @@ import MySound from '../../components/Icons/MySound';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
 import ArrowRight from '../../components/Icons/ArrowRight';
 import theme from '../../styles/theme';
+import { dummySentences } from '../SentenceList/dummySentences';
 import { dummyAudio } from './dummyAudio';
 
 const SpeakPage: React.FC = () => {
   const location = useLocation();
-  const { korean, translation } = location.state || {
-    korean: '문장이 없습니다.',
-    translation: 'No translation available.',
-  };
+  const initialIndex = location.state?.index ?? 0;
+
+  const [currentSentenceIndex, setCurrentSentenceIndex] =
+    useState<number>(initialIndex);
+  const [korean, setKorean] = useState(dummySentences[initialIndex].korean);
+  const [translation, setTranslation] = useState(
+    dummySentences[initialIndex].translation
+  );
 
   const [audioUrl, setAudioUrl] = useState(dummyAudio.generated.audioUrl);
   const [isRecording, setIsRecording] = useState(false);
@@ -39,8 +44,21 @@ const SpeakPage: React.FC = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
+  // 🔹 인덱스가 변경될 때 문장 업데이트
+  useEffect(() => {
+    setKorean(dummySentences[currentSentenceIndex].korean);
+    setTranslation(dummySentences[currentSentenceIndex].translation);
+  }, [currentSentenceIndex]);
+
   const playAudio = () => {
     new Audio(audioUrl).play();
+  };
+
+  const resetAudioAndFeedback = () => {
+    setUserText(null);
+    setFeedback(null);
+    setRecordedAudio(null);
+    setAudioUrl(dummyAudio.generated.audioUrl);
   };
 
   const startRecording = async () => {
@@ -113,11 +131,17 @@ const SpeakPage: React.FC = () => {
   };
 
   const handlePrev = () => {
-    console.log('prev');
+    if (currentSentenceIndex > 0) {
+      setCurrentSentenceIndex((prevIndex) => prevIndex - 1);
+      resetAudioAndFeedback();
+    }
   };
 
   const handleNext = () => {
-    console.log('next');
+    if (currentSentenceIndex < dummySentences.length - 1) {
+      setCurrentSentenceIndex((prevIndex) => prevIndex + 1);
+      resetAudioAndFeedback();
+    }
   };
 
   return (
@@ -191,6 +215,7 @@ const SpeakPage: React.FC = () => {
               bgColor={theme.colors.bg.black3}
               icon={<ArrowLeft color={theme.colors.gray[500]} />}
               onClick={handlePrev}
+              disabled={currentSentenceIndex === 0}
             />
           )}
           <CircleButton
@@ -213,6 +238,7 @@ const SpeakPage: React.FC = () => {
               bgColor={theme.colors.bg.black3}
               icon={<ArrowRight color={theme.colors.gray[500]} />}
               onClick={handleNext}
+              disabled={currentSentenceIndex === dummySentences.length - 1}
             />
           )}
         </ButtonContainer>

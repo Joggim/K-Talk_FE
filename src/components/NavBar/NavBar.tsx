@@ -22,7 +22,6 @@ const NavBar: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const currentUserId = getCurrentUserId();
 
   const tabs = [
     {
@@ -59,7 +58,7 @@ const NavBar: React.FC = () => {
           }
         />
       ),
-      route: `/my-page/${currentUserId}`,
+      route: `/my-page`,
     },
   ];
 
