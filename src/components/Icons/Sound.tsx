@@ -21,8 +21,8 @@ const Sound: React.FC<IconsProps> = ({
       <path
         d="M18.67 10.58C19.8363 11.7462 20.4943 13.3262 20.5007 14.9755C20.507 16.6248 19.8611 18.2098 18.7038 19.385M23.8213 7.92871C25.6873 9.79454 26.7402 12.3223 26.7505 14.9611C26.7608 17.5999 25.7277 20.1359 23.8763 22.0162"
         stroke={color}
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );

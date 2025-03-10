@@ -3,4 +3,5 @@ export interface CircleButtonProps {
   bgColor: string;
   icon: React.ReactNode;
   onClick?: () => void;
+  disabled?: boolean;
 }

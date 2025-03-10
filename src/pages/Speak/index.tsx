@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   Container,
@@ -21,29 +21,50 @@ import MySound from '../../components/Icons/MySound';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
 import ArrowRight from '../../components/Icons/ArrowRight';
 import theme from '../../styles/theme';
+import { dummySentences } from '../SentenceList/dummySentences';
 import { dummyAudio } from './dummyAudio';
 
 const SpeakPage: React.FC = () => {
   const location = useLocation();
-  const { korean, translation } = location.state || {
-    korean: '문장이 없습니다.',
-    translation: 'No translation available.',
-  };
+  const initialIndex = location.state?.index ?? 0;
+
+  const [currentSentenceIndex, setCurrentSentenceIndex] =
+    useState<number>(initialIndex);
+  const [korean, setKorean] = useState(dummySentences[initialIndex].korean);
+  const [translation, setTranslation] = useState(
+    dummySentences[initialIndex].translation
+  );
 
   const [audioUrl, setAudioUrl] = useState(dummyAudio.generated.audioUrl);
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [userText, setUserText] = useState<string | null>(null);
+  const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+
+  // 🔹 인덱스가 변경될 때 문장 업데이트
+  useEffect(() => {
+    setKorean(dummySentences[currentSentenceIndex].korean);
+    setTranslation(dummySentences[currentSentenceIndex].translation);
+  }, [currentSentenceIndex]);
 
   const playAudio = () => {
     new Audio(audioUrl).play();
   };
 
+  const resetAudioAndFeedback = () => {
+    setUserText(null);
+    setFeedback(null);
+    setRecordedAudio(null);
+    setAudioUrl(dummyAudio.generated.audioUrl);
+  };
+
   const startRecording = async () => {
     setRecordedAudio(null);
     setFeedback(null);
+    setUserText(null);
     setIsRecording(true);
     audioChunksRef.current = [];
 
@@ -81,24 +102,72 @@ const SpeakPage: React.FC = () => {
 
   const analyzeAudio = () => {
     setTimeout(() => {
+      setUserText(dummyAudio.analysis.data.text);
       setFeedback(dummyAudio.analysis.data.feedback);
     }, 2000);
   };
 
+  const compareText = (original: string, userText: string) => {
+    if (!userText) return [];
+    return original.split('').map((char, index) => ({
+      char,
+      correct: userText[index] === char, // 해당 글자가 맞으면 true, 틀리면 false
+    }));
+  };
+  const comparedText = userText ? compareText(korean, userText) : null;
+
+  useEffect(() => {
+    if (recordedAudio && audioPlayerRef.current) {
+      audioPlayerRef.current.src = recordedAudio;
+    }
+  }, [recordedAudio]);
+
+  const playRecordedAudio = () => {
+    if (recordedAudio && audioPlayerRef.current) {
+      audioPlayerRef.current.play().catch((error) => {
+        console.error('오디오 재생 오류:', error);
+      });
+    }
+  };
+
   const handlePrev = () => {
-    console.log('prev');
+    if (currentSentenceIndex > 0) {
+      setCurrentSentenceIndex((prevIndex) => prevIndex - 1);
+      resetAudioAndFeedback();
+    }
   };
 
   const handleNext = () => {
-    console.log('next');
+    if (currentSentenceIndex < dummySentences.length - 1) {
+      setCurrentSentenceIndex((prevIndex) => prevIndex + 1);
+      resetAudioAndFeedback();
+    }
   };
 
   return (
     <Container>
       <TopBar />
       <Card>
-        <Korean $variant="headingXL" color={theme.colors.text.tertiary}>
-          {korean}
+        <Korean>
+          {!comparedText ? (
+            <StyledText $variant="headingXL" color={theme.colors.text.tertiary}>
+              {korean}
+            </StyledText>
+          ) : (
+            comparedText.map((charInfo, index) => (
+              <StyledText
+                key={index}
+                $variant="headingXL"
+                color={
+                  charInfo.correct
+                    ? theme.colors.state.success // 맞으면 초록색
+                    : theme.colors.state.error // 틀리면 빨간색
+                }
+              >
+                {charInfo.char}
+              </StyledText>
+            ))
+          )}
         </Korean>
 
         {feedback && (
@@ -120,7 +189,7 @@ const SpeakPage: React.FC = () => {
             </AudioItem>
           )}
           {recordedAudio && (
-            <AudioItem>
+            <AudioItem onClick={playRecordedAudio}>
               <MySound color={theme.colors.brand.primary} />
               <StyledText
                 $variant="bodyMediumRegular"
@@ -146,6 +215,7 @@ const SpeakPage: React.FC = () => {
               bgColor={theme.colors.bg.black3}
               icon={<ArrowLeft color={theme.colors.gray[500]} />}
               onClick={handlePrev}
+              disabled={currentSentenceIndex === 0}
             />
           )}
           <CircleButton
@@ -168,6 +238,7 @@ const SpeakPage: React.FC = () => {
               bgColor={theme.colors.bg.black3}
               icon={<ArrowRight color={theme.colors.gray[500]} />}
               onClick={handleNext}
+              disabled={currentSentenceIndex === dummySentences.length - 1}
             />
           )}
         </ButtonContainer>

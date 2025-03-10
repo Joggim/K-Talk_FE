@@ -15,6 +15,7 @@ const SentenceListPage: React.FC = () => {
             key={index}
             korean={sentence.korean}
             translation={sentence.translation}
+            index={index}
           />
         ))}
       </SentenceList>

@@ -11,7 +11,7 @@ export const Container = styled.div<ContainerProps>`
   align-items: center;
   align-self: stretch;
   border-radius: 16px;
-  background-color: ${({ theme }) => theme.colors.background.white};
+  background-color: ${({ theme }) => theme.colors.bg.white};
   cursor: pointer;
 `;
 

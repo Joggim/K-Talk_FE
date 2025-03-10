@@ -174,21 +174,21 @@ const theme: DefaultTheme = {
       line-height: 1.4;
       letter-spacing: -0.0025rem;
     `,
-    captionMedium: css`
+    captionSemiBold: css`
       font-family: 'Pretendard Variable';
       font-size: 14px;
       font-weight: 600; /* Semi-bold */
       line-height: 1.4;
       letter-spacing: -0.0025rem;
     `,
-    captionRegular: css`
+    captionMedium: css`
       font-family: 'Pretendard Variable';
       font-size: 14px;
       font-weight: 500; /* Medium */
       line-height: 1.4;
       letter-spacing: -0.0025rem;
     `,
-    captionLight: css`
+    captionRegular: css`
       font-family: 'Pretendard Variable';
       font-size: 14px;
       font-weight: 400; /* Regular */

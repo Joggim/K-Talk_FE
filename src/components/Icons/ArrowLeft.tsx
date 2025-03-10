@@ -17,9 +17,9 @@ const ArrowLeft: React.FC<IconsProps> = ({
       <path
         d="M19.2188 6.5625L10.7812 15L19.2188 23.4375"
         stroke={color}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

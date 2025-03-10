@@ -6,8 +6,8 @@ export const dummyAudio = {
     success: true,
     message: 'SUCCESS',
     data: {
-      text: '오늘 날씨가 참 조네요',
-      feedback: "'녀' 발음을 개선하세요.",
+      text: '오늘 날씨가 참 조네요!',
+      feedback: "'좋' 발음을 개선하세요.",
     },
   },
 };
