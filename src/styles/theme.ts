@@ -5,6 +5,7 @@ const theme: DefaultTheme = {
     // Brand Colors
     brand: {
       primary: '#5249DC',
+      primaryLight: '#E5E2FC',
       secondary: '#2EC4B6',
     },
 

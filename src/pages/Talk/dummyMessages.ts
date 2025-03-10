@@ -7,6 +7,7 @@ export const dummyMessages: MessageProps[] = [
       '안녕! 나는 너의 한국어 스피킹 메이트야. 만나서 반가워! 너는 이름이 뭐야?',
     translation:
       "Hi! I'm your Korean speaking mate. Nice to meet you! What's your name?",
+    audio: 'path_to_audio.mp3',
   },
   {
     type: 'sent',
@@ -19,6 +20,7 @@ export const dummyMessages: MessageProps[] = [
     korean: '반가워, 다니엘! 너에 대해 더 알고 싶어. 오늘 뭐 했어?',
     translation:
       "Nice to meet you, Daniel! I'd like to know more about you. What did you do today?",
+    audio: 'path_to_audio.mp3',
   },
   {
     type: 'sent',
@@ -37,6 +39,7 @@ export const dummyMessages: MessageProps[] = [
     type: 'received',
     korean: '좋았겠다! 무슨 수업 들었어?',
     translation: 'That sounds great! What class did you take?',
+    audio: 'path_to_audio.mp3',
   },
   {
     type: 'sent',
@@ -57,6 +60,7 @@ export const dummyMessages: MessageProps[] = [
     type: 'received',
     korean: '그렇구나! 교수님은 설명을 잘 해주셔?',
     translation: 'I see! Does your professor explain things well?',
+    audio: 'path_to_audio.mp3',
   },
   {
     type: 'sent',

@@ -18,15 +18,7 @@ export const Container = styled.div<ContainerProps>`
 
 export const Left = styled.div`
   display: flex;
-  width: 210px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 9px;
-`;
-
-export const Right = styled.div`
-  display: flex;
-  width: 210px;
+  width: 240px;
   flex-direction: column;
   align-items: flex-start;
   gap: 9px;
