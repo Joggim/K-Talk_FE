@@ -9,7 +9,7 @@ export const NavBarContainer = styled.nav`
   height: 70px;
   justify-content: center;
   align-items: center;
-  background: ${({ theme }) => theme.colors.background.white};
+  background: ${({ theme }) => theme.colors.bg.white};
   margin: 0;
   border-radius: 1.25rem 1.25rem 0 0;
   filter: drop-shadow(0rem 0rem 0.25rem rgba(0, 0, 0, 0.25));

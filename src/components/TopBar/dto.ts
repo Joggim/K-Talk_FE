@@ -1,3 +1,3 @@
 export interface TopBarProps {
-  name: string;
+  name?: string;
 }

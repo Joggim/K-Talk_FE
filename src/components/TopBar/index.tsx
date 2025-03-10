@@ -10,7 +10,7 @@ import ArrowLeft from '../Icons/ArrowLeft';
 
 import { TopBarProps } from './dto';
 
-const TopBar: React.FC<TopBarProps> = ({ name }) => {
+const TopBar: React.FC<TopBarProps> = ({ name = '' }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {

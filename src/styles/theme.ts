@@ -34,7 +34,13 @@ const theme: DefaultTheme = {
       white: '#FFFFFF', // White
     },
 
-    background: {
+    state: {
+      success: '#27AE60',
+      warning: '#E2B93B',
+      error: '#EB5757',
+    },
+
+    bg: {
       black: '#000000',
       black2: '#E0E0EB',
       black3: '#F1F1F5',

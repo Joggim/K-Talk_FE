@@ -12,7 +12,7 @@ export const TopBarContainer = styled.nav`
   padding: 10px;
   gap: 10px;
   z-index: 10;
-  background: ${({ theme }) => theme.colors.background.white};
+  background: ${({ theme }) => theme.colors.bg.white};
 `;
 
 export const Icon = styled.div`
