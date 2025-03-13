@@ -5,6 +5,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import TopBar from '../../components/TopBar';
 import SentenceItem from './SentenceItem';
 import { dummySentences } from './dummySentences';
+import { dummyTopics } from '../TopicList/dummyTopics';
 
 const SentenceListPage: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
@@ -17,9 +18,14 @@ const SentenceListPage: React.FC = () => {
     (sentence) => sentence.topic_id === topicIdNum
   );
 
+  // 현재 선택한 토픽 찾기
+  const currentTopic = dummyTopics.find(
+    (topic) => topic.id === Number(topicId)
+  );
+
   return (
     <Container>
-      <TopBar name="Practice Sentences" />
+      <TopBar name={currentTopic?.title} />
       <SentenceList>
         {filteredSentences.map((sentence, index) => (
           <SentenceItem
