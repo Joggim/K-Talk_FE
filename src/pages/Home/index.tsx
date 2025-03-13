@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, MenuContainer } from './styles';
 import NavBar from '../../components/NavBar/NavBar';
-import MenuItem from './MenuItem';
+import MenuItem from '../../components/MenuItem';
 import theme from '../../styles/theme';
 
 const HomePage: React.FC = () => {
@@ -14,7 +14,7 @@ const HomePage: React.FC = () => {
           fontColor={theme.colors.text.white}
           title="Practice Sentences"
           content="Read structured sentences and practice pronunciation"
-          route="/sentence-list"
+          route="/topic-list"
         />
         <MenuItem
           bgColor={theme.colors.brand.secondary}

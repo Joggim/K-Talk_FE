@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/Home';
+import TopicListPage from './pages/TopicList';
 import TalkPage from './pages/Talk';
 import MyPage from './pages/MyPage/MyPage';
 import LoginPage from './pages/Login/Login';
@@ -17,6 +18,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/talk" element={<TalkPage />} />
         <Route path="/my-page" element={<MyPage />} />
+        <Route path="/topic-list" element={<TopicListPage />} />
         <Route path="/sentence-list" element={<SentenceListPage />} />
         <Route path="/custom-training" element={<CustomTrainingPage />} />
         <Route path="/speak" element={<PronouncePage />} />
