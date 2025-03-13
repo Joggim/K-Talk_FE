@@ -1,7 +1,7 @@
 import React from 'react';
-import { Container, MenuContainer } from './Home.styles';
+import { Container, MenuContainer } from './styles';
 import NavBar from '../../components/NavBar/NavBar';
-import MenuItem from './MenuItem';
+import MenuItem from '../../components/MenuItem';
 import theme from '../../styles/theme';
 
 const HomePage: React.FC = () => {
@@ -12,16 +12,16 @@ const HomePage: React.FC = () => {
         <MenuItem
           bgColor={theme.colors.brand.primary}
           fontColor={theme.colors.text.white}
-          title="내 문장으로 연습하기"
-          content="내가 훈련하고 싶은 문장으로 읽기"
-          route="/custom-sentence"
+          title="Practice Sentences"
+          content="Read structured sentences and practice pronunciation"
+          route="/topic-list"
         />
         <MenuItem
           bgColor={theme.colors.brand.secondary}
           fontColor={theme.colors.text.white}
-          title="문장 읽기"
-          content="정해진 문장을 읽으며 발음 연습하기"
-          route="/sentence-list"
+          title="Personalized Lesson"
+          content="Tailored to your past mistakes for better learning"
+          route="/custom-training"
         />
       </MenuContainer>
       <NavBar />

@@ -24,7 +24,7 @@ import theme from '../../styles/theme';
 import { dummySentences } from '../SentenceList/dummySentences';
 import { dummyAudio } from './dummyAudio';
 
-const SpeakPage: React.FC = () => {
+const PronouncePage: React.FC = () => {
   const location = useLocation();
   const initialIndex = location.state?.index ?? 0;
 
@@ -247,4 +247,4 @@ const SpeakPage: React.FC = () => {
   );
 };
 
-export default SpeakPage;
+export default PronouncePage;

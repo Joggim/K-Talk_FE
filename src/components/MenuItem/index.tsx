@@ -2,9 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Left } from './styles';
 import { MenuItemProps } from './dto';
-import { StyledText } from '../../../components/StyledText/StyledText.styles';
-import ArrowRight from '../../../components/Icons/ArrowRight';
-import theme from '../../../styles/theme';
+import { StyledText } from '../StyledText/StyledText.styles';
+import ArrowRight from '../Icons/ArrowRight';
+import theme from '../../styles/theme';
 
 const MenuItem: React.FC<MenuItemProps> = ({
   bgColor,
