@@ -15,7 +15,7 @@ import Sound from '../../../components/Icons/Sound';
 import MySound from '../../../components/Icons/MySound';
 import Error from '../../../components/Icons/Error';
 import { StyledText } from '../../../components/StyledText/StyledText.styles';
-import HighlightedText from '../HighlightedText';
+import HighlightedText from '../../../components/HighlightedText';
 
 const SentMessage: React.FC<SentMessageProps> = memo(
   ({ content, feedback, userAudio, correctAudio }) => {

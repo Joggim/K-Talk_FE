@@ -13,7 +13,7 @@ const SentenceItem: React.FC<SentenceItemProps> = ({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/speak', { state: { korean, translation, index } });
+    navigate('/pronounce', { state: { korean, translation, index } });
   };
 
   return (

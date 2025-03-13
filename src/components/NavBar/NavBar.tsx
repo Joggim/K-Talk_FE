@@ -34,7 +34,7 @@ const NavBar: React.FC = () => {
           }
         />
       ),
-      route: '/talk',
+      route: '/talk-bot',
     },
     {
       name: 'Home',

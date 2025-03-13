@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { StyledText } from '../../../components/StyledText/StyledText.styles';
+import { StyledText } from '../StyledText/StyledText.styles';
 
 // 기존 StyledText의 Props를 확장 (오버라이딩)
 interface CharSpanProps {

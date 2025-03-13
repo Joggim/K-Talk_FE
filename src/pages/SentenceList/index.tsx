@@ -29,7 +29,7 @@ const SentenceListPage: React.FC = () => {
       <SentenceList>
         {filteredSentences.map((sentence, index) => (
           <SentenceItem
-            key={index}
+            key={sentence.id}
             korean={sentence.korean}
             translation={sentence.translation}
             index={index}

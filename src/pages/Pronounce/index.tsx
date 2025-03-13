@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import {
   Container,
   Card,
   Korean,
-  Feedback,
   Translation,
   AudioContainer,
+  AudioItemWrapper,
   AudioItem,
   ButtonContainer,
 } from './styles';
@@ -25,45 +25,74 @@ import { dummySentences } from '../SentenceList/dummySentences';
 import { dummyAudio } from './dummyAudio';
 
 const PronouncePage: React.FC = () => {
+  const { topicId } = useParams<{ topicId: string }>();
   const location = useLocation();
   const initialIndex = location.state?.index ?? 0;
 
+  // 나중에 백엔드 연동하면, 이 부분을 API 호출로 대체 가능
+  const [sentences, setSentences] = useState(dummySentences);
   const [currentSentenceIndex, setCurrentSentenceIndex] =
     useState<number>(initialIndex);
-  const [korean, setKorean] = useState(dummySentences[initialIndex].korean);
-  const [translation, setTranslation] = useState(
-    dummySentences[initialIndex].translation
-  );
+
+  useEffect(() => {
+    // 나중에 백엔드 연동 시 `fetchSentences(topicId)`로 대체
+    if (topicId) {
+      const filtered = dummySentences.filter(
+        (sentence) => sentence.topic_id === Number(topicId)
+      );
+      setSentences(filtered);
+    }
+  }, [topicId]);
+
+  const currentSentence = sentences[currentSentenceIndex];
 
   const [audioUrl, setAudioUrl] = useState(dummyAudio.generated.audioUrl);
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<string | null>(null);
   const [userText, setUserText] = useState<string | null>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
-  // 🔹 인덱스가 변경될 때 문장 업데이트
+  // 문장 업데이트
   useEffect(() => {
-    setKorean(dummySentences[currentSentenceIndex].korean);
-    setTranslation(dummySentences[currentSentenceIndex].translation);
-  }, [currentSentenceIndex]);
+    if (currentSentence) {
+      setUserText(null);
+      setRecordedAudio(null);
+      setAudioUrl(dummyAudio.generated.audioUrl);
+    }
+  }, [currentSentenceIndex, sentences]);
 
   const playAudio = () => {
     new Audio(audioUrl).play();
   };
 
-  const resetAudioAndFeedback = () => {
-    setUserText(null);
-    setFeedback(null);
-    setRecordedAudio(null);
-    setAudioUrl(dummyAudio.generated.audioUrl);
+  const requestMicrophoneAccess = async () => {
+    try {
+      // 권한 상태 확인
+      const permission = await navigator.permissions.query({
+        name: 'microphone' as any,
+      });
+
+      if (permission.state === 'denied') {
+        alert(
+          '마이크 사용이 차단되었습니다. 브라우저 설정에서 마이크 권한을 허용해주세요.'
+        );
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('마이크 권한 확인 실패:', error);
+      return false;
+    }
   };
 
   const startRecording = async () => {
+    const hasPermission = await requestMicrophoneAccess();
+    if (!hasPermission) return;
+
     setRecordedAudio(null);
-    setFeedback(null);
     setUserText(null);
     setIsRecording(true);
     audioChunksRef.current = [];
@@ -103,7 +132,6 @@ const PronouncePage: React.FC = () => {
   const analyzeAudio = () => {
     setTimeout(() => {
       setUserText(dummyAudio.analysis.data.text);
-      setFeedback(dummyAudio.analysis.data.feedback);
     }, 2000);
   };
 
@@ -114,7 +142,9 @@ const PronouncePage: React.FC = () => {
       correct: userText[index] === char, // 해당 글자가 맞으면 true, 틀리면 false
     }));
   };
-  const comparedText = userText ? compareText(korean, userText) : null;
+  const comparedText = userText
+    ? compareText(currentSentence.korean, userText)
+    : null;
 
   useEffect(() => {
     if (recordedAudio && audioPlayerRef.current) {
@@ -133,14 +163,12 @@ const PronouncePage: React.FC = () => {
   const handlePrev = () => {
     if (currentSentenceIndex > 0) {
       setCurrentSentenceIndex((prevIndex) => prevIndex - 1);
-      resetAudioAndFeedback();
     }
   };
 
   const handleNext = () => {
-    if (currentSentenceIndex < dummySentences.length - 1) {
+    if (currentSentenceIndex < sentences.length - 1) {
       setCurrentSentenceIndex((prevIndex) => prevIndex + 1);
-      resetAudioAndFeedback();
     }
   };
 
@@ -151,7 +179,7 @@ const PronouncePage: React.FC = () => {
         <Korean>
           {!comparedText ? (
             <StyledText $variant="headingXL" color={theme.colors.text.tertiary}>
-              {korean}
+              {currentSentence.korean}
             </StyledText>
           ) : (
             comparedText.map((charInfo, index) => (
@@ -170,14 +198,8 @@ const PronouncePage: React.FC = () => {
           )}
         </Korean>
 
-        {feedback && (
-          <Feedback $variant="captionRegular" color={theme.colors.state.error}>
-            {feedback}
-          </Feedback>
-        )}
-
         <AudioContainer>
-          {!isRecording && (
+          <AudioItemWrapper>
             <AudioItem onClick={playAudio}>
               <Sound color={theme.colors.brand.primary} />
               <StyledText
@@ -187,37 +209,41 @@ const PronouncePage: React.FC = () => {
                 모범 발음
               </StyledText>
             </AudioItem>
-          )}
-          {recordedAudio && (
-            <AudioItem onClick={playRecordedAudio}>
-              <MySound color={theme.colors.brand.primary} />
-              <StyledText
-                $variant="bodyMediumRegular"
-                color={theme.colors.brand.primary}
-              >
-                내 발음
-              </StyledText>
-            </AudioItem>
-          )}
+          </AudioItemWrapper>
+
+          <AudioItemWrapper>
+            {recordedAudio ? (
+              <AudioItem onClick={playRecordedAudio}>
+                <MySound color={theme.colors.brand.primary} />
+                <StyledText
+                  $variant="bodyMediumRegular"
+                  color={theme.colors.brand.primary}
+                >
+                  내 발음
+                </StyledText>
+              </AudioItem>
+            ) : (
+              <div style={{ width: '100px' }} /> // 내 발음이 없을 때 빈 공간 유지
+            )}
+          </AudioItemWrapper>
         </AudioContainer>
 
         <Translation
           $variant="captionRegular"
           color={theme.colors.text.primary}
         >
-          {translation}
+          {currentSentence.translation}
         </Translation>
 
         <ButtonContainer>
-          {recordedAudio && (
-            <CircleButton
-              size="small"
-              bgColor={theme.colors.bg.black3}
-              icon={<ArrowLeft color={theme.colors.gray[500]} />}
-              onClick={handlePrev}
-              disabled={currentSentenceIndex === 0}
-            />
-          )}
+          <CircleButton
+            size="small"
+            bgColor={theme.colors.bg.black3}
+            icon={<ArrowLeft color={theme.colors.gray[500]} />}
+            onClick={handlePrev}
+            disabled={currentSentenceIndex === 0}
+          />
+
           <CircleButton
             size="big"
             bgColor={theme.colors.brand.primary}
@@ -232,15 +258,14 @@ const PronouncePage: React.FC = () => {
             }
             onClick={isRecording ? stopRecording : startRecording}
           />
-          {recordedAudio && (
-            <CircleButton
-              size="small"
-              bgColor={theme.colors.bg.black3}
-              icon={<ArrowRight color={theme.colors.gray[500]} />}
-              onClick={handleNext}
-              disabled={currentSentenceIndex === dummySentences.length - 1}
-            />
-          )}
+
+          <CircleButton
+            size="small"
+            bgColor={theme.colors.bg.black3}
+            icon={<ArrowRight color={theme.colors.gray[500]} />}
+            onClick={handleNext}
+            disabled={currentSentenceIndex === dummySentences.length - 1}
+          />
         </ButtonContainer>
       </Card>
     </Container>
