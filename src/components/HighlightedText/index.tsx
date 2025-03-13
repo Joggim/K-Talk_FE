@@ -6,6 +6,8 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
   original,
   correct,
   errors = [],
+  size = 'bodyMediumLight',
+  gap = 1,
 }) => {
   const words = correct.split(' '); // 단어 단위로 나눔
 

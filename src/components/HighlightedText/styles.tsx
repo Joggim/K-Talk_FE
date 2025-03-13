@@ -1,21 +1,24 @@
 import styled from 'styled-components';
 import { StyledText } from '../StyledText/StyledText.styles';
 
-// 기존 StyledText의 Props를 확장 (오버라이딩)
-interface CharSpanProps {
-  isError?: boolean;
+interface TextContainerProps {
+  gap?: number;
 }
 
-export const TextContainer = styled.div`
+export const TextContainer = styled.div<TextContainerProps>`
   display: flex;
   flex-wrap: wrap;
-  gap: 1px; // 단어 간 글자 간격
+  gap: ${({ gap }) => gap}px; // gap을 props로 받음
 `;
 
 export const WordSpan = styled.span`
   display: flex;
   gap: 0px;
 `;
+
+interface CharSpanProps {
+  isError?: boolean;
+}
 
 export const CharSpan = styled(StyledText)<CharSpanProps>`
   display: inline-block;

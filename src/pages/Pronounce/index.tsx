@@ -20,9 +20,10 @@ import Sound from '../../components/Icons/Sound';
 import MySound from '../../components/Icons/MySound';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
 import ArrowRight from '../../components/Icons/ArrowRight';
+import HighlightedText from '../../components/HighlightedText';
 import theme from '../../styles/theme';
 import { dummySentences } from '../SentenceList/dummySentences';
-import { dummyAudio } from './dummyAudio';
+import { dummyPronunciationAnalysis } from './dummyPronounciationAnalysis';
 
 const PronouncePage: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
@@ -46,25 +47,29 @@ const PronouncePage: React.FC = () => {
 
   const currentSentence = sentences[currentSentenceIndex];
 
-  const [audioUrl, setAudioUrl] = useState(dummyAudio.generated.audioUrl);
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState<string | null>(null);
   const [userText, setUserText] = useState<string | null>(null);
+  const [pronunciationErrors, setPronunciationErrors] = useState<
+    { char: string; index: number }[]
+  >([]);
+
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
-  // 문장 업데이트
+  // 문장 업데이트 시 초기화
   useEffect(() => {
     if (currentSentence) {
       setUserText(null);
       setRecordedAudio(null);
-      setAudioUrl(dummyAudio.generated.audioUrl);
+      setPronunciationErrors([]);
     }
   }, [currentSentenceIndex, sentences]);
 
-  const playAudio = () => {
-    new Audio(audioUrl).play();
+  const playModelPronunciation = () => {
+    //new Audio(currentSentence.modelPronunciation).play();
+    console.log(currentSentence.modelPronunciation, ' 재생');
   };
 
   const requestMicrophoneAccess = async () => {
@@ -94,6 +99,7 @@ const PronouncePage: React.FC = () => {
 
     setRecordedAudio(null);
     setUserText(null);
+    setPronunciationErrors([]);
     setIsRecording(true);
     audioChunksRef.current = [];
 
@@ -129,22 +135,15 @@ const PronouncePage: React.FC = () => {
     mediaRecorderRef.current?.stop();
   };
 
+  // 서버로부터 받은 분석 결과를 사용하는 함수
   const analyzeAudio = () => {
     setTimeout(() => {
-      setUserText(dummyAudio.analysis.data.text);
+      setUserText(dummyPronunciationAnalysis.data.userText);
+      setPronunciationErrors(
+        dummyPronunciationAnalysis.data.pronunciationErrors
+      );
     }, 2000);
   };
-
-  const compareText = (original: string, userText: string) => {
-    if (!userText) return [];
-    return original.split('').map((char, index) => ({
-      char,
-      correct: userText[index] === char, // 해당 글자가 맞으면 true, 틀리면 false
-    }));
-  };
-  const comparedText = userText
-    ? compareText(currentSentence.korean, userText)
-    : null;
 
   useEffect(() => {
     if (recordedAudio && audioPlayerRef.current) {
@@ -153,11 +152,12 @@ const PronouncePage: React.FC = () => {
   }, [recordedAudio]);
 
   const playRecordedAudio = () => {
-    if (recordedAudio && audioPlayerRef.current) {
-      audioPlayerRef.current.play().catch((error) => {
-        console.error('오디오 재생 오류:', error);
-      });
+    /*
+    if (dummyPronunciationAnalysis.data.userPronunciation) {
+      new Audio(dummyPronunciationAnalysis.data.userPronunciation).play();
     }
+    */
+    console.log(dummyPronunciationAnalysis.data.userPronunciation, ' 재생');
   };
 
   const handlePrev = () => {
@@ -177,30 +177,24 @@ const PronouncePage: React.FC = () => {
       <TopBar />
       <Card>
         <Korean>
-          {!comparedText ? (
+          {!userText ? (
             <StyledText $variant="headingXL" color={theme.colors.text.tertiary}>
               {currentSentence.korean}
             </StyledText>
           ) : (
-            comparedText.map((charInfo, index) => (
-              <StyledText
-                key={index}
-                $variant="headingXL"
-                color={
-                  charInfo.correct
-                    ? theme.colors.state.success // 맞으면 초록색
-                    : theme.colors.state.error // 틀리면 빨간색
-                }
-              >
-                {charInfo.char}
-              </StyledText>
-            ))
+            <HighlightedText
+              original={userText}
+              correct={currentSentence.korean}
+              errors={pronunciationErrors}
+              size="headingXL"
+              gap={2}
+            />
           )}
         </Korean>
 
         <AudioContainer>
           <AudioItemWrapper>
-            <AudioItem onClick={playAudio}>
+            <AudioItem onClick={playModelPronunciation}>
               <Sound color={theme.colors.brand.primary} />
               <StyledText
                 $variant="bodyMediumRegular"
