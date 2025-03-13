@@ -19,7 +19,7 @@ const App: React.FC = () => {
         <Route path="/talk" element={<TalkPage />} />
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/topic-list" element={<TopicListPage />} />
-        <Route path="/sentence-list" element={<SentenceListPage />} />
+        <Route path="/sentence-list/:topicId" element={<SentenceListPage />} />
         <Route path="/custom-training" element={<CustomTrainingPage />} />
         <Route path="/speak" element={<PronouncePage />} />
       </Routes>
