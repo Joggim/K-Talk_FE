@@ -12,16 +12,16 @@ const HomePage: React.FC = () => {
         <MenuItem
           bgColor={theme.colors.brand.primary}
           fontColor={theme.colors.text.white}
-          title="문장 읽기"
-          content="정해진 문장을 읽으며 발음 연습하기"
+          title="Practice Sentences"
+          content="Read structured sentences and practice pronunciation"
           route="/sentence-list"
         />
         <MenuItem
           bgColor={theme.colors.brand.secondary}
           fontColor={theme.colors.text.white}
-          title="회원님을 위한 맞춤 수업"
-          content="지난 레슨의 실수를 기반으로 만들었어요"
-          route="/sentence-list"
+          title="Personalized Lesson"
+          content="Tailored to your past mistakes for better learning"
+          route="/custom-training"
         />
       </MenuContainer>
       <NavBar />

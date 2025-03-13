@@ -18,7 +18,7 @@ export const Container = styled.div<ContainerProps>`
 
 export const Left = styled.div`
   display: flex;
-  width: 240px;
+  width: 85%;
   flex-direction: column;
   align-items: flex-start;
   gap: 9px;

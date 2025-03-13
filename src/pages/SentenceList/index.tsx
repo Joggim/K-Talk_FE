@@ -8,7 +8,7 @@ import { dummySentences } from './dummySentences';
 const SentenceListPage: React.FC = () => {
   return (
     <Container>
-      <TopBar name="문장 읽기" />
+      <TopBar name="Practice Sentences" />
       <SentenceList>
         {dummySentences.map((sentence, index) => (
           <SentenceItem
