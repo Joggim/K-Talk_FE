@@ -69,7 +69,7 @@ const PronouncePage: React.FC = () => {
 
   const playModelPronunciation = () => {
     //new Audio(currentSentence.modelPronunciation).play();
-    console.log(currentSentence.modelPronunciation, ' 재생');
+    console.log(currentSentence.modelAudioUrl, ' 재생');
   };
 
   const requestMicrophoneAccess = async () => {
@@ -157,7 +157,7 @@ const PronouncePage: React.FC = () => {
       new Audio(dummyPronunciationAnalysis.data.userPronunciation).play();
     }
     */
-    console.log(dummyPronunciationAnalysis.data.userPronunciation, ' 재생');
+    console.log(dummyPronunciationAnalysis.data.userAudioUrl, ' 재생');
   };
 
   const handlePrev = () => {
@@ -187,7 +187,6 @@ const PronouncePage: React.FC = () => {
               correct={currentSentence.korean}
               errors={pronunciationErrors}
               size="headingXL"
-              gap={2}
             />
           )}
         </Korean>

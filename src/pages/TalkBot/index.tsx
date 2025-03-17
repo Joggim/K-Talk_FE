@@ -73,8 +73,8 @@ const TalkBotPage: React.FC = () => {
               key={index}
               content={msg.content ?? ''}
               feedback={msg.feedback}
-              correctAudio={msg.correctAudio}
-              userAudio={msg.userAudio}
+              correctAudio={msg.modelAudioUrl}
+              userAudio={msg.userAudioUrl}
             />
           )
         )}
