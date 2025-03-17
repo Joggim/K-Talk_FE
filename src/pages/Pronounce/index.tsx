@@ -30,7 +30,7 @@ const PronouncePage: React.FC = () => {
   const location = useLocation();
   const initialIndex = location.state?.index ?? 0;
 
-  // 나중에 백엔드 연동하면, 이 부분을 API 호출로 대체 가능
+  // 나중에 백엔드 연동하면, 이 부분을 API 호출로 대체
   const [sentences, setSentences] = useState(dummySentences);
   const [currentSentenceIndex, setCurrentSentenceIndex] =
     useState<number>(initialIndex);
@@ -114,13 +114,14 @@ const PronouncePage: React.FC = () => {
         }
       };
 
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(audioChunksRef.current, {
           type: 'audio/wav',
         });
         const audioUrl = URL.createObjectURL(audioBlob);
         setRecordedAudio(audioUrl);
-        analyzeAudio();
+
+        await uploadAudio(audioBlob);
       };
 
       mediaRecorder.start();
@@ -132,17 +133,46 @@ const PronouncePage: React.FC = () => {
 
   const stopRecording = () => {
     setIsRecording(false);
-    mediaRecorderRef.current?.stop();
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: 'audio/wav',
+        });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        setRecordedAudio(audioUrl);
+
+        await uploadAudio(audioBlob);
+      };
+    }
   };
 
-  // 서버로부터 받은 분석 결과를 사용하는 함수
-  const analyzeAudio = () => {
-    setTimeout(() => {
+  const uploadAudio = async (audioBlob: Blob) => {
+    try {
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'recorded_audio.wav'); // 파일 추가
+      formData.append('sentenceId', String(currentSentence.id)); // 문장 ID 추가 (필요 시)
+
+      const response = await fetch('https://your-api.com/sentences/pronounce', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error('오디오 업로드 실패');
+
+      const responseData = await response.json();
+      console.log('서버 응답:', responseData);
+
+      // 서버에서 반환된 피드백 반영
+      //setUserText(responseData.userText);
+      //setPronunciationErrors(responseData.pronunciationErrors);
       setUserText(dummyPronunciationAnalysis.data.userText);
       setPronunciationErrors(
         dummyPronunciationAnalysis.data.pronunciationErrors
       );
-    }, 2000);
+    } catch (error) {
+      console.error('오디오 업로드 중 오류:', error);
+    }
   };
 
   useEffect(() => {
