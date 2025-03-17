@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
   Card,
@@ -22,30 +22,23 @@ import ArrowLeft from '../../components/Icons/ArrowLeft';
 import ArrowRight from '../../components/Icons/ArrowRight';
 import HighlightedText from '../../components/HighlightedText';
 import theme from '../../styles/theme';
-import { dummySentences } from '../SentenceList/dummySentences';
+import { dummySentences } from '../Sentences/dummySentences';
 import { dummyPronunciationAnalysis } from './dummyPronounciationAnalysis';
 
-const PronouncePage: React.FC = () => {
-  const { topicId } = useParams<{ topicId: string }>();
-  const location = useLocation();
-  const initialIndex = location.state?.index ?? 0;
+const PracticePage: React.FC = () => {
+  const { sentenceId } = useParams<{ sentenceId: string }>();
+  const navigate = useNavigate();
 
-  // 나중에 백엔드 연동하면, 이 부분을 API 호출로 대체
-  const [sentences, setSentences] = useState(dummySentences);
-  const [currentSentenceIndex, setCurrentSentenceIndex] =
-    useState<number>(initialIndex);
+  const [currentSentence, setCurrentSentence] = useState(() =>
+    dummySentences.find((sentence) => sentence.id === Number(sentenceId))
+  );
 
   useEffect(() => {
-    // 나중에 백엔드 연동 시 `fetchSentences(topicId)`로 대체
-    if (topicId) {
-      const filtered = dummySentences.filter(
-        (sentence) => sentence.topic_id === Number(topicId)
-      );
-      setSentences(filtered);
-    }
-  }, [topicId]);
-
-  const currentSentence = sentences[currentSentenceIndex];
+    const foundSentence = dummySentences.find(
+      (sentence) => sentence.id === Number(sentenceId)
+    );
+    setCurrentSentence(foundSentence);
+  }, [sentenceId]);
 
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState<string | null>(null);
@@ -65,11 +58,11 @@ const PronouncePage: React.FC = () => {
       setRecordedAudio(null);
       setPronunciationErrors([]);
     }
-  }, [currentSentenceIndex, sentences]);
+  }, [currentSentence]);
 
   const playModelPronunciation = () => {
     //new Audio(currentSentence.modelPronunciation).play();
-    console.log(currentSentence.modelAudioUrl, ' 재생');
+    console.log(currentSentence?.modelAudioUrl, ' 재생');
   };
 
   const requestMicrophoneAccess = async () => {
@@ -151,12 +144,15 @@ const PronouncePage: React.FC = () => {
     try {
       const formData = new FormData();
       formData.append('audio', audioBlob, 'recorded_audio.wav'); // 파일 추가
-      formData.append('sentenceId', String(currentSentence.id)); // 문장 ID 추가 (필요 시)
+      formData.append('sentenceId', String(currentSentence?.id)); // 문장 ID 추가 (필요 시)
 
-      const response = await fetch('https://your-api.com/sentences/pronounce', {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        'https://your-api.com/dummySentences/pronounce',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
 
       if (!response.ok) throw new Error('오디오 업로드 실패');
 
@@ -191,108 +187,125 @@ const PronouncePage: React.FC = () => {
   };
 
   const handlePrev = () => {
-    if (currentSentenceIndex > 0) {
-      setCurrentSentenceIndex((prevIndex) => prevIndex - 1);
+    const currentIndex = dummySentences.findIndex(
+      (s) => s.id === currentSentence?.id
+    );
+    if (currentIndex > 0) {
+      navigate(`/practice/${dummySentences[currentIndex - 1].id}`);
     }
   };
 
   const handleNext = () => {
-    if (currentSentenceIndex < sentences.length - 1) {
-      setCurrentSentenceIndex((prevIndex) => prevIndex + 1);
+    const currentIndex = dummySentences.findIndex(
+      (s) => s.id === currentSentence?.id
+    );
+    if (currentIndex < dummySentences.length - 1) {
+      navigate(`/practice/${dummySentences[currentIndex + 1].id}`);
     }
   };
 
   return (
     <Container>
       <TopBar />
-      <Card>
-        <Korean>
-          {!userText ? (
-            <StyledText $variant="headingXL" color={theme.colors.text.tertiary}>
-              {currentSentence.korean}
-            </StyledText>
-          ) : (
-            <HighlightedText
-              original={userText}
-              correct={currentSentence.korean}
-              errors={pronunciationErrors}
-              size="headingXL"
-            />
-          )}
-        </Korean>
-
-        <AudioContainer>
-          <AudioItemWrapper>
-            <AudioItem onClick={playModelPronunciation}>
-              <Sound color={theme.colors.brand.primary} />
+      {currentSentence && (
+        <Card>
+          <Korean>
+            {!userText ? (
               <StyledText
-                $variant="bodyMediumRegular"
-                color={theme.colors.brand.primary}
+                $variant="headingXL"
+                color={theme.colors.text.tertiary}
               >
-                모범 발음
+                {currentSentence.korean}
               </StyledText>
-            </AudioItem>
-          </AudioItemWrapper>
+            ) : (
+              <HighlightedText
+                original={userText}
+                correct={currentSentence.korean}
+                errors={pronunciationErrors}
+                size="headingXL"
+              />
+            )}
+          </Korean>
 
-          <AudioItemWrapper>
-            {recordedAudio ? (
-              <AudioItem onClick={playRecordedAudio}>
-                <MySound color={theme.colors.brand.primary} />
+          <AudioContainer>
+            <AudioItemWrapper>
+              <AudioItem onClick={playModelPronunciation}>
+                <Sound color={theme.colors.brand.primary} />
                 <StyledText
                   $variant="bodyMediumRegular"
                   color={theme.colors.brand.primary}
                 >
-                  내 발음
+                  모범 발음
                 </StyledText>
               </AudioItem>
-            ) : (
-              <div style={{ width: '100px' }} /> // 내 발음이 없을 때 빈 공간 유지
-            )}
-          </AudioItemWrapper>
-        </AudioContainer>
+            </AudioItemWrapper>
 
-        <Translation
-          $variant="captionRegular"
-          color={theme.colors.text.primary}
-        >
-          {currentSentence.translation}
-        </Translation>
-
-        <ButtonContainer>
-          <CircleButton
-            size="small"
-            bgColor={theme.colors.bg.black3}
-            icon={<ArrowLeft color={theme.colors.gray[500]} />}
-            onClick={handlePrev}
-            disabled={currentSentenceIndex === 0}
-          />
-
-          <CircleButton
-            size="big"
-            bgColor={theme.colors.brand.primary}
-            icon={
-              isRecording ? (
-                <Pause />
-              ) : recordedAudio ? (
-                <Retry />
+            <AudioItemWrapper>
+              {recordedAudio ? (
+                <AudioItem onClick={playRecordedAudio}>
+                  <MySound color={theme.colors.brand.primary} />
+                  <StyledText
+                    $variant="bodyMediumRegular"
+                    color={theme.colors.brand.primary}
+                  >
+                    내 발음
+                  </StyledText>
+                </AudioItem>
               ) : (
-                <Microphone />
-              )
-            }
-            onClick={isRecording ? stopRecording : startRecording}
-          />
+                <div style={{ width: '100px' }} /> // 내 발음이 없을 때 빈 공간 유지
+              )}
+            </AudioItemWrapper>
+          </AudioContainer>
 
-          <CircleButton
-            size="small"
-            bgColor={theme.colors.bg.black3}
-            icon={<ArrowRight color={theme.colors.gray[500]} />}
-            onClick={handleNext}
-            disabled={currentSentenceIndex === dummySentences.length - 1}
-          />
-        </ButtonContainer>
-      </Card>
+          <Translation
+            $variant="captionRegular"
+            color={theme.colors.text.primary}
+          >
+            {currentSentence.translation}
+          </Translation>
+
+          <ButtonContainer>
+            <CircleButton
+              size="small"
+              bgColor={theme.colors.bg.black3}
+              icon={<ArrowLeft color={theme.colors.gray[500]} />}
+              onClick={handlePrev}
+              disabled={
+                dummySentences.findIndex((s) => s.id === Number(sentenceId)) ===
+                0
+              }
+            />
+
+            <CircleButton
+              size="big"
+              bgColor={theme.colors.brand.primary}
+              icon={
+                isRecording ? (
+                  <Pause />
+                ) : recordedAudio ? (
+                  <Retry />
+                ) : (
+                  <Microphone />
+                )
+              }
+              onClick={isRecording ? stopRecording : startRecording}
+            />
+
+            <CircleButton
+              size="small"
+              bgColor={theme.colors.bg.black3}
+              icon={<ArrowRight color={theme.colors.gray[500]} />}
+              onClick={handleNext}
+              disabled={
+                dummySentences.findIndex((s) => s.id === Number(sentenceId)) ===
+                dummySentences.length - 1
+              }
+            />
+          </ButtonContainer>
+        </Card>
+      )}
     </Container>
   );
 };
 
-export default PronouncePage;
+export default PracticePage;

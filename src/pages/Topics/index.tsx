@@ -6,7 +6,7 @@ import MenuItem from '../../components/MenuItem';
 import { dummyTopics } from './dummyTopics';
 import theme from '../../styles/theme';
 
-const TopicListPage: React.FC = () => {
+const TopicsPage: React.FC = () => {
   return (
     <Container>
       <TopBar name="Practice Sentences" />
@@ -18,7 +18,7 @@ const TopicListPage: React.FC = () => {
             fontColor={theme.colors.text.primary}
             title={topic.title || ''}
             content={topic.description || ''}
-            route={`/sentence-list/${topic.id}`}
+            route={`/topics/${topic.id}/sentences`}
           />
         ))}
       </SentenceList>
@@ -27,4 +27,4 @@ const TopicListPage: React.FC = () => {
   );
 };
 
-export default TopicListPage;
+export default TopicsPage;

@@ -8,12 +8,12 @@ import theme from '../../../styles/theme';
 const SentenceItem: React.FC<SentenceItemProps> = ({
   korean,
   translation,
-  index,
+  id,
 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/pronounce', { state: { korean, translation, index } });
+    navigate(`/practice/${id}`);
   };
 
   return (
