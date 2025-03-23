@@ -1,33 +1,43 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import { Container, SentenceList } from './styles';
 import NavBar from '../../components/NavBar/NavBar';
 import TopBar from '../../components/TopBar';
 import SentenceItem from './SentenceItem';
-import { dummySentences } from './dummySentences';
-import { dummyTopics } from '../Topics/dummyTopics';
+import { SentenceItemDTO } from '../../apis/topics/dto';
+import { getSentenceListApi } from '../../apis/topics';
 
 const SentencesPage: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
 
+  const location = useLocation();
+  const topicName = location.state?.topicName || 'Practice Sentences';
+  const [sentences, setSentences] = useState<SentenceItemDTO[]>([]);
+
   // topicId가 undefined일 경우 대비
   const topicIdNum = topicId ? Number(topicId) : null;
 
-  // `topicIdNum`을 사용해 필터링
-  const filteredSentences = dummySentences.filter(
-    (sentence) => sentence.topic_id === topicIdNum
-  );
+  // 문장 리스트 조회 API
+  const getSentenceList = async () => {
+    try {
+      const response = await getSentenceListApi(Number(topicId));
+      if (response.success) {
+        setSentences(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching sentence list:', error);
+    }
+  };
 
-  // 현재 선택한 토픽 찾기
-  const currentTopic = dummyTopics.find(
-    (topic) => topic.id === Number(topicId)
-  );
+  useEffect(() => {
+    getSentenceList();
+  }, []);
 
   return (
     <Container>
-      <TopBar name={currentTopic?.title} />
+      <TopBar name={topicName} />
       <SentenceList>
-        {filteredSentences.map((sentence) => (
+        {sentences.map((sentence) => (
           <SentenceItem
             key={sentence.id}
             korean={sentence.korean}
