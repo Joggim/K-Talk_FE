@@ -26,10 +26,6 @@ const TopicsPage: React.FC = () => {
     getTopicList();
   }, []);
 
-  useEffect(() => {
-    console.log('topics updated:', topics);
-  }, [topics]);
-
   return (
     <Container>
       <TopBar name="Practice Sentences" />
@@ -42,6 +38,7 @@ const TopicsPage: React.FC = () => {
             title={topic.title || ''}
             content={topic.description || ''}
             route={`/topics/${topic.id}/sentences`}
+            state={{ topicName: topic.title }}
           />
         ))}
       </SentenceList>
