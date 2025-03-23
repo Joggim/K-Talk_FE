@@ -1,22 +1,36 @@
+import { AxiosError } from 'axios';
 import { newRequest } from '../util';
 import { GoolgeLoginRequest, GoogleLoginResponse } from './dto';
 
 export const googleLogin = async (
-  requestBody: GoolgeLoginRequest
+  requestData: GoolgeLoginRequest
 ): Promise<GoogleLoginResponse> => {
   try {
     const response = await newRequest.post<GoogleLoginResponse>(
-      '/auth/google-login',
-      requestBody
+      '/api/auth/google-login',
+      requestData, // { token: credentialResponse.credential }
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // 필요할 경우 추가
+      }
     );
 
-    // JWT 토큰을 로컬 스토리지에 저장
+    console.log('Login API Response:', response);
     localStorage.setItem('accessToken', response.data.accessToken);
     localStorage.setItem('refreshToken', response.data.refreshToken);
 
     return response;
-  } catch (error) {
-    console.error('Google Login API Error:', error);
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      console.error(
+        'Google Login API Error:',
+        error.response?.data || error.message
+      );
+    } else {
+      console.error('Unexpected error:', error);
+    }
     throw error;
   }
 };
