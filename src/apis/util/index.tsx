@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const NEW_JWT_KEY = 'jwt_token';
+const JWT_KEY = 'accessToken';
 
 interface CustomInstance extends AxiosInstance {
   getUri(config?: AxiosRequestConfig): string;
@@ -26,7 +26,7 @@ export const newRequest: CustomInstance = axios.create({
 // 요청 인터셉터 추가
 newRequest.interceptors.request.use(
   (config) => {
-    const jwt = window.localStorage.getItem(NEW_JWT_KEY);
+    const jwt = window.localStorage.getItem(JWT_KEY);
     if (jwt) {
       config.headers.Authorization = `Bearer ${jwt}`;
     }

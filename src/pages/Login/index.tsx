@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container } from './styles';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { googleLogin } from '../../apis/auth';
@@ -7,7 +8,10 @@ import { GoogleLogin } from '@react-oauth/google';
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
+
   console.log(GOOGLE_CLIENT_ID);
+
   if (!GOOGLE_CLIENT_ID) {
     console.error('Google Client ID is missing!');
     return null;
@@ -21,7 +25,7 @@ const LoginPage: React.FC = () => {
 
       const response = await googleLogin({ token });
       console.log('서버 응답:', response);
-      alert(`Login successful! Access Token: ${response.data.accessToken}`);
+      navigate('/');
     } catch (error) {
       alert('Login failed!');
     }
