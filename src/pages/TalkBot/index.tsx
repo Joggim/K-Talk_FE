@@ -15,7 +15,7 @@ import Setting from '../../components/Icons/Setting';
 import theme from '../../styles/theme';
 import { dummyMessages } from './dummyMessages';
 
-const TalkPage: React.FC = () => {
+const TalkBotPage: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
@@ -73,8 +73,8 @@ const TalkPage: React.FC = () => {
               key={index}
               content={msg.content ?? ''}
               feedback={msg.feedback}
-              correctAudio={msg.correctAudio}
-              userAudio={msg.userAudio}
+              correctAudio={msg.modelAudioUrl}
+              userAudio={msg.userAudioUrl}
             />
           )
         )}
@@ -93,4 +93,4 @@ const TalkPage: React.FC = () => {
   );
 };
 
-export default TalkPage;
+export default TalkBotPage;

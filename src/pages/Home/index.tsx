@@ -14,7 +14,7 @@ const HomePage: React.FC = () => {
           fontColor={theme.colors.text.white}
           title="Practice Sentences"
           content="Read structured sentences and practice pronunciation"
-          route="/topic-list"
+          route="/topics"
         />
         <MenuItem
           bgColor={theme.colors.brand.secondary}

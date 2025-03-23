@@ -30,8 +30,12 @@ export const Card = styled.div`
 `;
 
 export const Korean = styled.div`
+  position: absolute;
+  bottom: 150px;
   display: flex;
   width: auto;
+  max-width: 90%;
+  text-align: center;
   gap: 2px;
   margin: 60px 0;
   word-wrap: break-word;
@@ -42,20 +46,12 @@ export const Korean = styled.div`
 `;
 
 export const Translation = styled(StyledText)`
-  display: flex;
-  width: auto;
-  word-wrap: break-word;
-  word-break: break-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-`;
-
-export const Feedback = styled(StyledText)`
   position: absolute;
-  top: 140px;
+  bottom: 100px;
   display: flex;
   width: auto;
+  max-width: 90%;
+  text-align: center;
   word-wrap: break-word;
   word-break: break-all;
   overflow: hidden;
@@ -74,6 +70,12 @@ export const AudioContainer = styled.div`
   top: 160px;
 `;
 
+export const AudioItemWrapper = styled.div`
+  width: 100px; // 버튼 크기를 동일하게 유지하여 레이아웃이 변하지 않도록 설정
+  display: flex;
+  justify-content: center;
+`;
+
 export const AudioItem = styled.div`
   display: flex;
   flex-direction: row;
@@ -83,6 +85,8 @@ export const AudioItem = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
+  position: absolute;
+  bottom: 30px;
   display: flex;
   flex-direction: row;
   align-items: center;

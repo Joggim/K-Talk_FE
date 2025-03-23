@@ -9,11 +9,3 @@ export const Container = styled.div`
   position: relative;
   padding: 20px;
 `;
-
-export const ButtonList = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  width: 100%;
-  gap: 14px;
-`;

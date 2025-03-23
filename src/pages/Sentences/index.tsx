@@ -5,9 +5,9 @@ import NavBar from '../../components/NavBar/NavBar';
 import TopBar from '../../components/TopBar';
 import SentenceItem from './SentenceItem';
 import { dummySentences } from './dummySentences';
-import { dummyTopics } from '../TopicList/dummyTopics';
+import { dummyTopics } from '../Topics/dummyTopics';
 
-const SentenceListPage: React.FC = () => {
+const SentencesPage: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
 
   // topicId가 undefined일 경우 대비
@@ -27,12 +27,12 @@ const SentenceListPage: React.FC = () => {
     <Container>
       <TopBar name={currentTopic?.title} />
       <SentenceList>
-        {filteredSentences.map((sentence, index) => (
+        {filteredSentences.map((sentence) => (
           <SentenceItem
-            key={index}
+            key={sentence.id}
             korean={sentence.korean}
             translation={sentence.translation}
-            index={index}
+            id={sentence.id}
           />
         ))}
       </SentenceList>
@@ -41,4 +41,4 @@ const SentenceListPage: React.FC = () => {
   );
 };
 
-export default SentenceListPage;
+export default SentencesPage;

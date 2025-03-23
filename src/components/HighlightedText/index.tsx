@@ -6,11 +6,12 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
   original,
   correct,
   errors = [],
+  size = 'bodyMediumLight',
 }) => {
   const words = correct.split(' '); // 단어 단위로 나눔
 
   return (
-    <TextContainer>
+    <TextContainer size={size}>
       {words.map((word, wordIndex) => (
         <WordSpan key={wordIndex}>
           {word.split('').map((char, charIndex) => {
@@ -20,11 +21,7 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
             );
 
             return (
-              <CharSpan
-                key={globalIndex}
-                isError={isError}
-                $variant="bodyMediumLight"
-              >
+              <CharSpan key={globalIndex} isError={isError} $variant={size}>
                 {char}
               </CharSpan>
             );
