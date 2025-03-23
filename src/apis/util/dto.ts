@@ -1,5 +1,5 @@
 export type BaseSuccessResponse<T = any> = {
-  isSuccess: boolean;
+  success: boolean;
   code: string;
   data: T;
 };
