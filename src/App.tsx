@@ -6,7 +6,7 @@ import LoginPage from './pages/Login';
 import MyPage from './pages/MyPage/MyPage';
 import TopicsPage from './pages/Topics';
 import SentencesPage from './pages/Sentences';
-import PracticePage from './pages/Pactice';
+import PracticePage from './pages/Practice';
 import CustomTrainingPage from './pages/CustomTraining';
 import TalkBotPage from './pages/TalkBot';
 
@@ -58,7 +58,7 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path="/practice/:sentenceId"
+          path="/practice"
           element={
             <ProtectedRoute>
               <PracticePage />

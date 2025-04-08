@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Container,
   Card,
@@ -22,22 +22,30 @@ import ArrowLeft from '../../components/Icons/ArrowLeft';
 import ArrowRight from '../../components/Icons/ArrowRight';
 import HighlightedText from '../../components/HighlightedText';
 import theme from '../../styles/theme';
-import { dummySentences } from '../Sentences/dummySentences';
+import { useRecoilValue } from 'recoil';
+import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
+import { SentenceItemDTO } from '../../apis/topics/dto';
+
 import { dummyPronunciationAnalysis } from './dummyPronounciationAnalysis';
 
 const PracticePage: React.FC = () => {
-  const { sentenceId } = useParams<{ sentenceId: string }>();
+  const location = useLocation();
+  const sentenceId = (location.state as { sentenceId: string })?.sentenceId;
+
+  const sentenceList = useRecoilValue(sentenceListState);
+  const [sentence, setSentence] = useState<SentenceItemDTO>();
+
   const navigate = useNavigate();
 
-  const [currentSentence, setCurrentSentence] = useState(() =>
-    dummySentences.find((sentence) => sentence.id === Number(sentenceId))
-  );
+  const getSentence = () => {
+    if (!sentenceId) return;
+    const id = Number(sentenceId);
+    const found = sentenceList.find((s) => s.id === id);
+    if (found) setSentence(found);
+  };
 
   useEffect(() => {
-    const foundSentence = dummySentences.find(
-      (sentence) => sentence.id === Number(sentenceId)
-    );
-    setCurrentSentence(foundSentence);
+    getSentence();
   }, [sentenceId]);
 
   const [isRecording, setIsRecording] = useState(false);
@@ -51,18 +59,9 @@ const PracticePage: React.FC = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
-  // 문장 업데이트 시 초기화
-  useEffect(() => {
-    if (currentSentence) {
-      setUserText(null);
-      setRecordedAudio(null);
-      setPronunciationErrors([]);
-    }
-  }, [currentSentence]);
-
   const playModelPronunciation = () => {
-    //new Audio(currentSentence.modelPronunciation).play();
-    console.log(currentSentence?.modelAudioUrl, ' 재생');
+    //new Audio(sentence.modelPronunciation).play();
+    console.log(sentence?.modelAudioUrl, ' 재생');
   };
 
   const requestMicrophoneAccess = async () => {
@@ -144,7 +143,7 @@ const PracticePage: React.FC = () => {
     try {
       const formData = new FormData();
       formData.append('audio', audioBlob, 'recorded_audio.wav'); // 파일 추가
-      formData.append('sentenceId', String(currentSentence?.id)); // 문장 ID 추가 (필요 시)
+      formData.append('sentenceId', String(sentence?.id)); // 문장 ID 추가 (필요 시)
 
       const response = await fetch(
         'https://your-api.com/dummySentences/pronounce',
@@ -186,28 +185,30 @@ const PracticePage: React.FC = () => {
     console.log(dummyPronunciationAnalysis.data.userAudioUrl, ' 재생');
   };
 
+  // handlePrev
   const handlePrev = () => {
-    const currentIndex = dummySentences.findIndex(
-      (s) => s.id === currentSentence?.id
-    );
+    const currentIndex = sentenceList.findIndex((s) => s.id === sentence?.id);
     if (currentIndex > 0) {
-      navigate(`/practice/${dummySentences[currentIndex - 1].id}`);
+      const prevSentence = sentenceList[currentIndex - 1];
+      setSentence(prevSentence);
+      navigate('.', { state: { sentenceId: String(prevSentence.id) } });
     }
   };
 
+  // handleNext
   const handleNext = () => {
-    const currentIndex = dummySentences.findIndex(
-      (s) => s.id === currentSentence?.id
-    );
-    if (currentIndex < dummySentences.length - 1) {
-      navigate(`/practice/${dummySentences[currentIndex + 1].id}`);
+    const currentIndex = sentenceList.findIndex((s) => s.id === sentence?.id);
+    if (currentIndex < sentenceList.length - 1) {
+      const nextSentence = sentenceList[currentIndex + 1];
+      setSentence(nextSentence);
+      navigate('.', { state: { sentenceId: String(nextSentence.id) } });
     }
   };
 
   return (
     <Container>
       <TopBar />
-      {currentSentence && (
+      {sentence && (
         <Card>
           <Korean>
             {!userText ? (
@@ -215,12 +216,12 @@ const PracticePage: React.FC = () => {
                 $variant="headingXL"
                 color={theme.colors.text.tertiary}
               >
-                {currentSentence.korean}
+                {sentence.korean}
               </StyledText>
             ) : (
               <HighlightedText
                 original={userText}
-                correct={currentSentence.korean}
+                correct={sentence.korean}
                 errors={pronunciationErrors}
                 size="headingXL"
               />
@@ -261,7 +262,7 @@ const PracticePage: React.FC = () => {
             $variant="captionRegular"
             color={theme.colors.text.primary}
           >
-            {currentSentence.translation}
+            {sentence.translation}
           </Translation>
 
           <ButtonContainer>
@@ -271,8 +272,7 @@ const PracticePage: React.FC = () => {
               icon={<ArrowLeft color={theme.colors.gray[500]} />}
               onClick={handlePrev}
               disabled={
-                dummySentences.findIndex((s) => s.id === Number(sentenceId)) ===
-                0
+                sentenceList.findIndex((s) => s.id === Number(sentenceId)) === 0
               }
             />
 
@@ -297,8 +297,8 @@ const PracticePage: React.FC = () => {
               icon={<ArrowRight color={theme.colors.gray[500]} />}
               onClick={handleNext}
               disabled={
-                dummySentences.findIndex((s) => s.id === Number(sentenceId)) ===
-                dummySentences.length - 1
+                sentenceList.findIndex((s) => s.id === Number(sentenceId)) ===
+                sentenceList.length - 1
               }
             />
           </ButtonContainer>
