@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
+import theme from '../../styles/theme';
 
 export const Container = styled.div`
   display: flex;
@@ -27,6 +28,33 @@ export const Card = styled.div`
   border-radius: 20px;
   background-color: ${({ theme }) => theme.colors.bg.white};
   position: relative;
+`;
+
+interface PassedProps {
+  passed: boolean;
+}
+
+export const Passed = styled.div<PassedProps>`
+  position: absolute;
+  top: 20px;
+  display: flex;
+  width: 60px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 15px;
+  background: ${({ passed, theme }) =>
+    passed ? theme.colors.state.correct : theme.colors.state.error};
+  color: ${({ theme }) => theme.colors.text.white};
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+export const FeedbackText = styled(StyledText)`
+  position: absolute;
+  top: 60px;
+  color: ${({ theme }) => theme.colors.state.error};
 `;
 
 export const Korean = styled.div`

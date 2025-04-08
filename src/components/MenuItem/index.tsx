@@ -12,11 +12,12 @@ const MenuItem: React.FC<MenuItemProps> = ({
   title,
   content,
   route,
+  state
 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(route);
+    navigate(route, {state});
   };
 
   return (

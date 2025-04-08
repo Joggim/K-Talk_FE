@@ -11,10 +11,11 @@ export interface TopicItem {
   description: string;
 }
 
-export type GetSentenceListData = SentenceItem[];
+export type GetSentenceListData = SentenceItemDTO[];
 
-export interface SentenceItem {
+export interface SentenceItemDTO {
   id: number;
   korean: string;
   translation: string;
+  modelAudioUrl?: string;
 }

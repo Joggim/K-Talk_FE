@@ -13,7 +13,9 @@ const SentenceItem: React.FC<SentenceItemProps> = ({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/practice/${id}`);
+    navigate(`/practice`, {
+      state: { sentenceId: id },
+    });
   };
 
   return (
