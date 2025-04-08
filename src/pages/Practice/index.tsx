@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Container,
   Card,
+  Passed,
+  FeedbackText,
   Korean,
   Translation,
   AudioContainer,
@@ -25,6 +27,7 @@ import theme from '../../styles/theme';
 import { useRecoilValue } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
 import { SentenceItemDTO } from '../../apis/topics/dto';
+import { PronunciationAnalysisResult } from './dto';
 
 import { dummyPronunciationAnalysis } from './dummyPronounciationAnalysis';
 
@@ -50,10 +53,8 @@ const PracticePage: React.FC = () => {
 
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState<string | null>(null);
-  const [userText, setUserText] = useState<string | null>(null);
-  const [pronunciationErrors, setPronunciationErrors] = useState<
-    { char: string; index: number }[]
-  >([]);
+  const [analysisResult, setAnalysisResult] =
+    useState<PronunciationAnalysisResult | null>(null);
 
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -90,8 +91,7 @@ const PracticePage: React.FC = () => {
     if (!hasPermission) return;
 
     setRecordedAudio(null);
-    setUserText(null);
-    setPronunciationErrors([]);
+    setAnalysisResult(null);
     setIsRecording(true);
     audioChunksRef.current = [];
 
@@ -141,15 +141,24 @@ const PracticePage: React.FC = () => {
 
   const uploadAudio = async (audioBlob: Blob) => {
     try {
+      /*
       const formData = new FormData();
-      formData.append('audio', audioBlob, 'recorded_audio.wav'); // 파일 추가
-      formData.append('sentenceId', String(sentence?.id)); // 문장 ID 추가 (필요 시)
+      //formData.append('audio', audioBlob, 'recorded_audio.wav'); // 파일 추가
+      //formData.append('sentenceId', String(sentence?.id)); // 문장 ID 추가 (필요 시)
+
+      const testPayload = {
+        reference: sentence?.korean || '',
+        user_text: '사용자가 말한 문장 (예시)',
+      };
 
       const response = await fetch(
-        'https://your-api.com/dummySentences/pronounce',
+        'https://localhost:8000/pronounce-evaluate',
         {
           method: 'POST',
-          body: formData,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(testPayload),
         }
       );
 
@@ -157,14 +166,13 @@ const PracticePage: React.FC = () => {
 
       const responseData = await response.json();
       console.log('서버 응답:', responseData);
+      */
 
       // 서버에서 반환된 피드백 반영
       //setUserText(responseData.userText);
       //setPronunciationErrors(responseData.pronunciationErrors);
-      setUserText(dummyPronunciationAnalysis.data.userText);
-      setPronunciationErrors(
-        dummyPronunciationAnalysis.data.pronunciationErrors
-      );
+
+      setAnalysisResult(dummyPronunciationAnalysis.data);
     } catch (error) {
       console.error('오디오 업로드 중 오류:', error);
     }
@@ -178,11 +186,11 @@ const PracticePage: React.FC = () => {
 
   const playRecordedAudio = () => {
     /*
-    if (dummyPronunciationAnalysis.data.userPronunciation) {
-      new Audio(dummyPronunciationAnalysis.data.userPronunciation).play();
+    if (analysisResult.userPronunciation) {
+      new Audio(analysisResult.userPronunciation).play();
     }
     */
-    console.log(dummyPronunciationAnalysis.data.userAudioUrl, ' 재생');
+    console.log(analysisResult?.userAudioUrl, ' 재생');
   };
 
   // handlePrev
@@ -191,6 +199,7 @@ const PracticePage: React.FC = () => {
     if (currentIndex > 0) {
       const prevSentence = sentenceList[currentIndex - 1];
       setSentence(prevSentence);
+      setAnalysisResult(null);
       navigate('.', { state: { sentenceId: String(prevSentence.id) } });
     }
   };
@@ -201,6 +210,7 @@ const PracticePage: React.FC = () => {
     if (currentIndex < sentenceList.length - 1) {
       const nextSentence = sentenceList[currentIndex + 1];
       setSentence(nextSentence);
+      setAnalysisResult(null);
       navigate('.', { state: { sentenceId: String(nextSentence.id) } });
     }
   };
@@ -210,21 +220,36 @@ const PracticePage: React.FC = () => {
       <TopBar />
       {sentence && (
         <Card>
+          {analysisResult && (
+            <Passed passed={analysisResult.passed}>
+              {analysisResult.passed ? '통과' : '실패'}
+            </Passed>
+          )}
+
+          {!analysisResult?.passed && (
+            <FeedbackText
+              $variant="captionRegular"
+              color={theme.colors.state.error}
+            >
+              {analysisResult?.feedBack}
+            </FeedbackText>
+          )}
+
           <Korean>
-            {!userText ? (
+            {analysisResult ? (
+              <HighlightedText
+                original={analysisResult.userText}
+                correct={sentence.korean}
+                errors={analysisResult.pronunciationErrors}
+                size="headingXL"
+              />
+            ) : (
               <StyledText
                 $variant="headingXL"
                 color={theme.colors.text.tertiary}
               >
                 {sentence.korean}
               </StyledText>
-            ) : (
-              <HighlightedText
-                original={userText}
-                correct={sentence.korean}
-                errors={pronunciationErrors}
-                size="headingXL"
-              />
             )}
           </Korean>
 
