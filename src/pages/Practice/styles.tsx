@@ -40,7 +40,7 @@ interface PassedProps {
   $passed: boolean | null;
 }
 
-export const Passed = styled.div<{ $passed: boolean | null }>`
+export const Passed = styled.div<PassedProps>`
   display: flex;
   width: 60px;
   height: 30px;
@@ -50,7 +50,7 @@ export const Passed = styled.div<{ $passed: boolean | null }>`
   border-radius: 15px;
   background: ${({ $passed, theme }) =>
     $passed === true
-      ? theme.colors.state.correct
+      ? theme.colors.state.success
       : $passed === false
         ? theme.colors.state.error
         : theme.colors.bg.white}; // feedback이 없는 경우 중립 배경
