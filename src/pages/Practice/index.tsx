@@ -224,7 +224,6 @@ const PracticePage: React.FC = () => {
           <Korean>
             {feedback ? (
               <HighlightedText
-                original={feedback.userText}
                 correct={sentence.korean}
                 errors={
                   Array.isArray(feedback.pronunciationErrors)

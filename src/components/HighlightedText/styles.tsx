@@ -29,10 +29,20 @@ export const WordSpan = styled.span`
 
 interface CharSpanProps {
   $isError?: boolean;
+  $isSpace?: boolean;
 }
 
 export const CharSpan = styled(StyledText)<CharSpanProps>`
   display: inline-block;
   color: ${({ $isError, theme }) =>
     $isError ? theme.colors.state.error : theme.colors.state.success};
+
+  ${({ $isSpace }) =>
+    $isSpace &&
+    `
+    width: 0.27rem;
+    font-size: iherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+  `}
 `;
