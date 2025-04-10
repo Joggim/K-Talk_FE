@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Container,
   Card,
+  InnerCard,
   Passed,
   FeedbackText,
   Korean,
@@ -25,6 +26,7 @@ import ArrowRight from '../../components/Icons/ArrowRight';
 import XIcon from '../../components/Icons/X';
 import CheckIcon from '../../components/Icons/Check';
 import HighlightedText from '../../components/HighlightedText';
+import Tooltip from './Tooltip';
 import theme from '../../styles/theme';
 import { useRecoilValue } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
@@ -211,7 +213,7 @@ const PracticePage: React.FC = () => {
               {feedback.passed ? <CheckIcon /> : <XIcon />}
             </Passed>
           )}
-
+          {/*
           {!feedback?.passed && (
             <FeedbackText
               $variant="captionRegular"
@@ -220,62 +222,64 @@ const PracticePage: React.FC = () => {
               {feedback?.feedBack}
             </FeedbackText>
           )}
-
-          <Korean>
-            {feedback ? (
-              <HighlightedText
-                correct={sentence.korean}
-                errors={
-                  Array.isArray(feedback.pronunciationErrors)
-                    ? feedback.pronunciationErrors.map(
-                        ({ correct, index }) => ({
-                          char: correct,
-                          index,
-                        })
-                      )
-                    : []
-                }
-                size="headingXL"
-              />
-            ) : (
-              <StyledText
-                $variant="headingXL"
-                color={theme.colors.text.tertiary}
-              >
-                {sentence.korean}
-              </StyledText>
-            )}
-          </Korean>
-
-          <AudioContainer>
-            <AudioItemWrapper>
-              <AudioItem onClick={playModelPronunciation}>
-                <Sound color={theme.colors.brand.primary} />
+          */}
+          <InnerCard>
+            <Korean>
+              {feedback ? (
+                <HighlightedText
+                  correct={sentence.korean}
+                  errors={
+                    Array.isArray(feedback.pronunciationErrors)
+                      ? feedback.pronunciationErrors.map(
+                          ({ correct, index }) => ({
+                            char: correct,
+                            index,
+                          })
+                        )
+                      : []
+                  }
+                  size="headingXL"
+                />
+              ) : (
                 <StyledText
-                  $variant="bodyMediumRegular"
-                  color={theme.colors.brand.primary}
+                  $variant="headingXL"
+                  color={theme.colors.text.tertiary}
                 >
-                  모범 발음
+                  {sentence.korean}
                 </StyledText>
-              </AudioItem>
-            </AudioItemWrapper>
+              )}
+            </Korean>
 
-            <AudioItemWrapper>
-              {recordedAudio ? (
-                <AudioItem onClick={playRecordedAudio}>
-                  <MySound color={theme.colors.brand.primary} />
+            <AudioContainer>
+              <AudioItemWrapper>
+                <AudioItem onClick={playModelPronunciation}>
+                  <Sound color={theme.colors.brand.primary} />
                   <StyledText
                     $variant="bodyMediumRegular"
                     color={theme.colors.brand.primary}
                   >
-                    내 발음
+                    모범 발음
                   </StyledText>
                 </AudioItem>
-              ) : (
-                <div style={{ width: '100px' }} /> // 내 발음이 없을 때 빈 공간 유지
-              )}
-            </AudioItemWrapper>
-          </AudioContainer>
+              </AudioItemWrapper>
+
+              <AudioItemWrapper>
+                {recordedAudio ? (
+                  <AudioItem onClick={playRecordedAudio}>
+                    <MySound color={theme.colors.brand.primary} />
+                    <StyledText
+                      $variant="bodyMediumRegular"
+                      color={theme.colors.brand.primary}
+                    >
+                      내 발음
+                    </StyledText>
+                  </AudioItem>
+                ) : (
+                  <div style={{ width: '100px' }} /> // 내 발음이 없을 때 빈 공간 유지
+                )}
+              </AudioItemWrapper>
+            </AudioContainer>
+          </InnerCard>
 
           <Translation
             $variant="captionRegular"
@@ -284,45 +288,40 @@ const PracticePage: React.FC = () => {
             {sentence.translation}
           </Translation>
 
-          <ButtonContainer>
-            <CircleButton
-              size="small"
-              bgColor={theme.colors.bg.black3}
-              icon={<ArrowLeft color={theme.colors.gray[500]} />}
-              onClick={handlePrev}
-              disabled={
-                sentenceList.findIndex((s) => s.id === Number(sentenceId)) === 0
-              }
-            />
-
-            <CircleButton
-              size="big"
-              bgColor={theme.colors.brand.primary}
-              icon={
-                isRecording ? (
-                  <Pause />
-                ) : recordedAudio ? (
-                  <Retry />
-                ) : (
-                  <Microphone />
-                )
-              }
-              onClick={isRecording ? stopRecording : startRecording}
-            />
-
-            <CircleButton
-              size="small"
-              bgColor={theme.colors.bg.black3}
-              icon={<ArrowRight color={theme.colors.gray[500]} />}
-              onClick={handleNext}
-              disabled={
-                sentenceList.findIndex((s) => s.id === Number(sentenceId)) ===
-                sentenceList.length - 1
-              }
-            />
-          </ButtonContainer>
+          {feedback && <Tooltip userText={feedback?.userText} />}
         </Card>
       )}
+      <ButtonContainer>
+        <CircleButton
+          size="small"
+          bgColor={theme.colors.bg.black3}
+          icon={<ArrowLeft color={theme.colors.gray[500]} />}
+          onClick={handlePrev}
+          disabled={
+            sentenceList.findIndex((s) => s.id === Number(sentenceId)) === 0
+          }
+        />
+
+        <CircleButton
+          size="big"
+          bgColor={theme.colors.brand.primary}
+          icon={
+            isRecording ? <Pause /> : recordedAudio ? <Retry /> : <Microphone />
+          }
+          onClick={isRecording ? stopRecording : startRecording}
+        />
+
+        <CircleButton
+          size="small"
+          bgColor={theme.colors.bg.black3}
+          icon={<ArrowRight color={theme.colors.gray[500]} />}
+          onClick={handleNext}
+          disabled={
+            sentenceList.findIndex((s) => s.id === Number(sentenceId)) ===
+            sentenceList.length - 1
+          }
+        />
+      </ButtonContainer>
     </Container>
   );
 };
