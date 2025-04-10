@@ -1,7 +1,7 @@
 import React from 'react';
 import type { IconsProps } from './dto';
 
-const Setting: React.FC<IconsProps> = ({
+const X: React.FC<IconsProps> = ({
   color = 'white',
   isFilled = false,
   width = '30',
@@ -26,4 +26,4 @@ const Setting: React.FC<IconsProps> = ({
   );
 };
 
-export default Setting;
+export default X;
