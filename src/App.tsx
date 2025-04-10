@@ -9,32 +9,23 @@ import SentencesPage from './pages/Sentences';
 import PracticePage from './pages/Practice';
 import CustomTrainingPage from './pages/CustomTraining';
 import TalkBotPage from './pages/TalkBot';
-import { refreshTokens } from './utils/auth';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const success = await refreshTokens(); // accessToken을 갱신 시도
-      setIsAuthenticated(success);
-    };
-    checkAuth();
-  }, []);
+  if (!accessToken || !refreshToken) {
+    return <Navigate to="/login" />;
+  }
 
-  if (isAuthenticated === null) return <div>로딩 중...</div>;
-
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return children;
 };
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 인증 필요 없는 로그인 */}
         <Route path="/login" element={<LoginPage />} />
-
-        {/* 인증 필요한 페이지 */}
         <Route
           path="/"
           element={

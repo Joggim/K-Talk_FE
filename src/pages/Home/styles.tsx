@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
+export const LogoImage = styled.img`
+  width: 140px;
+  height: auto;
+  margin-bottom: 16px;
+`;
+
 export const Container = styled.div`
   flex-grow: 1;
   height: 100vh;

@@ -17,9 +17,9 @@ const MoveUp: React.FC<IconsProps> = ({
       <path
         d="M10 7.5L15 2.5M15 2.5L20 7.5M15 2.5V27.5"
         stroke={color}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
