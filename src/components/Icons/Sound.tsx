@@ -3,8 +3,8 @@ import type { IconsProps } from './dto';
 
 const Sound: React.FC<IconsProps> = ({
   color = 'white',
-  width = '26',
-  height = '26',
+  width = '22',
+  height = '22',
 }) => {
   return (
     <svg
