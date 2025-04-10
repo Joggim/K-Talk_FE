@@ -6,11 +6,24 @@ export type GoolgeLoginRequest = GoogleLogin;
 //response
 export type GoogleLoginResponse = BaseSuccessResponse<GoogleLoginData>;
 
+export type TokenRefreshResponse =
+  BaseSuccessResponse<TokenRefreshResponseData>;
+
 export interface GoogleLogin {
   token: string;
 }
 
 export interface GoogleLoginData {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface TokenRefreshRequest {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface TokenRefreshResponseData {
   accessToken: string;
   refreshToken: string;
 }

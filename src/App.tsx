@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/Home';
@@ -9,15 +9,25 @@ import SentencesPage from './pages/Sentences';
 import PracticePage from './pages/Practice';
 import CustomTrainingPage from './pages/CustomTraining';
 import TalkBotPage from './pages/TalkBot';
+import { refreshTokens } from './utils/auth';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const isAuthenticated = Boolean(localStorage.getItem('accessToken'));
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const success = await refreshTokens(); // accessToken을 갱신 시도
+      setIsAuthenticated(success);
+    };
+    checkAuth();
+  }, []);
+
+  if (isAuthenticated === null) return <div>로딩 중...</div>;
+
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
 const App: React.FC = () => {
-  console.log('VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
-
   return (
     <BrowserRouter>
       <Routes>

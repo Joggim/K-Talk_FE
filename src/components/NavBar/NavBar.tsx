@@ -7,8 +7,6 @@ import Like from '../Icons/Like';
 import Chat from '../Icons/Chat';
 import Profile from '../Icons/Profile';
 
-import { getCurrentUserId } from '../../utils/getCurrentUserId';
-
 import { StyledText } from '../StyledText/StyledText.styles';
 
 import {

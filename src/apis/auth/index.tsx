@@ -1,6 +1,11 @@
 import { AxiosError } from 'axios';
 import { newRequest } from '../util';
-import { GoolgeLoginRequest, GoogleLoginResponse } from './dto';
+import {
+  GoolgeLoginRequest,
+  GoogleLoginResponse,
+  TokenRefreshRequest,
+  TokenRefreshResponse,
+} from './dto';
 
 export const googleLogin = async (
   requestData: GoolgeLoginRequest
@@ -17,7 +22,7 @@ export const googleLogin = async (
       }
     );
 
-    console.log('Login API Response:', response);
+    //console.log('Login API Response:', response);
     localStorage.setItem('accessToken', response.data.accessToken);
     localStorage.setItem('refreshToken', response.data.refreshToken);
 
@@ -34,3 +39,6 @@ export const googleLogin = async (
     throw error;
   }
 };
+
+export const refreshTokenApi = (body: TokenRefreshRequest) =>
+  newRequest.post<TokenRefreshResponse>('/api/auth/refresh', body);
