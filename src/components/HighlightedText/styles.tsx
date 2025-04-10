@@ -28,11 +28,11 @@ export const WordSpan = styled.span`
 `;
 
 interface CharSpanProps {
-  isError?: boolean;
+  $isError?: boolean;
 }
 
 export const CharSpan = styled(StyledText)<CharSpanProps>`
   display: inline-block;
-  color: ${({ isError, theme }) =>
-    isError ? theme.colors.state.error : theme.colors.state.success};
+  color: ${({ $isError, theme }) =>
+    $isError ? theme.colors.state.error : theme.colors.state.success};
 `;
