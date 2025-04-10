@@ -3,32 +3,51 @@ import { HighlightedTextProps } from './dto';
 import { TextContainer, WordSpan, CharSpan } from './styles';
 
 const HighlightedText: React.FC<HighlightedTextProps> = ({
-  original,
   correct,
   errors = [],
   size = 'bodyMediumLight',
 }) => {
-  const words = correct.split(' '); // 단어 단위로 나눔
+  const words = correct.split(' ');
+  let globalIndex = 0;
 
   return (
     <TextContainer size={size}>
-      {words.map((word, wordIndex) => (
-        <WordSpan key={wordIndex}>
-          {word.split('').map((char, charIndex) => {
-            const globalIndex = original.indexOf(word) + charIndex; // 전체 문장에서의 인덱스 계산
-            const $isError = errors.some(
-              (error) => error.index === globalIndex && error.char === char
-            );
+      {words.map((word, wordIndex) => {
+        const wordChars = word.split('');
+        const wordSpans = wordChars.map((char) => {
+          const isError = errors.some((error) => error.index === globalIndex);
+          const span = (
+            <CharSpan
+              key={globalIndex}
+              $isError={isError}
+              $isSpace={false}
+              $variant={size}
+            >
+              {char}
+            </CharSpan>
+          );
+          globalIndex += 1;
+          return span;
+        });
 
-            return (
-              <CharSpan key={globalIndex} $isError={$isError} $variant={size}>
-                {char}
-              </CharSpan>
-            );
-          })}
-          {wordIndex < words.length - 1 && <span>&nbsp;</span>}
-        </WordSpan>
-      ))}
+        // 공백 처리
+        if (wordIndex < words.length - 1) {
+          const isError = errors.some((error) => error.index === globalIndex);
+          wordSpans.push(
+            <CharSpan
+              key={globalIndex}
+              $isError={isError}
+              $isSpace={true}
+              $variant={size}
+            >
+              {'\u00A0'}
+            </CharSpan>
+          );
+          globalIndex += 1;
+        }
+
+        return <WordSpan key={wordIndex}>{wordSpans}</WordSpan>;
+      })}
     </TextContainer>
   );
 };

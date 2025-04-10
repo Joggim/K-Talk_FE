@@ -7,8 +7,8 @@ export const Container = styled.button<{
   display: flex;
   align-items: center;
   justify-content: center;
-  width: ${({ $size }) => ($size === 'big' ? '56px' : '40px')};
-  height: ${({ $size }) => ($size === 'big' ? '56px' : '40px')};
+  width: ${({ $size }) => ($size === 'big' ? '80px' : '50px')};
+  height: ${({ $size }) => ($size === 'big' ? '80px' : '50px')};
   border-radius: 50%;
   background-color: ${({ $bgColor }) => $bgColor};
   border: none;

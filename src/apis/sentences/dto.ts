@@ -21,6 +21,7 @@ export interface FeedbackResponseData {
   passed: boolean;
   userText: string;
   userAudioUrl: string;
+  userIpa?: string;
   pronunciationErrors: PronunciationError[];
   feedBack?: string;
 }

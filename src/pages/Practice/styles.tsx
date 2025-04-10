@@ -17,26 +17,32 @@ export const Container = styled.div`
 
 export const Card = styled.div`
   display: flex;
-  width: 100%;
-  max-width: 400px;
-  height: 360px;
+  width: 353px;
   padding: 20px;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 20px;
   border-radius: 20px;
-  background-color: ${({ theme }) => theme.colors.bg.white};
-  position: relative;
+  background: var(--Bg-White, #fff);
+`;
+
+export const InnerCard = styled.div`
+  display: flex;
+  width: 100%;
+  min-height: 200px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 `;
 
 interface PassedProps {
-  passed: boolean;
+  $passed: boolean;
 }
 
 export const Passed = styled.div<PassedProps>`
-  position: absolute;
-  top: 20px;
+  //position: absolute;
+  //top: 20px;
   display: flex;
   width: 60px;
   height: 30px;
@@ -44,28 +50,28 @@ export const Passed = styled.div<PassedProps>`
   align-items: center;
   flex-shrink: 0;
   border-radius: 15px;
-  background: ${({ passed, theme }) =>
-    passed ? theme.colors.state.correct : theme.colors.state.error};
+  background: ${({ $passed, theme }) =>
+    $passed ? theme.colors.state.correct : theme.colors.state.error};
   color: ${({ theme }) => theme.colors.text.white};
   font-size: 14px;
   font-weight: bold;
 `;
 
 export const FeedbackText = styled(StyledText)`
-  position: absolute;
-  top: 60px;
+  //position: absolute;
+  //top: 60px;
   color: ${({ theme }) => theme.colors.state.error};
 `;
 
 export const Korean = styled.div`
-  position: absolute;
-  bottom: 150px;
+  //position: absolute;
+  //bottom: 150px;
   display: flex;
   width: auto;
   max-width: 90%;
   text-align: center;
   gap: 2px;
-  margin: 60px 0;
+  //margin: 60px 0;
   word-wrap: break-word;
   word-break: break-all;
   overflow: hidden;
@@ -74,8 +80,8 @@ export const Korean = styled.div`
 `;
 
 export const Translation = styled(StyledText)`
-  position: absolute;
-  bottom: 100px;
+  //position: absolute;
+  //bottom: 100px;
   display: flex;
   width: auto;
   max-width: 90%;
@@ -94,8 +100,8 @@ export const AudioContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 24px;
-  position: absolute;
-  top: 160px;
+  //position: absolute;
+  //top: 160px;
 `;
 
 export const AudioItemWrapper = styled.div`
@@ -113,11 +119,18 @@ export const AudioItem = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
-  position: absolute;
-  bottom: 30px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
+  padding: 20px;
+  background-color: ${({ theme }) => theme.colors.bg.white};
+
+  :nth-child(2) {
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  }
 `;
