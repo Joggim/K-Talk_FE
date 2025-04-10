@@ -1,8 +1,10 @@
 import { newRequest } from '../util';
-import { GetSentenceResponse, FeedbackResponse } from './dto';
+import { FeedbackResponse } from './dto';
 
+/*
 export const getSentenceApi = (sentenceId: number) =>
   newRequest.get<GetSentenceResponse>(`/api/sentences/${sentenceId}`, {});
+*/
 
 export const postSentenceFeedbackApi = (
   sentenceId: number,

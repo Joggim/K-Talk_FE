@@ -248,12 +248,21 @@ const PracticePage: React.FC = () => {
               )}
             </Korean>
 
+            {sentence.ipa && (
+              <StyledText
+                $variant="captionRegular"
+                color={theme.colors.text.primary}
+              >
+                {sentence.ipa}
+              </StyledText>
+            )}
+
             <AudioContainer>
               <AudioItemWrapper>
                 <AudioItem onClick={playModelPronunciation}>
                   <Sound color={theme.colors.brand.primary} />
                   <StyledText
-                    $variant="bodyMediumRegular"
+                    $variant="captionRegular"
                     color={theme.colors.brand.primary}
                   >
                     모범 발음
@@ -266,7 +275,7 @@ const PracticePage: React.FC = () => {
                   <AudioItem onClick={playRecordedAudio}>
                     <MySound color={theme.colors.brand.primary} />
                     <StyledText
-                      $variant="bodyMediumRegular"
+                      $variant="captionRegular"
                       color={theme.colors.brand.primary}
                     >
                       내 발음
@@ -294,7 +303,7 @@ const PracticePage: React.FC = () => {
       <ButtonContainer>
         <CircleButton
           size="small"
-          bgColor={theme.colors.bg.black3}
+          bgColor={theme.colors.bg.white}
           icon={<ArrowLeft color={theme.colors.gray[500]} />}
           onClick={handlePrev}
           disabled={
@@ -313,7 +322,7 @@ const PracticePage: React.FC = () => {
 
         <CircleButton
           size="small"
-          bgColor={theme.colors.bg.black3}
+          bgColor={theme.colors.bg.white}
           icon={<ArrowRight color={theme.colors.gray[500]} />}
           onClick={handleNext}
           disabled={

@@ -130,9 +130,9 @@ export const ButtonContainer = styled.div`
   justify-content: center;
   gap: 30px;
   padding: 20px;
-  background-color: ${({ theme }) => theme.colors.bg.white};
+  //background-color: ${({ theme }) => theme.colors.bg.white};
 
-  :nth-child(2) {
+  & > * {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   }
 `;
