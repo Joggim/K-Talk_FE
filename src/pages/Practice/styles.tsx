@@ -37,12 +37,10 @@ export const InnerCard = styled.div`
 `;
 
 interface PassedProps {
-  $passed: boolean;
+  $passed: boolean | null;
 }
 
-export const Passed = styled.div<PassedProps>`
-  //position: absolute;
-  //top: 20px;
+export const Passed = styled.div<{ $passed: boolean | null }>`
   display: flex;
   width: 60px;
   height: 30px;
@@ -51,7 +49,11 @@ export const Passed = styled.div<PassedProps>`
   flex-shrink: 0;
   border-radius: 15px;
   background: ${({ $passed, theme }) =>
-    $passed ? theme.colors.state.correct : theme.colors.state.error};
+    $passed === true
+      ? theme.colors.state.correct
+      : $passed === false
+        ? theme.colors.state.error
+        : theme.colors.bg.white}; // feedback이 없는 경우 중립 배경
   color: ${({ theme }) => theme.colors.text.white};
   font-size: 14px;
   font-weight: bold;

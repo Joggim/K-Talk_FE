@@ -208,11 +208,9 @@ const PracticePage: React.FC = () => {
       <TopBar />
       {sentence && (
         <Card>
-          {feedback && (
-            <Passed $passed={feedback.passed}>
-              {feedback.passed ? <CheckIcon /> : <XIcon />}
-            </Passed>
-          )}
+          <Passed $passed={feedback?.passed ?? null}>
+            {feedback ? feedback.passed ? <CheckIcon /> : <XIcon /> : null}
+          </Passed>
           {/*
           {!feedback?.passed && (
             <FeedbackText
