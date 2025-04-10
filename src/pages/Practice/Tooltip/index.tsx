@@ -26,8 +26,9 @@ const Tooltip: React.FC<TooltipDTO> = ({ userIpa, userText }) => {
         height="17"
         viewBox="0 0 17 17"
         fill="none"
+        shape-rendering="crispEdges"
       >
-        <path d="M8.5 17L0.272758 0.5L16.7272 0.5L8.5 17Z" fill="#5249DC" />
+        <path d="M8.5 17L0 0L17 0L8.5 17Z" fill="#5249DC" />
       </svg>
     </Container>
   );

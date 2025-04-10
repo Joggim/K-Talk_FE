@@ -288,7 +288,9 @@ const PracticePage: React.FC = () => {
             {sentence.translation}
           </Translation>
 
-          {feedback && <Tooltip userText={feedback?.userText} />}
+          {feedback && (
+            <Tooltip userIpa={feedback.userIpa} userText={feedback.userText} />
+          )}
         </Card>
       )}
       <ButtonContainer>
