@@ -1,14 +1,17 @@
 import { BaseSuccessResponse } from '../util/dto';
 
-export type GetSentenceResponse = BaseSuccessResponse<GetSentenceData>;
+//export type GetSentenceResponse = BaseSuccessResponse<GetSentenceData>;
 export type FeedbackResponse = BaseSuccessResponse<FeedbackResponseData>;
 
+/*
 export interface GetSentenceData {
   id: number;
   korean: string;
   translation: string;
   audioUrl: string;
+  ipa?: string;
 }
+*/
 
 export interface PronunciationError {
   wrong: string;

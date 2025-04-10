@@ -18,4 +18,5 @@ export interface SentenceItemDTO {
   korean: string;
   translation: string;
   modelAudioUrl?: string;
+  ipa?: string;
 }
