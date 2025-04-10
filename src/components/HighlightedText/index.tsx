@@ -16,12 +16,12 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
         <WordSpan key={wordIndex}>
           {word.split('').map((char, charIndex) => {
             const globalIndex = original.indexOf(word) + charIndex; // 전체 문장에서의 인덱스 계산
-            const isError = errors.some(
+            const $isError = errors.some(
               (error) => error.index === globalIndex && error.char === char
             );
 
             return (
-              <CharSpan key={globalIndex} isError={isError} $variant={size}>
+              <CharSpan key={globalIndex} $isError={$isError} $variant={size}>
                 {char}
               </CharSpan>
             );
