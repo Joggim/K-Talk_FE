@@ -22,6 +22,8 @@ import Sound from '../../components/Icons/Sound';
 import MySound from '../../components/Icons/MySound';
 import ArrowLeft from '../../components/Icons/ArrowLeft';
 import ArrowRight from '../../components/Icons/ArrowRight';
+import XIcon from '../../components/Icons/X';
+import CheckIcon from '../../components/Icons/Check';
 import HighlightedText from '../../components/HighlightedText';
 import theme from '../../styles/theme';
 import { useRecoilValue } from 'recoil';
@@ -206,7 +208,7 @@ const PracticePage: React.FC = () => {
         <Card>
           {feedback && (
             <Passed $passed={feedback.passed}>
-              {feedback.passed ? '통과' : '실패'}
+              {feedback.passed ? <CheckIcon /> : <XIcon />}
             </Passed>
           )}
 
