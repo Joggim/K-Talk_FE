@@ -24,6 +24,7 @@ export const Card = styled.div`
   gap: 20px;
   border-radius: 20px;
   background: var(--Bg-White, #fff);
+  margin-bottom: 80px;
 `;
 
 export const InnerCard = styled.div`
