@@ -1,13 +1,16 @@
 import React from 'react';
-import { Container, MenuContainer } from './styles';
+import { Container, MenuContainer, LogoImage } from './styles';
 import NavBar from '../../components/NavBar/NavBar';
 import MenuItem from '../../components/MenuItem';
 import theme from '../../styles/theme';
+import Logo from '../../assets/logo.png';
 
 const HomePage: React.FC = () => {
   return (
     <Container>
-      <h1>K-Talk</h1>
+      {/*
+      <LogoImage src={Logo} alt="Logo" />
+      */}
       <MenuContainer>
         <MenuItem
           bgColor={theme.colors.brand.primary}

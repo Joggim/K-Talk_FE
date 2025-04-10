@@ -9,30 +9,16 @@ import SentencesPage from './pages/Sentences';
 import PracticePage from './pages/Practice';
 import CustomTrainingPage from './pages/CustomTraining';
 import TalkBotPage from './pages/TalkBot';
-import { refreshTokens } from './apis/util';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      const refreshToken = localStorage.getItem('refreshToken');
+  if (!accessToken || !refreshToken) {
+    return <Navigate to="/login" />;
+  }
 
-      if (!accessToken || !refreshToken) {
-        setIsAuthenticated(false);
-        return;
-      }
-
-      const success = await refreshTokens();
-      setIsAuthenticated(success);
-    };
-
-    checkAuth();
-  }, []);
-
-  if (isAuthenticated === null) return <div>로딩 중...</div>;
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return children;
 };
 
 const App: React.FC = () => {

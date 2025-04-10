@@ -4,6 +4,7 @@ import { Container } from './styles';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { googleLogin } from '../../apis/auth';
 import { GoogleLogin } from '@react-oauth/google';
+import Logo from '../../assets/logo.png';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -34,6 +35,7 @@ const LoginPage: React.FC = () => {
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <Container>
+        <img src={Logo} alt="Logo" />
         <GoogleLogin
           onSuccess={handleGoogleLogin}
           onError={() => alert('Google login failed!')}
