@@ -16,5 +16,9 @@ export default defineConfig(({ mode }) => {
     define: {
       'import.meta.env': env, // 환경 변수를 Vite에서 사용 가능하게 설정
     },
+    base: '/',
+    build: {
+      outDir: 'dist',
+    },
   };
 });
