@@ -33,6 +33,7 @@ import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
 import { SentenceItemDTO } from '../../apis/topics/dto';
 import { FeedbackResponseData } from '../../apis/sentences/dto';
 import { postSentenceFeedbackApi } from '../../apis/sentences';
+import Loading from '../../components/Loader';
 
 const PracticePage: React.FC = () => {
   const location = useLocation();
@@ -61,6 +62,8 @@ const PracticePage: React.FC = () => {
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const playModelPronunciation = () => {
     //new Audio(sentence.modelPronunciation).play();
@@ -142,27 +145,36 @@ const PracticePage: React.FC = () => {
   };
 
   const uploadAudio = async (audioBlob: Blob) => {
+    setIsLoading(true);
+
     try {
       const reader = new FileReader();
       reader.onloadend = async () => {
-        const base64Audio = (reader.result as string).split(',')[1]; // data:audio/wav;base64,~~ 제거
-        if (!sentence?.id) return;
+        try {
+          const base64Audio = (reader.result as string).split(',')[1];
+          if (!sentence?.id) return;
 
-        const response = await postSentenceFeedbackApi(
-          sentence.id,
-          base64Audio
-        );
+          const response = await postSentenceFeedbackApi(
+            sentence.id,
+            base64Audio
+          );
 
-        if (response.success) {
-          setFeedback(response.data);
-        } else {
-          alert('피드백 분석에 실패했습니다.');
+          if (response.success) {
+            setFeedback(response.data);
+          } else {
+            alert('피드백 분석에 실패했습니다.');
+          }
+        } catch (error) {
+          console.error('오디오 업로드 중 오류:', error);
+        } finally {
+          setIsLoading(false);
         }
       };
 
       reader.readAsDataURL(audioBlob);
     } catch (error) {
-      console.error('오디오 업로드 중 오류:', error);
+      console.error('FileReader 시작 중 오류:', error);
+      setIsLoading(false);
     }
   };
 
@@ -203,8 +215,13 @@ const PracticePage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    console.log('loading 상태:', isLoading);
+  }, [isLoading]);
+
   return (
     <Container>
+      {isLoading && <Loading />}
       <TopBar />
       {sentence && (
         <Card>

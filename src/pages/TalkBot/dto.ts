@@ -5,7 +5,7 @@ export interface SentMessageProps {
   content: string; // 필수값
   feedback?: FeedbackProps; // 문법 및 발음 피드백 객체
   userAudio?: string; // 사용자의 녹음본 URL
-  correctAudio?: string; // 정답 발음 URL
+  modelAudio?: string; // 정답 발음 URL
 }
 
 export interface RcvdMessageProps {
@@ -28,6 +28,7 @@ export interface GrammarFeedbackProps {
 
 // 발음 오류 피드백
 export interface PronunciationFeedbackProps {
+  userText: string;
   pronunciationErrors: PronunciationError[]; // 발음 오류 정보
 }
 
