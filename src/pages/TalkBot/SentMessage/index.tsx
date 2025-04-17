@@ -40,7 +40,6 @@ const SentMessage: React.FC<SentMessageProps> = memo(
           )}
           <MessageBox>
             <HighlightedText
-              original={content}
               correct={content} // 문법 오류가 없으므로 원래 문장 그대로 전달
               errors={isAllCorrect ? [] : pronunciationErrors} // 발음 오류가 없으면 초록색으로 표시
               size="bodyMediumLight"
