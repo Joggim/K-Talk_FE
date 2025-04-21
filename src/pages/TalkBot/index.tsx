@@ -33,6 +33,7 @@ const TalkBotPage: React.FC = () => {
   const [newMessageId, setNewMessageId] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPronounceError, setIsPronounceError] = useState(false);
+  const [pronounceErrorCount, setPronounceErrorCount] = useState(0);
 
   // 채팅 진입/업데이트 시 하단으로 자동 스크롤
   useEffect(() => {
@@ -70,6 +71,7 @@ const TalkBotPage: React.FC = () => {
     setMessages((prev) => [...prev, newMsg]); // 아래쪽에 추가
     setNewMessageId(newId);
     setCurrentMessageIndex((prev) => prev + 1);
+    setIsPronounceError(false);
   };
 
   // 녹음 종료 및 서버로 전송 (현재는 console.log로 대체)
@@ -90,7 +92,17 @@ const TalkBotPage: React.FC = () => {
           msg.id === newMessageId ? { ...dummyNewMessage, id: msg.id } : msg
         )
       );
-      if (dummyNewMessage.feedback?.pronunciation) setIsPronounceError(true);
+      if (dummyNewMessage.feedback?.pronunciation) {
+        if (pronounceErrorCount >= 3) {
+          setIsPronounceError(false);
+          setPronounceErrorCount(0);
+        } else {
+          setIsPronounceError(true);
+          setPronounceErrorCount((prev) => prev + 1);
+        }
+      } else {
+        setPronounceErrorCount(0);
+      }
     }, 1000);
 
     return () => clearTimeout(timer);
