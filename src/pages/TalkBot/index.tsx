@@ -16,17 +16,22 @@ import Microphone from '../../components/Icons/Microphone';
 import Pause from '../../components/Icons/Pause';
 import Setting from '../../components/Icons/Setting';
 import theme from '../../styles/theme';
-import { MessageProps } from './dto';
+import { MessageData } from '../../apis/talkbot/dto';
 import { SentMessageProps } from './SentMessage/dto';
 import { dummyMessages, dummyNewMessage } from './dummyMessages';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
+import {
+  postSTTApi,
+  getFeedbackApi,
+  postChatReplyApi,
+} from '../../apis/talkbot';
 
 const TalkBotPage: React.FC = () => {
   const firstLoadRef = useRef(true);
   const scrollBottomRef = useRef<HTMLDivElement | null>(null); // 전체 채팅 하단 기준
   const lastMessageRef = useRef<HTMLDivElement | null>(null); // 마지막 메시지용 (피드백 열릴 때)
 
-  const [messages, setMessages] = useState<MessageProps[]>(
+  const [messages, setMessages] = useState<MessageData[]>(
     dummyMessages.map((m, i) => ({ ...m, id: i }))
   );
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
@@ -58,55 +63,111 @@ const TalkBotPage: React.FC = () => {
     console.log('녹음 시작');
   };
 
-  // STT 결과 수신 시 새 메시지 추가 (애니메이션 테스트용)
-  const handleSTTResult = (text: string) => {
-    const newId = Date.now();
-    const newMsg: SentMessageProps & { id: number } = {
-      id: newId,
-      type: 'sent',
-      content: text,
-      isFeedback: false,
-    };
-
-    setMessages((prev) => [...prev, newMsg]); // 아래쪽에 추가
-    setNewMessageId(newId);
-    setCurrentMessageIndex((prev) => prev + 1);
-    setIsPronounceError(false);
-  };
-
-  // 녹음 종료 및 서버로 전송 (현재는 console.log로 대체)
+  // 녹음 종료 및 서버로 전송
   const sendRecording = () => {
     setIsRecording(false);
-    console.log('녹음 종료, 서버로 전송...');
-
-    const text = '교수님 말 빠르고 어려워서 이해하기 힘들었다.';
-    handleSTTResult(text);
+    // 더미 오디오 입력 처리
+    const dummyAudio = 'dummy_base64_audio';
+    handleSTT(dummyAudio);
   };
 
-  useEffect(() => {
-    if (!newMessageId) return;
+  // STT 결과 수신 시 새 메시지 추가 (애니메이션 테스트용)
+  const handleSTT = async (audio: string) => {
+    try {
+      // const sttRes = await postSTTApi(dummyAudio);
+      // const { text, userAudioUrl } = sttRes.data;
 
-    const timer = setTimeout(() => {
+      const text = '교수님 말 빠르고 어려워서 이해하기 힘들었다.';
+      const userAudioUrl = 'path_to_user_audio_4.mp3';
+
+      const newId = Date.now();
+      const newMsg: SentMessageProps = {
+        id: newId,
+        type: 'sent',
+        content: text,
+        isFeedback: false,
+        userAudioUrl,
+      };
+
+      setMessages((prev) => [...prev, newMsg]); // 아래쪽에 추가
+      setNewMessageId(newId);
+      setCurrentMessageIndex((prev) => prev + 1);
+      setIsPronounceError(false);
+
+      // 피드백 요청
+      handleFeedback(newId, text);
+    } catch (err) {
+      console.error('STT 실패', err);
+    }
+  };
+
+  const handleFeedback = async (messageId: number, text: string) => {
+    try {
+      // const feedbackRes = await getFeedbackApi(messageId);
+      // const feedbackData = feedbackRes.data;
+
+      const feedbackData = {
+        grammar: {
+          suggestion: '교수님 말이 너무 빨라서 이해하기 힘들었어.',
+          explanation:
+            '‘말 빠르고 어려워서’ sounds unnatural. A more natural way to say it is "말이 너무 빨라서 이해하기 힘들었어."',
+        },
+        pronunciation: {
+          pronunciationErrors: [{ char: '빠', index: 6 }],
+        },
+      };
+
       setMessages((prev) =>
         prev.map((msg) =>
-          msg.id === newMessageId ? { ...dummyNewMessage, id: msg.id } : msg
+          msg.id === messageId
+            ? {
+                ...msg,
+                isFeedback: true,
+                feedback: feedbackData,
+                modelAudioUrl: 'path_to_model_audio_4.mp3',
+              }
+            : msg
         )
       );
-      if (dummyNewMessage.feedback?.pronunciation) {
-        if (pronounceErrorCount >= 3) {
-          setIsPronounceError(false);
-          setPronounceErrorCount(0);
-        } else {
+
+      const hasPronounceError =
+        feedbackData.pronunciation?.pronunciationErrors.length > 0;
+
+      if (hasPronounceError) {
+        if (pronounceErrorCount < 3) {
           setIsPronounceError(true);
           setPronounceErrorCount((prev) => prev + 1);
+          return;
+        } else {
+          setIsPronounceError(false);
+          setPronounceErrorCount(0);
+          // 챗봇 응답 요청
+          handleReply(text);
         }
-      } else {
-        setPronounceErrorCount(0);
       }
-    }, 1000);
+    } catch (err) {
+      console.error('피드백 요청 실패', err);
+    }
+  };
 
-    return () => clearTimeout(timer);
-  }, [newMessageId]);
+  const handleReply = async (text: string) => {
+    try {
+      // const replyRes = await postChatReplyApi(text);
+      // const replyData = replyRes.data;
+
+      const replyData: MessageData = {
+        id: Date.now(),
+        type: 'received',
+        korean: '그럴 땐 교수님께 질문해보는 게 좋아요!',
+        translation: 'In that case, try asking your professor!',
+        modelAudioUrl: 'path_to_model_audio_reply.mp3',
+      };
+
+      setMessages((prev) => [...prev, replyData]);
+    } catch (err) {
+      console.error('챗봇 응답 실패', err);
+    }
+  };
 
   const visibleMessages = [...dummyMessages].reverse(); // 최신 메시지가 아래로 오도록
 

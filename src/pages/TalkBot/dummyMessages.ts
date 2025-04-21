@@ -1,5 +1,5 @@
 import { SentMessageProps } from './SentMessage/dto';
-import { MessageProps } from './dto';
+import { MessageListData } from '../../apis/talkbot/dto';
 
 export const dummyNewMessage: SentMessageProps = {
   id: 8,
@@ -20,7 +20,7 @@ export const dummyNewMessage: SentMessageProps = {
   modelAudioUrl: 'path_to_model_audio_4.mp3',
 };
 
-export const dummyMessages: MessageProps[] = [
+export const dummyMessages: MessageListData[] = [
   {
     id: 7,
     type: 'received',
