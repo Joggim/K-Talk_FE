@@ -8,7 +8,7 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.bg.black3};
 `;
 
-export const TopBarContainer = styled.nav`
+export const TopBar = styled.nav`
   position: fixed;
   top: 0;
   left: 50%;
@@ -28,25 +28,26 @@ export const Icon = styled.div`
   object-fit: cover;
 `;
 
-export const MessageContainer = styled.div`
+export const ChatList = styled.div`
   display: flex;
+  flex-direction: column;
   position: fixed;
   top: 46px;
   height: calc(100% - 116px);
   overflow-y: scroll;
-  flex-direction: column;
   width: 100%;
   gap: 7px;
   padding: 10px;
   align-self: stretch;
+  padding-bottom: 110px;
 `;
 
-export const RecordContainer = styled.div`
+export const RecordingControls = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-  bottom: 0;
+  position: fixed;
+  bottom: 80px;
   width: 100%;
   gap: 7px;
   padding: 10px;

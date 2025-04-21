@@ -4,6 +4,8 @@ export interface SentMessageProps {
   feedback?: FeedbackProps; // 문법 및 발음 피드백 객체
   userAudio?: string; // 사용자의 녹음본 URL
   correctAudio?: string; // 정답 발음 URL
+  ref?: React.RefObject<HTMLDivElement>;
+  isLast?: boolean;
 }
 
 export interface FeedbackProps {

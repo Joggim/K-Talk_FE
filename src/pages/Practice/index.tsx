@@ -215,10 +215,6 @@ const PracticePage: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    console.log('loading 상태:', isLoading);
-  }, [isLoading]);
-
   return (
     <Container>
       {isLoading && <Loading />}
