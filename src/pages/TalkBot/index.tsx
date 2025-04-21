@@ -10,7 +10,7 @@ import Setting from '../../components/Icons/Setting';
 import theme from '../../styles/theme';
 import { MessageProps } from './dto';
 import { SentMessageProps } from './SentMessage/dto';
-import { dummyMessages } from './dummyMessages';
+import { dummyMessages, dummyNewMessage } from './dummyMessages';
 
 const TalkBotPage: React.FC = () => {
   const firstLoadRef = useRef(true);
@@ -54,6 +54,7 @@ const TalkBotPage: React.FC = () => {
       id: newId,
       type: 'sent',
       content: text,
+      isFeedback: false,
     };
 
     setMessages((prev) => [...prev, newMsg]); // 아래쪽에 추가
@@ -66,18 +67,23 @@ const TalkBotPage: React.FC = () => {
     setIsRecording(false);
     console.log('녹음 종료, 서버로 전송...');
 
-    handleSTTResult('교수님 말 빠르고 어려워서 이해하기 힘들었다.');
-
-    /*
-    // 현재 메시지가 `sent`이고 발음 오류가 있는 경우 다시 말하도록 설정
-    const lastSentMessage = dummyMessages[currentMessageIndex - 1];
-    if (
-      lastSentMessage.feedback?.pronunciation
-    ) {
-      console.log('발음 오류! 다시 말해주세요.');
-    }
-    */
+    const text = '교수님 말 빠르고 어려워서 이해하기 힘들었다.';
+    handleSTTResult(text);
   };
+
+  useEffect(() => {
+    if (!newMessageId) return;
+
+    const timer = setTimeout(() => {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === newMessageId ? { ...dummyNewMessage, id: msg.id } : msg
+        )
+      );
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [newMessageId]);
 
   const visibleMessages = [...dummyMessages].reverse(); // 최신 메시지가 아래로 오도록
 
@@ -95,20 +101,11 @@ const TalkBotPage: React.FC = () => {
           const isNew = index === 0 && msg.type === 'sent';
 
           return msg.type === 'received' ? (
-            <RcvdMessage
-              type="received"
-              key={index}
-              korean={msg.korean}
-              translation={msg.translation}
-            />
+            <RcvdMessage key={index} {...msg} />
           ) : (
             <SentMessage
-              type="sent"
               key={index}
-              content={msg.content ?? ''}
-              feedback={msg.feedback}
-              modelAudioUrl={msg.modelAudioUrl}
-              userAudioUrl={msg.userAudioUrl}
+              {...msg}
               ref={scrollRef}
               isLast={isLast}
               isNew={isNew}

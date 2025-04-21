@@ -4,6 +4,7 @@ import { TextContainer, WordSpan, CharSpan } from './styles';
 
 const HighlightedText: React.FC<HighlightedTextProps> = ({
   correct,
+  isFeedback,
   errors = [],
   size = 'bodyMediumLight',
 }) => {
@@ -20,6 +21,7 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
             <CharSpan
               key={globalIndex}
               $isError={isError}
+              $isFeedback={isFeedback}
               $isSpace={false}
               $variant={size}
             >

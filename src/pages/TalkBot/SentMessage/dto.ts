@@ -1,7 +1,8 @@
 export interface SentMessageProps {
+  id: number;
   type: 'sent';
   content: string; // 필수값
-  isFeedback?: boolean; // 피드백 여부
+  isFeedback: boolean; // 피드백 여부
   feedback?: FeedbackProps; // 문법 및 발음 피드백 객체
   userAudioUrl?: string; // 사용자의 녹음본 URL
   modelAudioUrl?: string; // 정답 발음 URL
