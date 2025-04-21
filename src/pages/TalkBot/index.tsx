@@ -17,7 +17,9 @@ const TalkBotPage: React.FC = () => {
   const scrollBottomRef = useRef<HTMLDivElement | null>(null); // 전체 채팅 하단 기준
   const lastMessageRef = useRef<HTMLDivElement | null>(null); // 마지막 메시지용 (피드백 열릴 때)
 
-  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [messages, setMessages] = useState<MessageProps[]>(
+    dummyMessages.map((m, i) => ({ ...m, id: i }))
+  );
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [newMessageId, setNewMessageId] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -32,16 +34,6 @@ const TalkBotPage: React.FC = () => {
     }
   }, [currentMessageIndex]);
 
-  // STT 결과 수신 시 호출되는 함수 예시
-  const handleSTTResult = (text: string) => {
-    const newMsg: SentMessageProps = {
-      type: 'sent',
-      content: text,
-    };
-    setMessages((prev) => [newMsg, ...prev]); // reverse 구조이므로 앞에 추가
-    setNewMessageId(Date.now()); // 새 메시지 식별용 (애니메이션용)
-  };
-
   // 녹음 시작 (RcvdMessage가 나오면 자동 시작)
   useEffect(() => {
     if (dummyMessages[currentMessageIndex]?.type === 'received') {
@@ -55,24 +47,36 @@ const TalkBotPage: React.FC = () => {
     console.log('녹음 시작');
   };
 
-  // 녹음 종료 및 서버로 전송 (현재는 console.log로 대체)
-  const stopRecording = () => {
-    console.log('녹음 종료, 서버로 전송...');
-    setIsRecording(false);
+  // STT 결과 수신 시 새 메시지 추가 (애니메이션 테스트용)
+  const handleSTTResult = (text: string) => {
+    const newId = Date.now();
+    const newMsg: SentMessageProps & { id: number } = {
+      id: newId,
+      type: 'sent',
+      content: text,
+    };
 
+    setMessages((prev) => [...prev, newMsg]); // 아래쪽에 추가
+    setNewMessageId(newId);
+    setCurrentMessageIndex((prev) => prev + 1);
+  };
+
+  // 녹음 종료 및 서버로 전송 (현재는 console.log로 대체)
+  const sendRecording = () => {
+    setIsRecording(false);
+    console.log('녹음 종료, 서버로 전송...');
+
+    handleSTTResult('교수님 말 빠르고 어려워서 이해하기 힘들었다.');
+
+    /*
     // 현재 메시지가 `sent`이고 발음 오류가 있는 경우 다시 말하도록 설정
     const lastSentMessage = dummyMessages[currentMessageIndex - 1];
     if (
-      lastSentMessage?.type === 'sent' &&
       lastSentMessage.feedback?.pronunciation
     ) {
       console.log('발음 오류! 다시 말해주세요.');
-    } else {
-      // 다음 메시지로 이동
-      setCurrentMessageIndex((prev) =>
-        Math.min(prev + 1, dummyMessages.length - 1)
-      );
     }
+    */
   };
 
   const visibleMessages = [...dummyMessages].reverse(); // 최신 메시지가 아래로 오도록
@@ -85,7 +89,7 @@ const TalkBotPage: React.FC = () => {
         </Icon>
       </TopBar>
       <ChatList>
-        {visibleMessages.map((msg, index) => {
+        {messages.map((msg, index) => {
           const isLast = index === 0;
           const scrollRef = isLast ? lastMessageRef : undefined;
           const isNew = index === 0 && msg.type === 'sent';
@@ -118,7 +122,7 @@ const TalkBotPage: React.FC = () => {
           size="big"
           bgColor={theme.colors.brand.primary}
           icon={!isRecording ? <Microphone /> : <Pause />}
-          onClick={isRecording ? stopRecording : startRecording}
+          onClick={isRecording ? sendRecording : startRecording}
         />
       </RecordingControls>
       <NavBar />

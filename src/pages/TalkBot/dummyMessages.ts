@@ -1,44 +1,7 @@
-export type MessageProps = SentMessageProps | RcvdMessageProps;
-
-export interface SentMessageProps {
-  type: 'sent'; // 메시지 타입 (보낸 메시지)
-  content: string; // 필수값
-  feedback?: FeedbackProps; // 문법 및 발음 피드백 객체
-  userAudioUrl?: string; // 사용자의 녹음본 URL
-  modelAudioUrl?: string; // 모범 발음 URL
-}
-
-export interface RcvdMessageProps {
-  type: 'received'; // 메시지 타입 (받은 메시지)
-  korean: string; // 원문
-  translation?: string; // 번역 (선택)
-  modelAudioUrl?: string; // 모범 발음 URL
-}
-
-export interface FeedbackProps {
-  grammar?: GrammarFeedbackProps; // 문법 오류 피드백 (선택적)
-  pronunciation?: PronunciationFeedbackProps; // 발음 오류 피드백 (선택적)
-}
-
-// 문법 오류 피드백
-export interface GrammarFeedbackProps {
-  suggestion: string; // 수정된 문장
-  explanation: string; // 문법 피드백 설명
-}
-
-// 발음 오류 피드백
-export interface PronunciationFeedbackProps {
-  pronunciationErrors: PronunciationError[]; // 발음 오류 정보
-}
-
-// 발음 오류 정보
-export interface PronunciationError {
-  index: number; // 틀린 글자의 인덱스
-  char: string; // 틀린 글자
-}
+import { MessageProps } from './dto';
 
 export const dummyMessages: MessageProps[] = [
-  {
+  /*{
     type: 'sent',
     content: '교수님 말 빠르고 어려워서 이해하기 힘들었다.',
     feedback: {
@@ -54,6 +17,7 @@ export const dummyMessages: MessageProps[] = [
     userAudioUrl: 'path_to_user_audio_4.mp3',
     modelAudioUrl: 'path_to_model_audio_4.mp3',
   },
+*/
   {
     type: 'received',
     korean: '그렇구나! 교수님은 설명을 잘 해주셔?',

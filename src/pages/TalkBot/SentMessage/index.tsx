@@ -43,14 +43,14 @@ const SentMessage = memo(
       const isAllCorrect = pronunciationErrors.length === 0;
 
       return (
-        <MessageLayout ref={ref} $isNew={isNew}>
-          <MessageContainer>
+        <MessageLayout ref={ref}>
+          <MessageContainer $isNew={isNew}>
             {feedback?.grammar && (
               <ErrorBtn onClick={handleFeedbackToggle}>
                 <Error color={theme.colors.brand.primary} width="24px" />
               </ErrorBtn>
             )}
-            <MessageBox>
+            <MessageBox $isNew={isNew}>
               <HighlightedText
                 correct={content} // 문법 오류가 없으므로 원래 문장 그대로 전달
                 errors={isAllCorrect ? [] : pronunciationErrors} // 발음 오류가 없으면 초록색으로 표시
