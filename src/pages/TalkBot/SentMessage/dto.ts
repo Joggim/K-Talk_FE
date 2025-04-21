@@ -1,11 +1,13 @@
 export interface SentMessageProps {
+  type: 'sent';
   content: string; // 필수값
   isFeedback?: boolean; // 피드백 여부
   feedback?: FeedbackProps; // 문법 및 발음 피드백 객체
-  userAudio?: string; // 사용자의 녹음본 URL
-  correctAudio?: string; // 정답 발음 URL
+  userAudioUrl?: string; // 사용자의 녹음본 URL
+  modelAudioUrl?: string; // 정답 발음 URL
   ref?: React.RefObject<HTMLDivElement>;
   isLast?: boolean;
+  isNew?: boolean;
 }
 
 export interface FeedbackProps {

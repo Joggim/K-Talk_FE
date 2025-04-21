@@ -1,12 +1,24 @@
-import { styled } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { StyledText } from '../../../components/StyledText/StyledText.styles';
 
-export const MessageLayout = styled.div`
+const slideUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+export const MessageLayout = styled.div<{ $isNew?: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   align-items: flex-end;
+  animation: ${({ $isNew }) => ($isNew ? slideUp : 'none')} 0.3s ease-out;
 `;
 
 export const MessageContainer = styled.div`

@@ -1,19 +1,7 @@
+import { SentMessageProps } from './SentMessage/dto';
+import { RcvdMessageProps } from './RcvdMessage/dto';
+
 export type MessageProps = SentMessageProps | RcvdMessageProps;
-
-export interface SentMessageProps {
-  type: 'sent'; // 메시지 타입 (보낸 메시지)
-  content: string; // 필수값
-  feedback?: FeedbackProps; // 문법 및 발음 피드백 객체
-  userAudio?: string; // 사용자의 녹음본 URL
-  modelAudio?: string; // 정답 발음 URL
-}
-
-export interface RcvdMessageProps {
-  type: 'received'; // 메시지 타입 (받은 메시지)
-  korean: string; // 원문
-  translation?: string; // 번역 (선택)
-  audio?: string;
-}
 
 export interface FeedbackProps {
   grammar?: GrammarFeedbackProps; // 문법 오류 피드백 (선택적)

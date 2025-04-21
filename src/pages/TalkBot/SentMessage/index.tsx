@@ -19,7 +19,10 @@ import HighlightedText from '../../../components/HighlightedText';
 
 const SentMessage = memo(
   forwardRef<HTMLDivElement, SentMessageProps & { isLast: boolean }>(
-    ({ content, feedback, userAudio, correctAudio, isLast }, ref) => {
+    (
+      { content, feedback, userAudioUrl, modelAudioUrl, isLast, isNew },
+      ref
+    ) => {
       const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
       useEffect(() => {
@@ -40,7 +43,7 @@ const SentMessage = memo(
       const isAllCorrect = pronunciationErrors.length === 0;
 
       return (
-        <MessageLayout ref={ref}>
+        <MessageLayout ref={ref} $isNew={isNew}>
           <MessageContainer>
             {feedback?.grammar && (
               <ErrorBtn onClick={handleFeedbackToggle}>
@@ -54,10 +57,10 @@ const SentMessage = memo(
                 size="bodyMediumLight"
               />
               <IconList>
-                {correctAudio && (
+                {modelAudioUrl && (
                   <Sound color={theme.colors.brand.primary} width="20px" />
                 )}
-                {userAudio && (
+                {userAudioUrl && (
                   <MySound color={theme.colors.brand.primary} width="20px" />
                 )}
               </IconList>
