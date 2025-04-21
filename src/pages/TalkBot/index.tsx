@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, TopBar, Icon, ChatList, RecordingControls } from './styles';
+import {
+  Container,
+  TopBar,
+  Icon,
+  ChatList,
+  RecordingControls,
+  TryAgainMessageBox,
+} from './styles';
+import { MessageLayout } from './SentMessage/styles';
 import NavBar from '../../components/NavBar/NavBar';
 import CircleButton from '../../components/CircleButton';
 import RcvdMessage from './RcvdMessage';
@@ -11,6 +19,7 @@ import theme from '../../styles/theme';
 import { MessageProps } from './dto';
 import { SentMessageProps } from './SentMessage/dto';
 import { dummyMessages, dummyNewMessage } from './dummyMessages';
+import { StyledText } from '../../components/StyledText/StyledText.styles';
 
 const TalkBotPage: React.FC = () => {
   const firstLoadRef = useRef(true);
@@ -23,6 +32,7 @@ const TalkBotPage: React.FC = () => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [newMessageId, setNewMessageId] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [isPronounceError, setIsPronounceError] = useState(false);
 
   // 채팅 진입/업데이트 시 하단으로 자동 스크롤
   useEffect(() => {
@@ -80,6 +90,7 @@ const TalkBotPage: React.FC = () => {
           msg.id === newMessageId ? { ...dummyNewMessage, id: msg.id } : msg
         )
       );
+      if (dummyNewMessage.feedback?.pronunciation) setIsPronounceError(true);
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -112,6 +123,18 @@ const TalkBotPage: React.FC = () => {
             />
           );
         })}
+        {isPronounceError && (
+          <MessageLayout>
+            <TryAgainMessageBox>
+              <StyledText
+                $variant="bodyMediumLight"
+                color={theme.colors.text.tertiary}
+              >
+                Please improve your pronunciation and say it again!
+              </StyledText>
+            </TryAgainMessageBox>
+          </MessageLayout>
+        )}
         <div ref={scrollBottomRef} />
       </ChatList>
       <RecordingControls>

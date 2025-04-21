@@ -42,6 +42,12 @@ export const ChatList = styled.div`
   padding-bottom: 110px;
 `;
 
+import { MessageBox } from './SentMessage/styles';
+export const TryAgainMessageBox = styled(MessageBox)`
+  background-color: transparent;
+  border: 1px solid ${({ theme }) => theme.colors.text.tertiary};
+`;
+
 export const RecordingControls = styled.div`
   display: flex;
   flex-direction: column;
