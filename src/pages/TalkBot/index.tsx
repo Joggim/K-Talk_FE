@@ -5,6 +5,8 @@ import CircleButton from '../../components/CircleButton';
 import RcvdMessage from './RcvdMessage';
 import SentMessage from './SentMessage';
 import MoveUp from '../../components/Icons/MoveUp';
+import Microphone from '../../components/Icons/Microphone';
+import Pause from '../../components/Icons/Pause';
 import Setting from '../../components/Icons/Setting';
 import theme from '../../styles/theme';
 import { dummyMessages } from './dummyMessages';
@@ -36,8 +38,8 @@ const TalkBotPage: React.FC = () => {
 
   // 녹음 시작 함수
   const startRecording = () => {
-    console.log('녹음 시작');
     setIsRecording(true);
+    console.log('녹음 시작');
   };
 
   // 녹음 종료 및 서버로 전송 (현재는 console.log로 대체)
@@ -52,7 +54,6 @@ const TalkBotPage: React.FC = () => {
       lastSentMessage.feedback?.pronunciation
     ) {
       console.log('발음 오류! 다시 말해주세요.');
-      startRecording();
     } else {
       // 다음 메시지로 이동
       setCurrentMessageIndex((prev) =>
@@ -99,8 +100,8 @@ const TalkBotPage: React.FC = () => {
         <CircleButton
           size="big"
           bgColor={theme.colors.brand.primary}
-          icon={<MoveUp />}
-          onClick={stopRecording}
+          icon={!isRecording ? <Microphone /> : <Pause />}
+          onClick={isRecording ? stopRecording : startRecording}
         />
       </RecordingControls>
       <NavBar />
