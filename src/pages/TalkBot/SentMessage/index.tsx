@@ -22,7 +22,7 @@ const SentMessage = memo(
     (
       {
         content,
-        isFeedback,
+        isFeedback = true,
         feedback,
         userAudioUrl,
         modelAudioUrl,

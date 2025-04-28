@@ -35,24 +35,31 @@ const TalkBotPage: React.FC = () => {
   const [newMessageId, setNewMessageId] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPronounceError, setIsPronounceError] = useState(false);
-  const [pronounceErrorCount, setPronounceErrorCount] = useState(0);
 
   const [recordedFile, setRecordedFile] = useState<File | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
-  // 채팅 진입/업데이트 시 메세지 리스트 로드 및 하단으로 자동 스크롤
   useEffect(() => {
     getMessageList();
+  }, []);
 
+  useEffect(() => {
+    if (messages?.length && messages[messages.length - 1].type === 'received') {
+      startRecording();
+    }
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
     if (scrollBottomRef.current) {
       scrollBottomRef.current.scrollIntoView({
-        behavior: firstLoadRef.current ? 'auto' : 'smooth',
+        behavior: 'auto',
       });
       firstLoadRef.current = false;
     }
-  }, [currentMessageIndex]);
+  };
 
   // 녹음 시작 (RcvdMessage가 나오면 자동 시작)
   useEffect(() => {
@@ -132,7 +139,7 @@ const TalkBotPage: React.FC = () => {
   const getMessageList = async () => {
     try {
       const res = await getMessageListApi();
-      setMessages(res.data);
+      setMessages(res.data.reverse());
     } catch (err) {
       console.error('로딩 실패', err);
     }
@@ -162,7 +169,7 @@ const TalkBotPage: React.FC = () => {
 
       setMessages((prev) => {
         const newMessages = [...(prev ?? []), newMsg];
-        setCurrentMessageIndex(newMessages.length - 1);
+        setCurrentMessageIndex(0);
         return newMessages;
       });
 
@@ -190,30 +197,11 @@ const TalkBotPage: React.FC = () => {
             isFeedback: true,
             feedback: feedbackData.feedback,
             modelAudioUrl: feedbackData.modelAudioUrl,
-            isNew: true,
           };
         })
       );
 
-      const hasPronounceError =
-        Array.isArray(
-          feedbackData.feedback?.pronunciation?.pronunciationErrors
-        ) &&
-        feedbackData.feedback?.pronunciation?.pronunciationErrors.length > 0;
-
-      if (hasPronounceError) {
-        if (pronounceErrorCount < 2) {
-          setIsPronounceError(true);
-          setPronounceErrorCount((prev) => prev + 1);
-          startRecording();
-          return;
-        } else {
-          setIsPronounceError(false);
-          setPronounceErrorCount(0);
-          // 챗봇 응답 요청
-          getChatReply(feedbackData.content);
-        }
-      } else getChatReply(feedbackData.content);
+      getChatReply(feedbackData.content);
     } catch (err) {
       console.error('피드백 요청 실패', err);
     }
@@ -224,7 +212,11 @@ const TalkBotPage: React.FC = () => {
       const replyRes = await postChatReplyApi(text);
       const replyData = replyRes.data;
 
-      setMessages((prev) => [...(prev ?? []), replyData]);
+      setMessages((prev) => {
+        const newMessages = [...(prev ?? []), replyData];
+        setCurrentMessageIndex(0); // 항상 맨 위 인덱스
+        return newMessages;
+      });
     } catch (err) {
       console.error('챗봇 응답 실패', err);
     }
@@ -238,26 +230,23 @@ const TalkBotPage: React.FC = () => {
         </Icon>
       </TopBar>
       <ChatList>
-        {messages
-          ?.slice()
-          .reverse()
-          .map((msg, index) => {
-            const isLast = index === 0;
-            const scrollRef = isLast ? lastMessageRef : undefined;
-            const isNew = index === 0 && msg.type === 'sent';
+        {messages?.slice().map((msg, index) => {
+          const isLast = index === messages.length - 1;
+          const scrollRef = isLast ? lastMessageRef : undefined;
+          const isNew = isLast && msg.type === 'sent';
 
-            return msg.type === 'received' ? (
-              <RcvdMessage key={index} {...msg} />
-            ) : (
-              <SentMessage
-                key={index}
-                {...msg}
-                ref={scrollRef}
-                isLast={isLast}
-                isNew={isNew}
-              />
-            );
-          })}
+          return msg.type === 'received' ? (
+            <RcvdMessage key={index} {...msg} />
+          ) : (
+            <SentMessage
+              key={index}
+              {...msg}
+              ref={scrollRef}
+              isLast={isLast}
+              isNew={isNew}
+            />
+          );
+        })}
         {isPronounceError && (
           <MessageLayout>
             <TryAgainMessageBox>
