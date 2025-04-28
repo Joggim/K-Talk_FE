@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 import { StyledText } from '../../../components/StyledText/StyledText.styles';
 
@@ -34,10 +34,10 @@ export const MessageContainer = styled.div<{ $isNew?: boolean }>`
 
   ${({ $isNew }) =>
     $isNew &&
-    `
-    animation: ${bubbleSlideIn} 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    transform-origin: right center;
-`};
+    css`
+      animation: ${bubbleSlideIn} 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      transform-origin: right center;
+    `};
 `;
 
 export const MessageBox = styled.div<{ $isNew?: boolean }>`

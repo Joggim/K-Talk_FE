@@ -48,8 +48,7 @@ export interface PronunciationError {
 }
 
 export interface STTResponseData {
-  userText: string;
-  userAudioUrl: string;
+  text: string;
 }
 
 export type FeedbackResponseData = SentMessageProps;

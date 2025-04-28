@@ -12,16 +12,27 @@ export const getMessageListApi = () => {
 };
 
 // STT 변환 요청
-export const postSTTApi = (audioBase64: string) => {
-  return newRequest.post<STTResponse>(`/api/convert/stt`, {
-    audio: audioBase64,
+export const postSTTApi = (audioFile: File) => {
+  const formData = new FormData();
+  formData.append('file', audioFile);
+
+  return newRequest.post<STTResponse>('/api/convert/stt', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
 };
 
 // 문장 피드백 요청
-export const getFeedbackApi = (messageId: number) => {
-  return newRequest.post<GetFeedbackResponse>(`/api/chat/feedback`, {
-    messageId,
+export const getFeedbackApi = (transcription: string, audioFile: File) => {
+  const formData = new FormData();
+  formData.append('transcription', transcription);
+  formData.append('audioFile', audioFile);
+
+  return newRequest.post<GetFeedbackResponse>('/api/chat/feedback', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
 };
 

@@ -16,11 +16,10 @@ import Microphone from '../../components/Icons/Microphone';
 import Pause from '../../components/Icons/Pause';
 import Setting from '../../components/Icons/Setting';
 import theme from '../../styles/theme';
-import { MessageData } from '../../apis/talkbot/dto';
-import { SentMessageProps } from './SentMessage/dto';
-import { dummyMessages, dummyNewMessage } from './dummyMessages';
+import { MessageData, SentMessageProps } from '../../apis/talkbot/dto';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
 import {
+  getMessageListApi,
   postSTTApi,
   getFeedbackApi,
   postChatReplyApi,
@@ -31,17 +30,22 @@ const TalkBotPage: React.FC = () => {
   const scrollBottomRef = useRef<HTMLDivElement | null>(null); // 전체 채팅 하단 기준
   const lastMessageRef = useRef<HTMLDivElement | null>(null); // 마지막 메시지용 (피드백 열릴 때)
 
-  const [messages, setMessages] = useState<MessageData[]>(
-    dummyMessages.map((m, i) => ({ ...m, id: i }))
-  );
+  const [messages, setMessages] = useState<MessageData[]>();
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [newMessageId, setNewMessageId] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPronounceError, setIsPronounceError] = useState(false);
   const [pronounceErrorCount, setPronounceErrorCount] = useState(0);
 
-  // 채팅 진입/업데이트 시 하단으로 자동 스크롤
+  const [recordedFile, setRecordedFile] = useState<File | null>(null);
+
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+
+  // 채팅 진입/업데이트 시 메세지 리스트 로드 및 하단으로 자동 스크롤
   useEffect(() => {
+    getMessageList();
+
     if (scrollBottomRef.current) {
       scrollBottomRef.current.scrollIntoView({
         behavior: firstLoadRef.current ? 'auto' : 'smooth',
@@ -52,124 +56,179 @@ const TalkBotPage: React.FC = () => {
 
   // 녹음 시작 (RcvdMessage가 나오면 자동 시작)
   useEffect(() => {
-    if (dummyMessages[currentMessageIndex]?.type === 'received') {
+    if (messages && messages[currentMessageIndex]?.type === 'received') {
       startRecording();
     }
   }, [currentMessageIndex]);
 
-  // 녹음 시작 함수
-  const startRecording = () => {
-    setIsRecording(true);
-    console.log('녹음 시작');
-  };
-
-  // 녹음 종료 및 서버로 전송
-  const sendRecording = () => {
-    setIsRecording(false);
-    // 더미 오디오 입력 처리
-    const dummyAudio = 'dummy_base64_audio';
-    handleSTT(dummyAudio);
-  };
-
-  // STT 결과 수신 시 새 메시지 추가 (애니메이션 테스트용)
-  const handleSTT = async (audio: string) => {
+  const requestMicrophoneAccess = async () => {
     try {
-      // const sttRes = await postSTTApi(dummyAudio);
-      // const { text, userAudioUrl } = sttRes.data;
+      // 권한 상태 확인
+      const permission = await navigator.permissions.query({
+        name: 'microphone' as any,
+      });
 
-      const text = '교수님 말 빠르고 어려워서 이해하기 힘들었다.';
-      const userAudioUrl = 'path_to_user_audio_4.mp3';
+      if (permission.state === 'denied') {
+        alert(
+          '마이크 사용이 차단되었습니다. 브라우저 설정에서 마이크 권한을 허용해주세요.'
+        );
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('마이크 권한 확인 실패:', error);
+      return false;
+    }
+  };
+
+  // 녹음 시작 함수
+  const startRecording = async () => {
+    const hasPermission = await requestMicrophoneAccess();
+    if (!hasPermission) return;
+
+    setIsRecording(true);
+    audioChunksRef.current = [];
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: 'audio/wav',
+        });
+        const file = new File([audioBlob], 'recording.wav', {
+          type: 'audio/wav',
+        });
+
+        setRecordedFile(file);
+        handleSTT(file); // 여기서 STT 요청 보내기
+      };
+
+      mediaRecorder.start();
+      console.log('녹음 시작');
+    } catch (error) {
+      console.error('녹음 시작 실패:', error);
+      setIsRecording(false);
+    }
+  };
+
+  const stopRecording = () => {
+    const mediaRecorder = mediaRecorderRef.current;
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+    }
+    setIsRecording(false);
+  };
+
+  const getMessageList = async () => {
+    try {
+      const res = await getMessageListApi();
+      setMessages(res.data);
+    } catch (err) {
+      console.error('로딩 실패', err);
+    }
+  };
+
+  // STT 결과 수신 시 새 메시지 추가
+  const handleSTT = async (audioFile: File) => {
+    try {
+      const sttRes = await postSTTApi(audioFile);
+      const { text } = sttRes.data;
+
+      const trimmedText = text?.trim() ?? '';
+
+      if (trimmedText === '') {
+        console.warn('STT 결과가 비어있음');
+        setIsRecording(false);
+        return; // text가 없으면 그냥 함수 종료
+      }
 
       const newId = Date.now();
       const newMsg: SentMessageProps = {
         id: newId,
         type: 'sent',
-        content: text,
+        content: trimmedText,
         isFeedback: false,
-        userAudioUrl,
       };
 
-      setMessages((prev) => [...prev, newMsg]); // 아래쪽에 추가
+      setMessages((prev) => {
+        const newMessages = [...(prev ?? []), newMsg];
+        setCurrentMessageIndex(newMessages.length - 1);
+        return newMessages;
+      });
+
       setNewMessageId(newId);
-      setCurrentMessageIndex((prev) => prev + 1);
       setIsPronounceError(false);
 
-      // 피드백 요청
-      handleFeedback(newId, text);
+      getFeedback(trimmedText, audioFile);
     } catch (err) {
       console.error('STT 실패', err);
     }
   };
 
-  const handleFeedback = async (messageId: number, text: string) => {
+  const getFeedback = async (transcription: string, audioFile: File) => {
     try {
-      // const feedbackRes = await getFeedbackApi(messageId);
-      // const feedbackData = feedbackRes.data;
-
-      const feedbackData = {
-        grammar: {
-          suggestion: '교수님 말이 너무 빨라서 이해하기 힘들었어.',
-          explanation:
-            '‘말 빠르고 어려워서’ sounds unnatural. A more natural way to say it is "말이 너무 빨라서 이해하기 힘들었어."',
-        },
-        pronunciation: {
-          pronunciationErrors: [{ char: '빠', index: 6 }],
-        },
-      };
+      const res = await getFeedbackApi(transcription, audioFile);
+      const feedbackData = res.data;
 
       setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === messageId
-            ? {
-                ...msg,
-                isFeedback: true,
-                feedback: feedbackData,
-                modelAudioUrl: 'path_to_model_audio_4.mp3',
-              }
-            : msg
-        )
+        prev?.map((msg) => {
+          if (msg.id !== newMessageId) return msg;
+          if (msg.type !== 'sent') return msg;
+
+          return {
+            ...msg,
+            isFeedback: true,
+            feedback: feedbackData.feedback,
+            modelAudioUrl: feedbackData.modelAudioUrl,
+            isNew: true,
+          };
+        })
       );
 
       const hasPronounceError =
-        feedbackData.pronunciation?.pronunciationErrors.length > 0;
+        Array.isArray(
+          feedbackData.feedback?.pronunciation?.pronunciationErrors
+        ) &&
+        feedbackData.feedback?.pronunciation?.pronunciationErrors.length > 0;
 
       if (hasPronounceError) {
-        if (pronounceErrorCount < 3) {
+        if (pronounceErrorCount < 2) {
           setIsPronounceError(true);
           setPronounceErrorCount((prev) => prev + 1);
+          startRecording();
           return;
         } else {
           setIsPronounceError(false);
           setPronounceErrorCount(0);
           // 챗봇 응답 요청
-          handleReply(text);
+          getChatReply(feedbackData.content);
         }
-      }
+      } else getChatReply(feedbackData.content);
     } catch (err) {
       console.error('피드백 요청 실패', err);
     }
   };
 
-  const handleReply = async (text: string) => {
+  const getChatReply = async (text: string) => {
     try {
-      // const replyRes = await postChatReplyApi(text);
-      // const replyData = replyRes.data;
+      const replyRes = await postChatReplyApi(text);
+      const replyData = replyRes.data;
 
-      const replyData: MessageData = {
-        id: Date.now(),
-        type: 'received',
-        korean: '그럴 땐 교수님께 질문해보는 게 좋아요!',
-        translation: 'In that case, try asking your professor!',
-        modelAudioUrl: 'path_to_model_audio_reply.mp3',
-      };
-
-      setMessages((prev) => [...prev, replyData]);
+      setMessages((prev) => [...(prev ?? []), replyData]);
     } catch (err) {
       console.error('챗봇 응답 실패', err);
     }
   };
-
-  const visibleMessages = [...dummyMessages].reverse(); // 최신 메시지가 아래로 오도록
 
   return (
     <Container>
@@ -179,23 +238,26 @@ const TalkBotPage: React.FC = () => {
         </Icon>
       </TopBar>
       <ChatList>
-        {messages.map((msg, index) => {
-          const isLast = index === 0;
-          const scrollRef = isLast ? lastMessageRef : undefined;
-          const isNew = index === 0 && msg.type === 'sent';
+        {messages
+          ?.slice()
+          .reverse()
+          .map((msg, index) => {
+            const isLast = index === 0;
+            const scrollRef = isLast ? lastMessageRef : undefined;
+            const isNew = index === 0 && msg.type === 'sent';
 
-          return msg.type === 'received' ? (
-            <RcvdMessage key={index} {...msg} />
-          ) : (
-            <SentMessage
-              key={index}
-              {...msg}
-              ref={scrollRef}
-              isLast={isLast}
-              isNew={isNew}
-            />
-          );
-        })}
+            return msg.type === 'received' ? (
+              <RcvdMessage key={index} {...msg} />
+            ) : (
+              <SentMessage
+                key={index}
+                {...msg}
+                ref={scrollRef}
+                isLast={isLast}
+                isNew={isNew}
+              />
+            );
+          })}
         {isPronounceError && (
           <MessageLayout>
             <TryAgainMessageBox>
@@ -215,7 +277,7 @@ const TalkBotPage: React.FC = () => {
           size="big"
           bgColor={theme.colors.brand.primary}
           icon={!isRecording ? <Microphone /> : <Pause />}
-          onClick={isRecording ? sendRecording : startRecording}
+          onClick={isRecording ? stopRecording : startRecording}
         />
       </RecordingControls>
       <NavBar />
