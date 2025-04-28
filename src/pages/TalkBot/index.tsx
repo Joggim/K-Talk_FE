@@ -6,10 +6,13 @@ import {
   ChatList,
   RecordingControls,
   TryAgainMessageBox,
+  ReplyLoadingMessageBox,
 } from './styles';
-import { MessageLayout } from './SentMessage/styles';
+import { SentMessageLayout } from './SentMessage/styles';
+import { RcvdMessageLayout } from './RcvdMessage/styles';
 import NavBar from '../../components/NavBar/NavBar';
 import CircleButton from '../../components/CircleButton';
+import BounceLoader from '../../components/BounceLoader';
 import RcvdMessage from './RcvdMessage';
 import SentMessage from './SentMessage';
 import Microphone from '../../components/Icons/Microphone';
@@ -35,6 +38,7 @@ const TalkBotPage: React.FC = () => {
   const [newMessageId, setNewMessageId] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPronounceError, setIsPronounceError] = useState(false);
+  const [isReplyLoading, setIsReplyLoading] = useState(false);
 
   const [recordedFile, setRecordedFile] = useState<File | null>(null);
 
@@ -208,6 +212,8 @@ const TalkBotPage: React.FC = () => {
   };
 
   const getChatReply = async (text: string) => {
+    setIsReplyLoading(true);
+
     try {
       const replyRes = await postChatReplyApi(text);
       const replyData = replyRes.data;
@@ -219,6 +225,8 @@ const TalkBotPage: React.FC = () => {
       });
     } catch (err) {
       console.error('챗봇 응답 실패', err);
+    } finally {
+      setIsReplyLoading(false);
     }
   };
 
@@ -247,8 +255,9 @@ const TalkBotPage: React.FC = () => {
             />
           );
         })}
+
         {isPronounceError && (
-          <MessageLayout>
+          <SentMessageLayout>
             <TryAgainMessageBox>
               <StyledText
                 $variant="bodyMediumLight"
@@ -257,8 +266,17 @@ const TalkBotPage: React.FC = () => {
                 Please improve your pronunciation and say it again!
               </StyledText>
             </TryAgainMessageBox>
-          </MessageLayout>
+          </SentMessageLayout>
         )}
+
+        {isReplyLoading && (
+          <RcvdMessageLayout>
+            <ReplyLoadingMessageBox>
+              <BounceLoader />
+            </ReplyLoadingMessageBox>
+          </RcvdMessageLayout>
+        )}
+
         <div ref={scrollBottomRef} />
       </ChatList>
       <RecordingControls>

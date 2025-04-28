@@ -4,9 +4,9 @@ import theme from '../../../styles/theme';
 import type { SentMessageProps } from './dto';
 
 import {
-  MessageLayout,
+  SentMessageLayout,
   MessageContainer,
-  MessageBox,
+  SentMessageBox,
   IconList,
   ErrorBtn,
   FeedbackBox,
@@ -51,14 +51,14 @@ const SentMessage = memo(
       const isAllCorrect = pronunciationErrors.length === 0;
 
       return (
-        <MessageLayout ref={ref}>
+        <SentMessageLayout ref={ref}>
           <MessageContainer $isNew={isNew}>
             {feedback?.grammar && (
               <ErrorBtn onClick={handleFeedbackToggle}>
                 <Error color={theme.colors.brand.primary} width="24px" />
               </ErrorBtn>
             )}
-            <MessageBox $isNew={isNew}>
+            <SentMessageBox $isNew={isNew}>
               <HighlightedText
                 correct={content}
                 isFeedback={isFeedback}
@@ -73,7 +73,7 @@ const SentMessage = memo(
                   <MySound color={theme.colors.brand.primary} width="20px" />
                 )}
               </IconList>
-            </MessageBox>
+            </SentMessageBox>
           </MessageContainer>
 
           {isFeedbackOpen && feedback?.grammar && (
@@ -100,7 +100,7 @@ const SentMessage = memo(
               </FeedbackBox>
             </MessageContainer>
           )}
-        </MessageLayout>
+        </SentMessageLayout>
       );
     }
   )

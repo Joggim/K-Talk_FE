@@ -3,7 +3,12 @@ import theme from '../../../styles/theme';
 
 import type { RcvdMessageProps } from '../../../apis/talkbot/dto';
 
-import { MessageLayout, MessageBox, Message, TranslateBtn } from './styles';
+import {
+  RcvdMessageLayout,
+  RcvdMessageBox,
+  Message,
+  TranslateBtn,
+} from './styles';
 
 const RcvdMessage: React.FC<RcvdMessageProps> = memo(
   ({ content, translation }) => {
@@ -14,8 +19,8 @@ const RcvdMessage: React.FC<RcvdMessageProps> = memo(
     };
 
     return (
-      <MessageLayout>
-        <MessageBox>
+      <RcvdMessageLayout>
+        <RcvdMessageBox>
           <Message $variant="bodyMediumLight">
             {mode === 'korean' ? content : translation}
           </Message>
@@ -26,8 +31,8 @@ const RcvdMessage: React.FC<RcvdMessageProps> = memo(
           >
             {mode === 'korean' ? 'translate' : 'show original'}
           </TranslateBtn>
-        </MessageBox>
-      </MessageLayout>
+        </RcvdMessageBox>
+      </RcvdMessageLayout>
     );
   }
 );

@@ -28,7 +28,7 @@ const fadeInUp = keyframes`
   }
 `;
 
-export const MessageLayout = styled.div`
+export const SentMessageLayout = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -55,7 +55,7 @@ export const MessageContainer = styled.div<{ $isNew?: boolean }>`
     `};
 `;
 
-export const MessageBox = styled.div<{ $isNew?: boolean }>`
+export const SentMessageBox = styled.div<{ $isNew?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
