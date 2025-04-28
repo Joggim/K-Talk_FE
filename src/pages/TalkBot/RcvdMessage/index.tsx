@@ -4,10 +4,9 @@ import theme from '../../../styles/theme';
 import type { RcvdMessageProps } from '../../../apis/talkbot/dto';
 
 import { MessageLayout, MessageBox, Message, TranslateBtn } from './styles';
-import { StyledText } from '../../../components/StyledText/StyledText.styles';
 
 const RcvdMessage: React.FC<RcvdMessageProps> = memo(
-  ({ korean, translation }) => {
+  ({ content, translation }) => {
     const [mode, setMode] = useState<'korean' | 'translation'>('korean');
 
     const handleModeChange = () => {
@@ -18,7 +17,7 @@ const RcvdMessage: React.FC<RcvdMessageProps> = memo(
       <MessageLayout>
         <MessageBox>
           <Message $variant="bodyMediumLight">
-            {mode === 'korean' ? korean : translation}
+            {mode === 'korean' ? content : translation}
           </Message>
           <TranslateBtn
             onClick={handleModeChange}

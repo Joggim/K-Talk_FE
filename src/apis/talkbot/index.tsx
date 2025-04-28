@@ -37,8 +37,8 @@ export const getFeedbackApi = (transcription: string, audioFile: File) => {
 };
 
 // 챗봇 응답 요청
-export const postChatReplyApi = (userText: string) => {
+export const postChatReplyApi = (text: string) => {
   return newRequest.post<GetReplyResponse>(`/api/chat/reply`, {
-    userText,
+    text,
   });
 };
