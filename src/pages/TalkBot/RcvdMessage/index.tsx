@@ -1,13 +1,17 @@
 import { memo, useState } from 'react';
 import theme from '../../../styles/theme';
 
-import type { RcvdMessageProps } from './dto';
+import type { RcvdMessageProps } from '../../../apis/talkbot/dto';
 
-import { MessageLayout, MessageBox, Message, TranslateBtn } from './styles';
-import { StyledText } from '../../../components/StyledText/StyledText.styles';
+import {
+  RcvdMessageLayout,
+  RcvdMessageBox,
+  Message,
+  TranslateBtn,
+} from './styles';
 
 const RcvdMessage: React.FC<RcvdMessageProps> = memo(
-  ({ korean, translation }) => {
+  ({ content, translation }) => {
     const [mode, setMode] = useState<'korean' | 'translation'>('korean');
 
     const handleModeChange = () => {
@@ -15,10 +19,10 @@ const RcvdMessage: React.FC<RcvdMessageProps> = memo(
     };
 
     return (
-      <MessageLayout>
-        <MessageBox>
+      <RcvdMessageLayout>
+        <RcvdMessageBox>
           <Message $variant="bodyMediumLight">
-            {mode === 'korean' ? korean : translation}
+            {mode === 'korean' ? content : translation}
           </Message>
           <TranslateBtn
             onClick={handleModeChange}
@@ -27,8 +31,8 @@ const RcvdMessage: React.FC<RcvdMessageProps> = memo(
           >
             {mode === 'korean' ? 'translate' : 'show original'}
           </TranslateBtn>
-        </MessageBox>
-      </MessageLayout>
+        </RcvdMessageBox>
+      </RcvdMessageLayout>
     );
   }
 );

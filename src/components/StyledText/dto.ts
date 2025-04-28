@@ -4,3 +4,5 @@ export interface StyledTextProps {
   $variant: keyof typeof theme.fontStyles;
   color?: string;
 }
+
+

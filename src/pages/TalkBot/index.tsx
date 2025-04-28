@@ -1,93 +1,296 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Container,
-  TopBarContainer,
+  TopBar,
   Icon,
-  MessageContainer,
-  RecordContainer,
+  ChatList,
+  RecordingControls,
+  TryAgainMessageBox,
+  ReplyLoadingMessageBox,
 } from './styles';
+import { SentMessageLayout } from './SentMessage/styles';
+import { RcvdMessageLayout } from './RcvdMessage/styles';
 import NavBar from '../../components/NavBar/NavBar';
 import CircleButton from '../../components/CircleButton';
+import BounceLoader from '../../components/BounceLoader';
 import RcvdMessage from './RcvdMessage';
 import SentMessage from './SentMessage';
-import MoveUp from '../../components/Icons/MoveUp';
+import Microphone from '../../components/Icons/Microphone';
+import Pause from '../../components/Icons/Pause';
 import Setting from '../../components/Icons/Setting';
 import theme from '../../styles/theme';
-import { dummyMessages } from './dummyMessages';
+import { MessageData, SentMessageProps } from '../../apis/talkbot/dto';
+import { StyledText } from '../../components/StyledText/StyledText.styles';
+import {
+  getMessageListApi,
+  postSTTApi,
+  getFeedbackApi,
+  postChatReplyApi,
+} from '../../apis/talkbot';
 
 const TalkBotPage: React.FC = () => {
-  const [isRecording, setIsRecording] = useState(false);
+  const firstLoadRef = useRef(true);
+  const scrollBottomRef = useRef<HTMLDivElement | null>(null); // 전체 채팅 하단 기준
+  const lastMessageRef = useRef<HTMLDivElement | null>(null); // 마지막 메시지용 (피드백 열릴 때)
+
+  const [messages, setMessages] = useState<MessageData[]>();
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [newMessageId, setNewMessageId] = useState<number | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isPronounceError, setIsPronounceError] = useState(false);
+  const [isFeedbackLoading, setIsFeedbackLoading] = useState(false);
+  const [isReplyLoading, setIsReplyLoading] = useState(false);
+
+  const [recordedFile, setRecordedFile] = useState<File | null>(null);
+
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+
+  useEffect(() => {
+    getMessageList();
+  }, []);
+
+  useEffect(() => {
+    if (messages?.length && messages[messages.length - 1].type === 'received') {
+      startRecording();
+    }
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    if (scrollBottomRef.current) {
+      scrollBottomRef.current.scrollIntoView({
+        behavior: 'auto',
+      });
+      firstLoadRef.current = false;
+    }
+  };
 
   // 녹음 시작 (RcvdMessage가 나오면 자동 시작)
   useEffect(() => {
-    if (dummyMessages[currentMessageIndex]?.type === 'received') {
+    if (messages && messages[currentMessageIndex]?.type === 'received') {
       startRecording();
     }
   }, [currentMessageIndex]);
 
-  // 녹음 시작 함수
-  const startRecording = () => {
-    console.log('녹음 시작');
-    setIsRecording(true);
+  const requestMicrophoneAccess = async () => {
+    try {
+      // 권한 상태 확인
+      const permission = await navigator.permissions.query({
+        name: 'microphone' as any,
+      });
+
+      if (permission.state === 'denied') {
+        alert(
+          '마이크 사용이 차단되었습니다. 브라우저 설정에서 마이크 권한을 허용해주세요.'
+        );
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('마이크 권한 확인 실패:', error);
+      return false;
+    }
   };
 
-  // 녹음 종료 및 서버로 전송 (현재는 console.log로 대체)
-  const stopRecording = () => {
-    console.log('녹음 종료, 서버로 전송...');
-    setIsRecording(false);
+  // 녹음 시작 함수
+  const startRecording = async () => {
+    const hasPermission = await requestMicrophoneAccess();
+    if (!hasPermission) return;
 
-    // 현재 메시지가 `sent`이고 발음 오류가 있는 경우 다시 말하도록 설정
-    const lastSentMessage = dummyMessages[currentMessageIndex - 1];
-    if (
-      lastSentMessage?.type === 'sent' &&
-      lastSentMessage.feedback?.pronunciation
-    ) {
-      console.log('발음 오류! 다시 말해주세요.');
-      startRecording();
-    } else {
-      // 다음 메시지로 이동
-      setCurrentMessageIndex((prev) =>
-        Math.min(prev + 1, dummyMessages.length - 1)
-      );
+    setIsRecording(true);
+    audioChunksRef.current = [];
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: 'audio/wav',
+        });
+        const file = new File([audioBlob], 'recording.wav', {
+          type: 'audio/wav',
+        });
+
+        setRecordedFile(file);
+        handleSTT(file); // 여기서 STT 요청 보내기
+      };
+
+      mediaRecorder.start();
+      console.log('녹음 시작');
+    } catch (error) {
+      console.error('녹음 시작 실패:', error);
+      setIsRecording(false);
+    }
+  };
+
+  const stopRecording = () => {
+    const mediaRecorder = mediaRecorderRef.current;
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+    }
+    setIsRecording(false);
+  };
+
+  const getMessageList = async () => {
+    try {
+      const res = await getMessageListApi();
+      setMessages(res.data.reverse());
+    } catch (err) {
+      console.error('로딩 실패', err);
+    }
+  };
+
+  // STT 결과 수신 시 새 메시지 추가
+  const handleSTT = async (audioFile: File) => {
+    try {
+      const sttRes = await postSTTApi(audioFile);
+      const { text } = sttRes.data;
+      const trimmedText = text?.trim() ?? '';
+
+      if (trimmedText === '') {
+        console.warn('STT 결과가 비어있음');
+        setIsRecording(false);
+        return; // text가 없으면 그냥 함수 종료
+      }
+
+      const newId = Date.now();
+
+      const newMsg: SentMessageProps = {
+        id: newId,
+        type: 'sent',
+        content: trimmedText,
+        isFeedback: false,
+      };
+
+      setMessages((prev) => [...(prev ?? []), newMsg]);
+      setCurrentMessageIndex(0);
+
+      setIsPronounceError(false);
+
+      getFeedback(trimmedText, audioFile, newId);
+    } catch (err) {
+      console.error('STT 실패', err);
+    }
+  };
+
+  const getFeedback = async (
+    transcription: string,
+    audioFile: File,
+    messageId: number
+  ) => {
+    setIsFeedbackLoading(true);
+    try {
+      const res = await getFeedbackApi(transcription, audioFile);
+      const feedbackData = res.data;
+
+      setMessages((prev) => {
+        if (!prev) return prev;
+        return prev.map((msg) => {
+          if (msg.id !== messageId || msg.type !== 'sent') return msg;
+          return {
+            ...msg,
+            isFeedback: true,
+            feedback: feedbackData.feedback,
+            modelAudioUrl: feedbackData.modelAudioUrl,
+          };
+        });
+      });
+
+      getChatReply(feedbackData.content);
+    } catch (err) {
+      console.error('피드백 요청 실패', err);
+    } finally {
+      setIsFeedbackLoading(false);
+    }
+  };
+
+  const getChatReply = async (text: string) => {
+    setIsReplyLoading(true);
+
+    try {
+      const replyRes = await postChatReplyApi(text);
+      const replyData = replyRes.data;
+
+      setMessages((prev) => {
+        const newMessages = [...(prev ?? []), replyData];
+        setCurrentMessageIndex(0); // 항상 맨 위 인덱스
+        return newMessages;
+      });
+    } catch (err) {
+      console.error('챗봇 응답 실패', err);
+    } finally {
+      setIsReplyLoading(false);
     }
   };
 
   return (
     <Container>
-      <TopBarContainer>
+      <TopBar>
         <Icon>
           <Setting color={theme.colors.text.tertiary} />
         </Icon>
-      </TopBarContainer>
-      <MessageContainer>
-        {dummyMessages.map((msg, index) =>
-          msg.type === 'received' ? (
-            <RcvdMessage
-              key={index}
-              korean={msg.korean}
-              translation={msg.translation}
-            />
+      </TopBar>
+      <ChatList>
+        {messages?.slice().map((msg, index) => {
+          const isLast = index === messages.length - 1;
+          const scrollRef = isLast ? lastMessageRef : undefined;
+          const isNew = isLast && msg.type === 'sent';
+
+          return msg.type === 'received' ? (
+            <RcvdMessage key={index} {...msg} />
           ) : (
             <SentMessage
               key={index}
-              content={msg.content ?? ''}
-              feedback={msg.feedback}
-              correctAudio={msg.modelAudioUrl}
-              userAudio={msg.userAudioUrl}
+              {...msg}
+              ref={scrollRef}
+              isLast={isLast}
+              isNew={isNew}
+              isFeedbackLoading={isFeedbackLoading}
             />
-          )
-        )}
-        <RecordContainer>
-          <CircleButton
-            size="big"
-            bgColor={theme.colors.brand.primary}
-            icon={<MoveUp />}
-            onClick={stopRecording}
-          />
-        </RecordContainer>
-      </MessageContainer>
+          );
+        })}
 
+        {isPronounceError && (
+          <SentMessageLayout>
+            <TryAgainMessageBox>
+              <StyledText
+                $variant="bodyMediumLight"
+                color={theme.colors.text.tertiary}
+              >
+                Please improve your pronunciation and say it again!
+              </StyledText>
+            </TryAgainMessageBox>
+          </SentMessageLayout>
+        )}
+
+        {isReplyLoading && (
+          <RcvdMessageLayout>
+            <ReplyLoadingMessageBox>
+              <BounceLoader />
+            </ReplyLoadingMessageBox>
+          </RcvdMessageLayout>
+        )}
+
+        <div ref={scrollBottomRef} />
+      </ChatList>
+      <RecordingControls>
+        <CircleButton
+          size="big"
+          bgColor={theme.colors.brand.primary}
+          icon={!isRecording ? <Microphone /> : <Pause />}
+          onClick={isRecording ? stopRecording : startRecording}
+        />
+      </RecordingControls>
       <NavBar />
     </Container>
   );

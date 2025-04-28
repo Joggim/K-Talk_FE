@@ -1,24 +1,61 @@
-import { styled } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 import { StyledText } from '../../../components/StyledText/StyledText.styles';
 
-export const MessageLayout = styled.div`
+const bubbleSlideIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateX(10%) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%) scale(1);
+  }
+`;
+
+const fadeInUp = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+export const SentMessageLayout = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   align-items: flex-end;
 `;
 
-export const MessageContainer = styled.div`
+export const MessageContainer = styled.div<{ $isNew?: boolean }>`
   display: flex;
+  width: 100%;
   justify-content: flex-end;
   align-items: center;
-  width: 100%;
   flex-direction: row;
   gap: 10px;
+
+  ${({ $isNew }) =>
+    $isNew &&
+    css`
+      animation: ${fadeInUp} 0.4s ease-out;
+      transform-origin: bottom center;
+      /*
+      animation: {bubbleSlideIn} 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      transform-origin: right center;
+      */
+    `};
 `;
 
-export const MessageBox = styled.div`
+export const SentMessageBox = styled.div<{ $isNew?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,10 +64,6 @@ export const MessageBox = styled.div`
   gap: 4px;
   border-radius: 10px 10px 0px 10px;
   background: ${({ theme }) => theme.colors.bg.white};
-`;
-
-export const Message = styled(StyledText)`
-  overflow-wrap: break-word;
 `;
 
 export const IconList = styled.div`

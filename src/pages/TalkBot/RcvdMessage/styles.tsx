@@ -3,13 +3,13 @@ import theme from '../../../styles/theme';
 
 import { StyledText } from '../../../components/StyledText/StyledText.styles';
 
-export const MessageLayout = styled.div`
+export const RcvdMessageLayout = styled.div`
   display: flex;
   width: 100%;
   justify-content: flex-start;
 `;
 
-export const MessageBox = styled.div`
+export const RcvdMessageBox = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 75%;

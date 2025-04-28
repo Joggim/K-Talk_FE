@@ -30,12 +30,17 @@ export const WordSpan = styled.span`
 interface CharSpanProps {
   $isError?: boolean;
   $isSpace?: boolean;
+  $isFeedback?: boolean;
 }
 
 export const CharSpan = styled(StyledText)<CharSpanProps>`
   display: inline-block;
-  color: ${({ $isError, theme }) =>
-    $isError ? theme.colors.state.error : theme.colors.state.success};
+  color: ${({ $isFeedback, $isError, theme }) =>
+    !$isFeedback
+      ? theme.colors.text.primary
+      : $isError
+        ? theme.colors.state.error
+        : theme.colors.state.success};
 
   ${({ $isSpace }) =>
     $isSpace &&

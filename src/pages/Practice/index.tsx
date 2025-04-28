@@ -215,10 +215,6 @@ const PracticePage: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    console.log('loading 상태:', isLoading);
-  }, [isLoading]);
-
   return (
     <Container>
       {isLoading && <Loading />}
@@ -282,7 +278,7 @@ const PracticePage: React.FC = () => {
                     $variant="captionRegular"
                     color={theme.colors.brand.primary}
                   >
-                    모범 발음
+                    Guide
                   </StyledText>
                 </AudioItem>
               </AudioItemWrapper>
@@ -295,7 +291,7 @@ const PracticePage: React.FC = () => {
                       $variant="captionRegular"
                       color={theme.colors.brand.primary}
                     >
-                      내 발음
+                      Mine
                     </StyledText>
                   </AudioItem>
                 ) : (

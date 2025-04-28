@@ -1,87 +1,115 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect, forwardRef } from 'react';
 import theme from '../../../styles/theme';
 
 import type { SentMessageProps } from './dto';
 
 import {
-  MessageLayout,
+  SentMessageLayout,
   MessageContainer,
-  MessageBox,
+  SentMessageBox,
   IconList,
   ErrorBtn,
   FeedbackBox,
 } from './styles';
+import BounceLoader from '../../../components/BounceLoader';
 import Sound from '../../../components/Icons/Sound';
 import MySound from '../../../components/Icons/MySound';
 import Error from '../../../components/Icons/Error';
 import { StyledText } from '../../../components/StyledText/StyledText.styles';
 import HighlightedText from '../../../components/HighlightedText';
 
-const SentMessage: React.FC<SentMessageProps> = memo(
-  ({ content, feedback, userAudio, correctAudio }) => {
-    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+const SentMessage = memo(
+  forwardRef<HTMLDivElement, SentMessageProps & { isLast: boolean }>(
+    (
+      {
+        content,
+        isFeedback = true,
+        feedback,
+        userAudioUrl,
+        modelAudioUrl,
+        isLast = false,
+        isNew,
+        isFeedbackLoading = false,
+      },
+      ref
+    ) => {
+      const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
-    const handleFeedbackToggle = () => {
-      setIsFeedbackOpen((prev) => !prev);
-    };
+      useEffect(() => {
+        if (isFeedbackOpen && isLast && ref && typeof ref !== 'function') {
+          setTimeout(() => {
+            ref.current?.scrollIntoView({ behavior: 'smooth' });
+          }, 0);
+        }
+      }, [isFeedbackOpen, isLast, ref]);
 
-    // 발음 오류가 있는 경우 오류 인덱스 설정, 없으면 전체 초록색 표시
-    const pronunciationErrors =
-      feedback?.pronunciation?.pronunciationErrors || [];
-    const isAllCorrect = pronunciationErrors.length === 0;
+      const handleFeedbackToggle = () => {
+        setIsFeedbackOpen((prev) => !prev);
+      };
 
-    return (
-      <MessageLayout>
-        <MessageContainer>
-          {feedback?.grammar && (
-            <ErrorBtn onClick={handleFeedbackToggle}>
-              <Error color={theme.colors.brand.primary} width="24px" />
-            </ErrorBtn>
-          )}
-          <MessageBox>
-            <HighlightedText
-              correct={content} // 문법 오류가 없으므로 원래 문장 그대로 전달
-              errors={isAllCorrect ? [] : pronunciationErrors} // 발음 오류가 없으면 초록색으로 표시
-              size="bodyMediumLight"
-            />
-            <IconList>
-              {correctAudio && (
-                <Sound color={theme.colors.brand.primary} width="20px" />
-              )}
-              {userAudio && (
-                <MySound color={theme.colors.brand.primary} width="20px" />
-              )}
-            </IconList>
-          </MessageBox>
-        </MessageContainer>
+      // 발음 오류가 있는 경우 오류 인덱스 설정, 없으면 전체 초록색 표시
+      const pronunciationErrors =
+        feedback?.pronunciation?.pronunciationErrors || [];
+      const isAllCorrect = pronunciationErrors.length === 0;
 
-        {isFeedbackOpen && feedback?.grammar && (
-          <MessageContainer>
-            <FeedbackBox>
-              <StyledText
-                $variant="captionRegular"
-                color={theme.colors.brand.primary}
-              >
-                {feedback.grammar.suggestion}
-              </StyledText>
-              <hr
-                style={{
-                  border: `0.5px solid ${theme.colors.brand.primary}`,
-                  width: '100%',
-                }}
+      return (
+        <SentMessageLayout ref={ref}>
+          <MessageContainer $isNew={isNew}>
+            {feedback?.grammar && (
+              <ErrorBtn onClick={handleFeedbackToggle}>
+                <Error color={theme.colors.brand.primary} width="24px" />
+              </ErrorBtn>
+            )}
+            <SentMessageBox $isNew={isNew}>
+              <HighlightedText
+                correct={content}
+                isFeedback={isFeedback}
+                errors={isAllCorrect ? [] : pronunciationErrors} // 발음 오류가 없으면 초록색으로 표시
+                size="bodyMediumLight"
               />
-              <StyledText
-                $variant="captionRegular"
-                color={theme.colors.brand.primary}
-              >
-                {feedback.grammar.explanation}
-              </StyledText>
-            </FeedbackBox>
+
+              <IconList>
+                {modelAudioUrl && (
+                  <Sound color={theme.colors.brand.primary} width="20px" />
+                )}
+                {userAudioUrl && (
+                  <MySound color={theme.colors.brand.primary} width="20px" />
+                )}
+                {isFeedbackLoading && isLast && (
+                  <BounceLoader size="small" color="bg.black2" />
+                )}
+              </IconList>
+            </SentMessageBox>
           </MessageContainer>
-        )}
-      </MessageLayout>
-    );
-  }
+
+          {isFeedbackOpen && feedback?.grammar && (
+            <MessageContainer>
+              <FeedbackBox>
+                <StyledText
+                  $variant="captionRegular"
+                  color={theme.colors.brand.primary}
+                >
+                  {feedback.grammar.suggestion}
+                </StyledText>
+                <hr
+                  style={{
+                    border: `0.5px solid ${theme.colors.brand.primary}`,
+                    width: '100%',
+                  }}
+                />
+                <StyledText
+                  $variant="captionRegular"
+                  color={theme.colors.brand.primary}
+                >
+                  {feedback.grammar.explanation}
+                </StyledText>
+              </FeedbackBox>
+            </MessageContainer>
+          )}
+        </SentMessageLayout>
+      );
+    }
+  )
 );
 
 export default SentMessage;
