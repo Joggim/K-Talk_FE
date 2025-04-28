@@ -155,7 +155,6 @@ const TalkBotPage: React.FC = () => {
     try {
       const sttRes = await postSTTApi(audioFile);
       const { text } = sttRes.data;
-
       const trimmedText = text?.trim() ?? '';
 
       if (trimmedText === '') {
@@ -165,6 +164,7 @@ const TalkBotPage: React.FC = () => {
       }
 
       const newId = Date.now();
+
       const newMsg: SentMessageProps = {
         id: newId,
         type: 'sent',
@@ -172,46 +172,45 @@ const TalkBotPage: React.FC = () => {
         isFeedback: false,
       };
 
-      setMessages((prev) => {
-        const newMessages = [...(prev ?? []), newMsg];
-        setCurrentMessageIndex(0);
-        return newMessages;
-      });
+      setMessages((prev) => [...(prev ?? []), newMsg]);
+      setCurrentMessageIndex(0);
 
-      setNewMessageId(newId);
       setIsPronounceError(false);
 
-      getFeedback(trimmedText, audioFile);
+      getFeedback(trimmedText, audioFile, newId);
     } catch (err) {
       console.error('STT 실패', err);
     }
   };
 
-  const getFeedback = async (transcription: string, audioFile: File) => {
+  const getFeedback = async (
+    transcription: string,
+    audioFile: File,
+    messageId: number
+  ) => {
     setIsFeedbackLoading(true);
     try {
       const res = await getFeedbackApi(transcription, audioFile);
       const feedbackData = res.data;
 
-      setMessages((prev) =>
-        prev?.map((msg) => {
-          if (msg.id !== newMessageId) return msg;
-          if (msg.type !== 'sent') return msg;
-
+      setMessages((prev) => {
+        if (!prev) return prev;
+        return prev.map((msg) => {
+          if (msg.id !== messageId || msg.type !== 'sent') return msg;
           return {
             ...msg,
             isFeedback: true,
             feedback: feedbackData.feedback,
             modelAudioUrl: feedbackData.modelAudioUrl,
           };
-        })
-      );
+        });
+      });
 
       getChatReply(feedbackData.content);
     } catch (err) {
       console.error('피드백 요청 실패', err);
     } finally {
-      setIsFeedbackLoading(true);
+      setIsFeedbackLoading(false);
     }
   };
 
