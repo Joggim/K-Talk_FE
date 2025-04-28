@@ -11,6 +11,7 @@ import {
   ErrorBtn,
   FeedbackBox,
 } from './styles';
+import BounceLoader from '../../../components/BounceLoader';
 import Sound from '../../../components/Icons/Sound';
 import MySound from '../../../components/Icons/MySound';
 import Error from '../../../components/Icons/Error';
@@ -26,8 +27,9 @@ const SentMessage = memo(
         feedback,
         userAudioUrl,
         modelAudioUrl,
-        isLast,
+        isLast = false,
         isNew,
+        isFeedbackLoading = false,
       },
       ref
     ) => {
@@ -65,12 +67,16 @@ const SentMessage = memo(
                 errors={isAllCorrect ? [] : pronunciationErrors} // 발음 오류가 없으면 초록색으로 표시
                 size="bodyMediumLight"
               />
+
               <IconList>
                 {modelAudioUrl && (
                   <Sound color={theme.colors.brand.primary} width="20px" />
                 )}
                 {userAudioUrl && (
                   <MySound color={theme.colors.brand.primary} width="20px" />
+                )}
+                {isFeedbackLoading && isLast && (
+                  <BounceLoader size="small" color="bg.black2" />
                 )}
               </IconList>
             </SentMessageBox>

@@ -11,18 +11,35 @@ const bounceDelay = keyframes`
 `;
 
 export const Spinner = styled.div`
-  width: 70px;
+  min-height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 6px;
 `;
 
-export const Bounce = styled.div<{ delay: string }>`
-  width: 8px;
-  height: 8px;
-  background-color: ${({ theme }) => theme.colors.white};
+export const Bounce = styled.div<{
+  $delay: string;
+  $color: string;
+  $size: 'small' | 'medium' | 'large';
+}>`
+  width: ${({ $size }) =>
+    $size === 'small' ? '4px' : $size === 'medium' ? '8px' : '10px'};
+  height: ${({ $size }) =>
+    $size === 'small' ? '4px' : $size === 'medium' ? '8px' : '10px'};
+  background-color: ${({ theme, $color }) => {
+    const [group, key] = $color.split('.');
+    if (key) {
+      return (
+        (theme.colors as any)[group]?.[key] ||
+        theme.colors[group] ||
+        theme.colors.text.primary
+      );
+    }
+    return theme.colors[$color] || theme.colors.text.primary;
+  }};
   border-radius: 100%;
   animation: ${bounceDelay} 1.4s infinite ease-in-out both;
-  animation-delay: ${({ delay }) => delay};
+  animation-delay: ${({ $delay }) => $delay};
+  align-self: center;
 `;

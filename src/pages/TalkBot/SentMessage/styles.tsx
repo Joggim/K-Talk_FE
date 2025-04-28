@@ -66,10 +66,6 @@ export const SentMessageBox = styled.div<{ $isNew?: boolean }>`
   background: ${({ theme }) => theme.colors.bg.white};
 `;
 
-export const Message = styled(StyledText)`
-  overflow-wrap: break-word;
-`;
-
 export const IconList = styled.div`
   display: flex;
   width: auto;

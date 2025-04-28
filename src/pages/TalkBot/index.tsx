@@ -38,6 +38,7 @@ const TalkBotPage: React.FC = () => {
   const [newMessageId, setNewMessageId] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPronounceError, setIsPronounceError] = useState(false);
+  const [isFeedbackLoading, setIsFeedbackLoading] = useState(false);
   const [isReplyLoading, setIsReplyLoading] = useState(false);
 
   const [recordedFile, setRecordedFile] = useState<File | null>(null);
@@ -187,6 +188,7 @@ const TalkBotPage: React.FC = () => {
   };
 
   const getFeedback = async (transcription: string, audioFile: File) => {
+    setIsFeedbackLoading(true);
     try {
       const res = await getFeedbackApi(transcription, audioFile);
       const feedbackData = res.data;
@@ -208,6 +210,8 @@ const TalkBotPage: React.FC = () => {
       getChatReply(feedbackData.content);
     } catch (err) {
       console.error('피드백 요청 실패', err);
+    } finally {
+      setIsFeedbackLoading(true);
     }
   };
 
@@ -252,6 +256,7 @@ const TalkBotPage: React.FC = () => {
               ref={scrollRef}
               isLast={isLast}
               isNew={isNew}
+              isFeedbackLoading={isFeedbackLoading}
             />
           );
         })}
