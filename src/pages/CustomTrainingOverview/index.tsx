@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   DashBoardContainer,
@@ -11,7 +12,6 @@ import {
   MoreBtn,
   SentenceList,
   SentenceItem,
-  EnglishSentence,
 } from './styles';
 import TopBar from '../../components/TopBar';
 import NavBar from '../../components/NavBar/NavBar';
@@ -20,10 +20,16 @@ import { StyledText } from '../../components/StyledText/StyledText.styles';
 import theme from '../../styles/theme';
 import { dummyCustoms } from './dummyCustoms';
 
-const PersonalizedLessonPage: React.FC = () => {
+const CustomTrainingOverviewPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/custom-sentences`);
+  };
+
   return (
     <Container>
-      <TopBar name="Personalized Lesson" />
+      <TopBar name="Custom Training" />
       <DashBoardContainer>
         <Title>Your Pronunciation Summary</Title>
         <StyledText
@@ -54,7 +60,7 @@ const PersonalizedLessonPage: React.FC = () => {
                 >
                   Try Saying This
                 </StyledText>
-                <MoreBtn>
+                <MoreBtn onClick={handleClick}>
                   <StyledText $variant="captionMedium">more</StyledText>
                   <ArrowRight color="black" width="18" height="18" />
                 </MoreBtn>
@@ -79,4 +85,4 @@ const PersonalizedLessonPage: React.FC = () => {
   );
 };
 
-export default PersonalizedLessonPage;
+export default CustomTrainingOverviewPage;

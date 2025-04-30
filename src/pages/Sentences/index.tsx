@@ -3,7 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { Container, SentenceList } from './styles';
 import NavBar from '../../components/NavBar/NavBar';
 import TopBar from '../../components/TopBar';
-import SentenceItem from './SentenceItem';
+import SentenceItem from '../../components/SentenceItem';
 import { getSentenceListApi } from '../../apis/topics';
 import { useRecoilState } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';

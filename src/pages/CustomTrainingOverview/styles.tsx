@@ -109,14 +109,3 @@ export const SentenceItem = styled.div<{ $hasBottomBorder?: boolean }>`
     $hasBottomBorder &&
     `border-bottom: 1px solid ${theme.colors.border.divider};`}
 `;
-
-export const Sentence = styled.p`
-  font-size: 16px;
-  font-weight: 600;
-  color: ${theme.colors.text.primary};
-`;
-
-export const EnglishSentence = styled.p`
-  font-size: 14px;
-  color: ${theme.colors.text.tertiary};
-`;
