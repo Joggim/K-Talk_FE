@@ -3,14 +3,12 @@ import { Container, MenuContainer, LogoImage } from './styles';
 import NavBar from '../../components/NavBar/NavBar';
 import MenuItem from '../../components/MenuItem';
 import theme from '../../styles/theme';
-import Logo from '../../assets/logo.png';
+import kTalkLogo from '../../assets/kTalkLogo.svg';
 
 const HomePage: React.FC = () => {
   return (
     <Container>
-      {/*
-      <LogoImage src={Logo} alt="Logo" />
-      */}
+      <LogoImage src={kTalkLogo} alt="Logo" />
       <MenuContainer>
         <MenuItem
           bgColor={theme.colors.brand.primary}
@@ -22,7 +20,7 @@ const HomePage: React.FC = () => {
         <MenuItem
           bgColor={theme.colors.brand.secondary}
           fontColor={theme.colors.text.white}
-          title="Personalized Lesson"
+          title="Custom Training"
           content="Tailored to your past mistakes for better learning"
           route="/custom-training"
         />

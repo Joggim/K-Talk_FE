@@ -16,6 +16,8 @@ import {
 import TopBar from '../../components/TopBar';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
 import CircleButton from '../../components/CircleButton';
+import HighlightedText from '../../components/HighlightedText';
+import Loading from '../../components/Loader';
 import Microphone from '../../components/Icons/Microphone';
 import Pause from '../../components/Icons/Pause';
 import Retry from '../../components/Icons/Retry';
@@ -25,7 +27,6 @@ import ArrowLeft from '../../components/Icons/ArrowLeft';
 import ArrowRight from '../../components/Icons/ArrowRight';
 import XIcon from '../../components/Icons/X';
 import CheckIcon from '../../components/Icons/Check';
-import HighlightedText from '../../components/HighlightedText';
 import Tooltip from './Tooltip';
 import theme from '../../styles/theme';
 import { useRecoilValue } from 'recoil';
@@ -33,11 +34,11 @@ import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
 import { SentenceItemDTO } from '../../apis/topics/dto';
 import { FeedbackResponseData } from '../../apis/sentences/dto';
 import { postSentenceFeedbackApi } from '../../apis/sentences';
-import Loading from '../../components/Loader';
 
 const PracticePage: React.FC = () => {
   const location = useLocation();
   const sentenceId = (location.state as { sentenceId: string })?.sentenceId;
+  const backTo = (location.state as { backTo?: string })?.backTo;
 
   const sentenceList = useRecoilValue(sentenceListState);
   const [sentence, setSentence] = useState<SentenceItemDTO>();
@@ -200,7 +201,10 @@ const PracticePage: React.FC = () => {
       const prevSentence = sentenceList[currentIndex - 1];
       setSentence(prevSentence);
       setFeedback(null);
-      navigate('.', { state: { sentenceId: String(prevSentence.id) } });
+      navigate('.', {
+        state: { sentenceId: String(prevSentence.id), backTo },
+        replace: true,
+      });
     }
   };
 
@@ -211,14 +215,17 @@ const PracticePage: React.FC = () => {
       const nextSentence = sentenceList[currentIndex + 1];
       setSentence(nextSentence);
       setFeedback(null);
-      navigate('.', { state: { sentenceId: String(nextSentence.id) } });
+      navigate('.', {
+        state: { sentenceId: String(nextSentence.id), backTo },
+        replace: true,
+      });
     }
   };
 
   return (
     <Container>
       {isLoading && <Loading />}
-      <TopBar />
+      <TopBar backTo={backTo} />
       {sentence && (
         <Card>
           <Passed $passed={feedback?.passed ?? null}>

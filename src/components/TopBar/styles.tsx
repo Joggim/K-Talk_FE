@@ -13,6 +13,7 @@ export const TopBarContainer = styled.nav`
   gap: 10px;
   z-index: 1;
   background: ${({ theme }) => theme.colors.bg.black3};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[300]};
 `;
 
 export const Icon = styled.div`

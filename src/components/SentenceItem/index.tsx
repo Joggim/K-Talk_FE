@@ -2,19 +2,24 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Left } from './styles';
 import { SentenceItemProps } from './dto';
-import { StyledText } from '../../../components/StyledText/StyledText.styles';
-import theme from '../../../styles/theme';
+import { StyledText } from '../StyledText/StyledText.styles';
+import theme from '../../styles/theme';
 
 const SentenceItem: React.FC<SentenceItemProps> = ({
   korean,
   translation,
   id,
+  backTo,
 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/practice`, {
-      state: { sentenceId: id },
+    navigate('/practice', {
+      replace: true,
+      state: {
+        sentenceId: id,
+        backTo,
+      },
     });
   };
 
@@ -24,7 +29,10 @@ const SentenceItem: React.FC<SentenceItemProps> = ({
         <StyledText $variant="headingM" color={theme.colors.text.primary}>
           {korean}
         </StyledText>
-        <StyledText $variant="captionRegular" color={theme.colors.text.primary}>
+        <StyledText
+          $variant="captionRegular"
+          color={theme.colors.text.tertiary}
+        >
           {translation}
         </StyledText>
       </Left>

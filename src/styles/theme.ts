@@ -39,6 +39,7 @@ const theme: DefaultTheme = {
       success: '#27AE60',
       warning: '#E2B93B',
       error: '#EB5757',
+      errorLight: '#FFE2E2',
     },
 
     bg: {
