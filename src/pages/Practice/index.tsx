@@ -38,6 +38,7 @@ import Loading from '../../components/Loader';
 const PracticePage: React.FC = () => {
   const location = useLocation();
   const sentenceId = (location.state as { sentenceId: string })?.sentenceId;
+  const backTo = (location.state as { backTo?: string })?.backTo;
 
   const sentenceList = useRecoilValue(sentenceListState);
   const [sentence, setSentence] = useState<SentenceItemDTO>();
@@ -200,7 +201,10 @@ const PracticePage: React.FC = () => {
       const prevSentence = sentenceList[currentIndex - 1];
       setSentence(prevSentence);
       setFeedback(null);
-      navigate('.', { state: { sentenceId: String(prevSentence.id) } });
+      navigate('.', {
+        state: { sentenceId: String(prevSentence.id), backTo },
+        replace: true,
+      });
     }
   };
 
@@ -211,14 +215,17 @@ const PracticePage: React.FC = () => {
       const nextSentence = sentenceList[currentIndex + 1];
       setSentence(nextSentence);
       setFeedback(null);
-      navigate('.', { state: { sentenceId: String(nextSentence.id) } });
+      navigate('.', {
+        state: { sentenceId: String(nextSentence.id), backTo },
+        replace: true,
+      });
     }
   };
 
   return (
     <Container>
       {isLoading && <Loading />}
-      <TopBar />
+      <TopBar backTo={backTo} />
       {sentence && (
         <Card>
           <Passed $passed={feedback?.passed ?? null}>

@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
         <MenuItem
           bgColor={theme.colors.brand.secondary}
           fontColor={theme.colors.text.white}
-          title="Personalized Lesson"
+          title="Custom Training"
           content="Tailored to your past mistakes for better learning"
           route="/custom-training"
         />

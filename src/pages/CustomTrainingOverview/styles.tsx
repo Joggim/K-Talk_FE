@@ -86,6 +86,7 @@ export const MoreBtn = styled.button`
   justify-content: center;
   align-items: center;
   gap: 4px;
+  padding-left: 10px;
 `;
 
 export const SentenceList = styled.div`

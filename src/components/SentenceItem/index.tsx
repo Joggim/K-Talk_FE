@@ -9,12 +9,17 @@ const SentenceItem: React.FC<SentenceItemProps> = ({
   korean,
   translation,
   id,
+  backTo,
 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/practice`, {
-      state: { sentenceId: id },
+    navigate('/practice', {
+      replace: true,
+      state: {
+        sentenceId: id,
+        backTo,
+      },
     });
   };
 

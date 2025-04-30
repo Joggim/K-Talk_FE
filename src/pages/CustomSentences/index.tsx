@@ -17,7 +17,7 @@ import { dummyCustomSentences } from './dummyCustomSentences';
 const CustomSentencesPage: React.FC = () => {
   const [sentenceList, setSentenceList] = useRecoilState(sentenceListState);
 
-  // 문장 리스트 조회 API
+  // 커스텀 문장 리스트 조회 API
   const getCustomSentenceList = async () => {
     /*
     try {
@@ -62,6 +62,7 @@ const CustomSentencesPage: React.FC = () => {
             korean={sentence.korean}
             translation={sentence.translation}
             id={sentence.id}
+            backTo="/custom-sentences"
           />
         ))}
       </ContentArea>

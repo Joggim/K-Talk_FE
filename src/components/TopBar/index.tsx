@@ -10,11 +10,15 @@ import ArrowLeft from '../Icons/ArrowLeft';
 
 import { TopBarProps } from './dto';
 
-const TopBar: React.FC<TopBarProps> = ({ name = '' }) => {
+const TopBar: React.FC<TopBarProps> = ({ name = '', backTo }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(-1);
+    if (backTo) {
+      navigate(backTo, { replace: true }); // 히스토리 쌓지 않도록 replace 사용
+    } else {
+      navigate(-1);
+    }
   };
 
   return (
