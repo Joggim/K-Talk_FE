@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, LoginContainer } from './styles';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { googleLogin } from '../../apis/auth';
-import Logo from '../../assets/logo.png';
+import kTalkLogo from '../../assets/kTalkLogo.svg';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -30,7 +30,7 @@ const LoginPage: React.FC = () => {
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <Container>
-        <img src={Logo} alt="Logo" />
+        <img src={kTalkLogo} alt="Logo" />
         <LoginContainer>
           <GoogleLogin
             onSuccess={handleGoogleLogin}
