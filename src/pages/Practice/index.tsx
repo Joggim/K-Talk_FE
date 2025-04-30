@@ -16,6 +16,8 @@ import {
 import TopBar from '../../components/TopBar';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
 import CircleButton from '../../components/CircleButton';
+import HighlightedText from '../../components/HighlightedText';
+import Loading from '../../components/Loader';
 import Microphone from '../../components/Icons/Microphone';
 import Pause from '../../components/Icons/Pause';
 import Retry from '../../components/Icons/Retry';
@@ -25,7 +27,6 @@ import ArrowLeft from '../../components/Icons/ArrowLeft';
 import ArrowRight from '../../components/Icons/ArrowRight';
 import XIcon from '../../components/Icons/X';
 import CheckIcon from '../../components/Icons/Check';
-import HighlightedText from '../../components/HighlightedText';
 import Tooltip from './Tooltip';
 import theme from '../../styles/theme';
 import { useRecoilValue } from 'recoil';
@@ -33,7 +34,6 @@ import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
 import { SentenceItemDTO } from '../../apis/topics/dto';
 import { FeedbackResponseData } from '../../apis/sentences/dto';
 import { postSentenceFeedbackApi } from '../../apis/sentences';
-import Loading from '../../components/Loader';
 
 const PracticePage: React.FC = () => {
   const location = useLocation();

@@ -12,7 +12,7 @@ import { StyledText } from '../../components/StyledText/StyledText.styles';
 import theme from '../../styles/theme';
 import { useRecoilState } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
-import { dummyCustomSentences } from './dummyCustomSentences';
+import { dummyCustomIssue } from './dummyCustomIssue';
 
 const CustomSentencesPage: React.FC = () => {
   const [sentenceList, setSentenceList] = useRecoilState(sentenceListState);
@@ -29,11 +29,11 @@ const CustomSentencesPage: React.FC = () => {
       console.error('Error fetching sentence list:', error);
     }
     */
-    setSentenceList(dummyCustomSentences.sentences);
   };
 
   useEffect(() => {
-    getCustomSentenceList();
+    //getCustomSentenceList();
+    setSentenceList(dummyCustomIssue.sentences);
   }, []);
 
   return (
@@ -45,10 +45,10 @@ const CustomSentencesPage: React.FC = () => {
             $variant="bodyLargeBold"
             color={theme.colors.brand.primary}
           >
-            {dummyCustomSentences.title}
+            {dummyCustomIssue.title}
           </IssueTitle>
           <IssueScoreBadge>
-            <span>{dummyCustomSentences.accuracy}%</span>
+            <span>{dummyCustomIssue.accuracy}%</span>
           </IssueScoreBadge>
         </HeaderSection>
 

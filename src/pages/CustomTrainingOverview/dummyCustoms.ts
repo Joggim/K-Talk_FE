@@ -1,71 +1,116 @@
-export const dummyCustoms = [
+export const dummyPronunciationIssues = [
   {
-    title: '‘ㄹ’ 발음 정확도',
+    id: 1,
+    title: 'Difficulty pronouncing tense sounds (ㄲ, ㅃ, ㅉ)',
     accuracy: 35,
     sentences: [
       {
+        id: 11,
+        korean: '아빠가 빨간 꽃병을 꺼냈어요.',
+        translation: 'Dad took out the red flower vase.',
+      },
+      {
+        id: 12,
+        korean: '쭈꾸미 볶음이 정말 맛있어요.',
+        translation: 'The stir-fried baby octopus is really tasty.',
+      },
+      {
+        id: 13,
         korean: '리모컨을 눌러서 TV를 켰어요.',
         translation: 'I pressed the remote control to turn on the TV.',
       },
       {
+        id: 14,
+        korean: '달리기가 끝난 후 물을 마셨어요.',
+        translation: 'I drank water after finishing the run.',
+      },
+      {
+        id: 15,
+        korean: '리모컨을 눌러서 TV를 켰어요.',
+        translation: 'I pressed the remote control to turn on the TV.',
+      },
+      {
+        id: 16,
+        korean: '달리기가 끝난 후 물을 마셨어요.',
+        translation: 'I drank water after finishing the run.',
+      },
+      {
+        id: 17,
+        korean: '리모컨을 눌러서 TV를 켰어요.',
+        translation: 'I pressed the remote control to turn on the TV.',
+      },
+      {
+        id: 18,
         korean: '달리기가 끝난 후 물을 마셨어요.',
         translation: 'I drank water after finishing the run.',
       },
     ],
   },
   {
-    title: '‘ㅈ’ 발음 정확도',
+    id: 2,
+    title: 'Voicing assimilation of /ㅈ/ (자음 동화: 유성음화)',
     accuracy: 41,
     sentences: [
       {
-        korean: '지갑을 주워서 주인에게 돌려줬어요.',
-        translation: 'I picked up a wallet and returned it to the owner.',
+        id: 21,
+        korean: '지하철에서 짐을 주웠어요.',
+        translation: 'I picked up my stuff on the subway.',
       },
       {
-        korean: '주말마다 친구와 자전거를 타요.',
-        translation: 'I ride a bike with my friend every weekend.',
+        id: 22,
+        korean: '중학교 친구를 자주 만나요.',
+        translation: 'I often meet my middle school friend.',
       },
     ],
   },
   {
-    title: '‘ㄱ’ vs. ‘ㅋ’ 구별 어려움',
+    id: 3,
+    title: 'Aspirated consonant confusion (예: ㄱ vs ㅋ)',
     accuracy: 48,
     sentences: [
       {
-        korean: '고양이가 커피를 쏟았어요.',
-        translation: 'The cat spilled coffee.',
+        id: 31,
+        korean: '기린이 커다란 키를 자랑해요.',
+        translation: 'The giraffe proudly shows off its height.',
       },
       {
-        korean: '기차를 타고 캠핑장에 갔어요.',
-        translation: 'I took a train to the campsite.',
+        id: 32,
+        korean: '고기를 캠핑장에서 구웠어요.',
+        translation: 'I grilled meat at the campsite.',
       },
     ],
   },
   {
-    title: '‘ㅅ’ vs. ‘ㅆ’ 구별 어려움',
+    id: 4,
+    title: 'Fortis / Plain / Lenis confusion (예: ㅅ vs. ㅆ)',
     accuracy: 52,
     sentences: [
       {
-        korean: '사자가 숲속에서 쉬고 있어요.',
-        translation: 'The lion is resting in the forest.',
+        id: 41,
+        korean: '선생님이 수업을 시작하셨어요.',
+        translation: 'The teacher started the class.',
       },
       {
-        korean: '쓰레기를 쓰레기통에 버리세요.',
-        translation: 'Please throw the trash in the trash can.',
+        id: 42,
+        korean: '쌀쌀한 날씨에 스웨터를 입었어요.',
+        translation: 'I wore a sweater in the chilly weather.',
       },
     ],
   },
   {
-    title: '문장 강세 패턴 오류',
+    id: 5,
+    title: 'Incorrect sentence stress and intonation (억양/강세 오류)',
     accuracy: 60,
     sentences: [
       {
-        korean: '나는 친구를 만나러 가는 중이에요.',
-        translation: "I'm on my way to meet a friend.",
+        id: 51,
+        korean: '저는 오늘 학교에 갑니다.',
+        translation: 'I am going to school today.',
       },
       {
-        korean: '오늘 저녁에는 김밥을 만들 거예요.',
-        translation: "I'm going to make kimbap for dinner tonight.",
+        id: 52,
+        korean: '내일 시험이 있어서 공부할 거예요.',
+        translation: 'I have a test tomorrow, so I’ll study.',
       },
     ],
   },
