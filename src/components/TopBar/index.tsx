@@ -22,7 +22,7 @@ const TopBar: React.FC<TopBarProps> = ({ name = '' }) => {
       <Icon onClick={handleClick}>
         <ArrowLeft color="black" />
       </Icon>
-      <StyledText $variant="headingL">{name}</StyledText>
+      <StyledText $variant="headingMMedium">{name}</StyledText>
     </TopBarContainer>
   );
 };

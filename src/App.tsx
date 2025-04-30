@@ -7,7 +7,7 @@ import MyPage from './pages/MyPage';
 import TopicsPage from './pages/Topics';
 import SentencesPage from './pages/Sentences';
 import PracticePage from './pages/Practice';
-import CustomTrainingPage from './pages/CustomTraining';
+import PersonalizedLessonPage from './pages/PersonalizedLesson';
 import TalkBotPage from './pages/TalkBot';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -70,7 +70,7 @@ const App: React.FC = () => {
           path="/custom-training"
           element={
             <ProtectedRoute>
-              <CustomTrainingPage />
+              <PersonalizedLessonPage />
             </ProtectedRoute>
           }
         />

@@ -87,6 +87,6 @@ export const FeedbackBox = styled.div`
   align-items: flex-start;
   width: 75%;
   padding: 10px;
-  border-radius: 0px 0px 10px 10px;
-  background: #e5e2fc;
+  border-radius: 10px 0px 10px 10px;
+  background: ${({ theme }) => theme.colors.brand.primaryLight};
 `;
