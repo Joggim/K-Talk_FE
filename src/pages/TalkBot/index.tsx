@@ -51,9 +51,6 @@ const TalkBotPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (messages?.length && messages[messages.length - 1].type === 'received') {
-      startRecording();
-    }
     scrollToBottom();
   }, [messages]);
 
@@ -65,13 +62,6 @@ const TalkBotPage: React.FC = () => {
       firstLoadRef.current = false;
     }
   };
-
-  // 녹음 시작 (RcvdMessage가 나오면 자동 시작)
-  useEffect(() => {
-    if (messages && messages[currentMessageIndex]?.type === 'received') {
-      startRecording();
-    }
-  }, [currentMessageIndex]);
 
   const requestMicrophoneAccess = async () => {
     try {
@@ -95,7 +85,7 @@ const TalkBotPage: React.FC = () => {
   };
 
   // 녹음 시작 함수
-  const startRecording = async () => {
+  const startTalkbotRecording = async () => {
     const hasPermission = await requestMicrophoneAccess();
     if (!hasPermission) return;
 
@@ -226,6 +216,9 @@ const TalkBotPage: React.FC = () => {
         setCurrentMessageIndex(0); // 항상 맨 위 인덱스
         return newMessages;
       });
+
+      new Audio(replyData.modelAudioUrl).play();
+      console.log('model audio play');
     } catch (err) {
       console.error('챗봇 응답 실패', err);
     } finally {
@@ -288,7 +281,7 @@ const TalkBotPage: React.FC = () => {
           size="big"
           bgColor={theme.colors.brand.primary}
           icon={!isRecording ? <Microphone /> : <Pause />}
-          onClick={isRecording ? stopRecording : startRecording}
+          onClick={isRecording ? stopRecording : startTalkbotRecording}
         />
       </RecordingControls>
       <NavBar />

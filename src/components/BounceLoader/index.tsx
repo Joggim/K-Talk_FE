@@ -4,7 +4,7 @@ import { BounceLoaderProps } from './dto';
 
 const BounceLoader: React.FC<BounceLoaderProps> = ({
   color = 'white',
-  size = 'midium',
+  size = 'medium',
 }) => {
   return (
     <Spinner>

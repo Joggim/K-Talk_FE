@@ -75,6 +75,11 @@ export const IconList = styled.div`
   gap: 10px;
 `;
 
+export const IconWrapper = styled.button`
+  width: 24px;
+  height: 24px;
+`;
+
 export const ErrorBtn = styled.button`
   width: 24px;
   height: 24px;

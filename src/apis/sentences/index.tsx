@@ -8,8 +8,18 @@ export const getSentenceApi = (sentenceId: number) =>
 
 export const postSentenceFeedbackApi = (
   sentenceId: number,
-  audioBase64: string
-) =>
-  newRequest.post<FeedbackResponse>(`/api/sentences/${sentenceId}/feedback`, {
-    audio: audioBase64,
-  });
+  audioFile: File
+) => {
+  const formData = new FormData();
+  formData.append('file', audioFile);
+
+  return newRequest.post<FeedbackResponse>(
+    `/api/sentences/${sentenceId}/feedback`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+};

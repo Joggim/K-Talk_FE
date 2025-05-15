@@ -45,6 +45,7 @@ const SentencesPage: React.FC = () => {
             korean={sentence.korean}
             translation={sentence.translation}
             id={sentence.id}
+            isPassed={sentence.isPassed ?? null}
             backTo={`/topics/${topicId}/sentences`}
           />
         ))}
