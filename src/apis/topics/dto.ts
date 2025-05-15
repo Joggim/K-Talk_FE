@@ -19,4 +19,5 @@ export interface SentenceItemDTO {
   translation: string;
   audioUrl?: string;
   ipa?: string;
+  isPassed?: boolean;
 }

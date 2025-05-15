@@ -26,6 +26,8 @@ const SentenceItem: React.FC<SentenceItemProps> = ({
     });
   };
 
+  console.log(korean, isPassed);
+
   return (
     <Container onClick={handleClick}>
       <Left>
@@ -39,7 +41,7 @@ const SentenceItem: React.FC<SentenceItemProps> = ({
           {translation}
         </StyledText>
       </Left>
-      {isPassed && isPassed !== null && (
+      {isPassed !== null && (
         <Passed $passed={isPassed}>
           {isPassed ? <CheckIcon width="20px" /> : <XIcon width="20px" />}
         </Passed>

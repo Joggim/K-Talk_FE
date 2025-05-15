@@ -3,5 +3,5 @@ export interface SentenceItemProps {
   translation: string;
   id: number;
   backTo: string;
-  isPassed?: boolean;
+  isPassed: boolean | null;
 }
