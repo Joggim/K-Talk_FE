@@ -23,4 +23,18 @@ export const Message = styled(StyledText)`
   overflow-wrap: break-word;
 `;
 
+export const BtnList = styled.div`
+  display: flex;
+  width: auto;
+  height: 20px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+`;
+
+export const IconWrapper = styled.button`
+  width: 24px;
+  height: 24px;
+`;
+
 export const TranslateBtn = styled(StyledText)``;

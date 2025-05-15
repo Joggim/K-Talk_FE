@@ -8,6 +8,7 @@ import {
   MessageContainer,
   SentMessageBox,
   IconList,
+  IconWrapper,
   ErrorBtn,
   FeedbackBox,
 } from './styles';
@@ -47,6 +48,16 @@ const SentMessage = memo(
         setIsFeedbackOpen((prev) => !prev);
       };
 
+      const playModelPronunciation = () => {
+        new Audio(modelAudioUrl).play();
+        console.log('model audio play click');
+      };
+
+      const playUserPronunciation = () => {
+        new Audio(userAudioUrl).play();
+        console.log('user audio play click');
+      };
+
       // 발음 오류가 있는 경우 오류 인덱스 설정, 없으면 전체 초록색 표시
       const pronunciationErrors =
         feedback?.pronunciation?.pronunciationErrors || [];
@@ -70,10 +81,14 @@ const SentMessage = memo(
 
               <IconList>
                 {modelAudioUrl && (
-                  <Sound color={theme.colors.brand.primary} width="20px" />
+                  <IconWrapper onClick={playModelPronunciation}>
+                    <Sound color={theme.colors.brand.primary} width="20px" />
+                  </IconWrapper>
                 )}
                 {userAudioUrl && (
-                  <MySound color={theme.colors.brand.primary} width="20px" />
+                  <IconWrapper onClick={playUserPronunciation}>
+                    <MySound color={theme.colors.brand.primary} width="20px" />
+                  </IconWrapper>
                 )}
                 {isFeedbackLoading && isLast && (
                   <BounceLoader size="small" color="bg.black2" />
