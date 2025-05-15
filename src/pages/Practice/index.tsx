@@ -42,6 +42,8 @@ const PracticePage: React.FC = () => {
   const sentenceList = useRecoilValue(sentenceListState);
   const [sentence, setSentence] = useState<SentenceItemDTO>();
 
+  const [recordedFile, setRecordedFile] = useState<File | null>(null);
+
   const navigate = useNavigate();
 
   const getSentence = () => {
@@ -95,7 +97,7 @@ const PracticePage: React.FC = () => {
     const hasPermission = await requestMicrophoneAccess();
     if (!hasPermission) return;
 
-    setRecordedAudio(null);
+    setRecordedFile(null);
     setFeedback(null);
     setIsRecording(true);
     audioChunksRef.current = [];
@@ -115,10 +117,13 @@ const PracticePage: React.FC = () => {
         const audioBlob = new Blob(audioChunksRef.current, {
           type: 'audio/wav',
         });
+        const file = new File([audioBlob], 'recording.wav', {
+          type: 'audio/wav',
+        });
+        setRecordedFile(file);
         const audioUrl = URL.createObjectURL(audioBlob);
         setRecordedAudio(audioUrl);
-
-        await uploadAudio(audioBlob);
+        await uploadAudio(file);
       };
 
       mediaRecorder.start();
@@ -132,48 +137,22 @@ const PracticePage: React.FC = () => {
     setIsRecording(false);
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: 'audio/wav',
-        });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        setRecordedAudio(audioUrl);
-
-        await uploadAudio(audioBlob);
-      };
     }
   };
 
-  const uploadAudio = async (audioBlob: Blob) => {
+  const uploadAudio = async (audioFile: File) => {
     setIsLoading(true);
-
     try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        try {
-          const base64Audio = (reader.result as string).split(',')[1];
-          if (!sentence?.id) return;
-
-          const response = await postSentenceFeedbackApi(
-            sentence.id,
-            base64Audio
-          );
-
-          if (response.success) {
-            setFeedback(response.data);
-          } else {
-            alert('피드백 분석에 실패했습니다.');
-          }
-        } catch (error) {
-          console.error('오디오 업로드 중 오류:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      reader.readAsDataURL(audioBlob);
+      if (!sentence?.id) return;
+      const response = await postSentenceFeedbackApi(sentence.id, audioFile);
+      if (response.success) {
+        setFeedback(response.data);
+      } else {
+        alert('피드백 분석에 실패했습니다.');
+      }
     } catch (error) {
-      console.error('FileReader 시작 중 오류:', error);
+      console.error('오디오 업로드 중 오류:', error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -190,7 +169,6 @@ const PracticePage: React.FC = () => {
       new Audio(feedback.userPronunciation).play();
     }
     */
-    console.log(feedback?.userAudioUrl, ' 재생');
   };
 
   // handlePrev
@@ -230,31 +208,18 @@ const PracticePage: React.FC = () => {
           <Passed $passed={feedback?.passed ?? null}>
             {feedback ? feedback.passed ? <CheckIcon /> : <XIcon /> : null}
           </Passed>
-          {/*
-          {!feedback?.passed && (
-            <FeedbackText
-              $variant="captionRegular"
-              color={theme.colors.state.error}
-            >
-              {feedback?.feedBack}
-            </FeedbackText>
-          )}
-          */}
           <InnerCard>
             <Korean>
               {feedback ? (
                 <HighlightedText
                   correct={sentence.korean}
-                  errors={
-                    Array.isArray(feedback.pronunciationErrors)
-                      ? feedback.pronunciationErrors.map(
-                          ({ correct, index }) => ({
-                            char: correct,
-                            index,
-                          })
-                        )
-                      : []
-                  }
+                  isFeedback={true}
+                  errors={feedback.pronunciationErrors.map(
+                    ({ correct, index }) => ({
+                      char: correct,
+                      index,
+                    })
+                  )}
                   size="headingXL"
                 />
               ) : (
@@ -334,7 +299,7 @@ const PracticePage: React.FC = () => {
           size="big"
           bgColor={theme.colors.brand.primary}
           icon={
-            isRecording ? <Pause /> : recordedAudio ? <Retry /> : <Microphone />
+            isRecording ? <Pause /> : recordedFile ? <Retry /> : <Microphone />
           }
           onClick={isRecording ? stopRecording : startRecording}
         />
