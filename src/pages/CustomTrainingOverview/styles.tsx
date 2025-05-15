@@ -105,6 +105,7 @@ export const SentenceItem = styled.div<{ $hasBottomBorder?: boolean }>`
   gap: 8px;
   padding: 10px;
   flex: 1 0 0;
+  width: 100%;
 
   ${({ $hasBottomBorder, theme }) =>
     $hasBottomBorder &&

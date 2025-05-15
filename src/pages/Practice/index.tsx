@@ -5,7 +5,6 @@ import {
   Card,
   InnerCard,
   Passed,
-  FeedbackText,
   Korean,
   Translation,
   AudioContainer,

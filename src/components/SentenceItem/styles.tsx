@@ -22,3 +22,26 @@ export const Left = styled.div`
   align-items: flex-start;
   gap: 9px;
 `;
+
+interface PassedProps {
+  $passed: boolean | null;
+}
+
+export const Passed = styled.div<PassedProps>`
+  display: flex;
+  width: 26px;
+  height: 26px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 13px;
+  background: ${({ $passed, theme }) =>
+    $passed === true
+      ? theme.colors.state.success
+      : $passed === false
+        ? theme.colors.state.error
+        : theme.colors.bg.white}; // feedback이 없는 경우 중립 배경
+  color: ${({ theme }) => theme.colors.text.white};
+  font-size: 14px;
+  font-weight: bold;
+`;

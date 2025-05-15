@@ -5,4 +5,5 @@ export interface SentMessageProps extends ApiSentMessageProps {
   ref?: React.RefObject<HTMLDivElement>;
   isLast?: boolean;
   isNew?: boolean;
+  isFeedbackLoading?: boolean;
 }
