@@ -26,7 +26,7 @@ const SentenceItem: React.FC<SentenceItemProps> = ({
     });
   };
 
-  console.log(korean, isPassed);
+  //console.log(korean, isPassed);
 
   return (
     <Container onClick={handleClick}>
