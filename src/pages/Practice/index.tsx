@@ -67,11 +67,6 @@ const PracticePage: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const playModelPronunciation = () => {
-    //new Audio(sentence.modelPronunciation).play();
-    console.log(sentence?.modelAudioUrl, ' 재생');
-  };
-
   const requestMicrophoneAccess = async () => {
     try {
       // 권한 상태 확인
@@ -163,12 +158,16 @@ const PracticePage: React.FC = () => {
     }
   }, [recordedAudio]);
 
+  const playModelPronunciation = () => {
+    new Audio(sentence?.audioUrl).play();
+    console.log('model audio play click');
+  };
+
   const playRecordedAudio = () => {
-    /*
-    if (feedback.userPronunciation) {
-      new Audio(feedback.userPronunciation).play();
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.play();
+      console.log('user audio play click');
     }
-    */
   };
 
   // handlePrev
@@ -315,6 +314,7 @@ const PracticePage: React.FC = () => {
           }
         />
       </ButtonContainer>
+      <audio ref={audioPlayerRef} hidden />
     </Container>
   );
 };
