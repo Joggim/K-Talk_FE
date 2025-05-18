@@ -76,7 +76,7 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path="/custom-sentences"
+          path="/custom-sentences/:issueId"
           element={
             <ProtectedRoute>
               <CustomSentencesPage />

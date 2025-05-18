@@ -6,7 +6,7 @@ import {
 
 export const getPronunciationIssueListApi = () => {
   return newRequest.get<GetPronunciationIssueListResponse>(
-    `/api/learning/recommendations`
+    `/api/pronunciation-issue`
   );
 };
 

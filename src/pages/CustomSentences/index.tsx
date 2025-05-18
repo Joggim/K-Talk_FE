@@ -36,7 +36,7 @@ const CustomSentencesPage: React.FC = () => {
       const response = await getPronunciationIssueDetailApi(Number(issueId));
       if (response.success) {
         setIssueDetail(response.data);
-        setSentenceList(response.data.recommendSentences);
+        setSentenceList(response.data.recommendedSentences);
       }
     } catch (error) {
       console.error('Error fetching sentence list:', error);
@@ -74,7 +74,7 @@ const CustomSentencesPage: React.FC = () => {
               $variant="captionRegular"
               color={theme.colors.text.secondary}
             >
-              Where did I pronounce wrong?
+              Where did I pronounced wrong?
             </StyledText>
           </LeftWrapper>
           <RightWrapper>
@@ -101,7 +101,7 @@ const CustomSentencesPage: React.FC = () => {
             translation={sentence.translation}
             id={sentence.id}
             isPassed={sentence.isPassed ?? null}
-            backTo="/custom-sentences"
+            backTo={`/custom-sentences/${issueId}`}
           />
         ))}
       </ContentArea>

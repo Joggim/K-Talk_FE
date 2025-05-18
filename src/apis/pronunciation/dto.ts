@@ -1,4 +1,5 @@
 import { BaseSuccessResponse } from '../util/dto';
+import { SentenceItemDTO } from '../topics/dto';
 
 export type GetPronunciationIssueListResponse = BaseSuccessResponse<
   PronunciationIssue[]
@@ -6,17 +7,11 @@ export type GetPronunciationIssueListResponse = BaseSuccessResponse<
 export type GetPronunciationIssueDetailResponse =
   BaseSuccessResponse<PronunciationIssueDetail>;
 
-export interface Sentence {
-  id: number;
-  korean: string;
-  translation: string;
-}
-
 export interface PronunciationIssue {
   id: number;
   title: string;
   accuracy: number;
-  sentences: Sentence[];
+  sentences: SentenceItemDTO[];
 }
 
 export interface PronunciationIssueDetail {
@@ -25,7 +20,7 @@ export interface PronunciationIssueDetail {
   accuracy: number;
   totalErrorLogCount: number;
   errorLogs: ErrorLog[];
-  recommendSentences: Sentence[];
+  recommendedSentences: SentenceItemDTO[];
 }
 
 export interface ErrorLog {

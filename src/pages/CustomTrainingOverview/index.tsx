@@ -47,18 +47,7 @@ const CustomTrainingOverviewPage: React.FC = () => {
   }, []);
 
   const handleMoreBtnClick = (issueId: Number) => {
-    const targetGroup = pronunciationIssueList.find(
-      (group) => group.id === issueId
-    );
-    if (!targetGroup) return;
-
-    setSentenceList(targetGroup.sentences);
-
-    navigate(`/custom-sentences`, {
-      state: {
-        issueId: issueId,
-      },
-    });
+    navigate(`/custom-sentences/${issueId}`);
   };
 
   const handleSentenceClick = (sentenceId: Number, issueId: Number) => {
@@ -72,7 +61,7 @@ const CustomTrainingOverviewPage: React.FC = () => {
     navigate('/practice', {
       state: {
         sentenceId: sentenceId,
-        backTo: '/custom-sentences',
+        backTo: `/custom-sentences/${issueId}`,
       },
     });
   };
