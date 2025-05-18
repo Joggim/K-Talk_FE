@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
   ContentArea,
   HeaderSection,
   IssueTitle,
   IssueScoreBadge,
+  ErrorLogSummaryCard,
+  LeftWrapper,
+  RightWrapper,
+  ErrorCountBadge,
 } from './styles';
 import TopBar from '../../components/TopBar';
 import SentenceItem from '../../components/SentenceItem';
@@ -15,12 +19,15 @@ import { useRecoilState } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
 import { getPronunciationIssueDetailApi } from '../../apis/pronunciation';
 import { PronunciationIssueDetail } from '../../apis/pronunciation/dto';
+import Info from '../../components/Icons/Info';
+import ArrowRight from '../../components/Icons/ArrowRight';
 
 const CustomSentencesPage: React.FC = () => {
   const { issueId } = useParams<{ issueId: string }>();
   const [issueDetail, setIssueDetail] =
     useState<PronunciationIssueDetail | null>(null);
   const [sentenceList, setSentenceList] = useRecoilState(sentenceListState);
+  const navigate = useNavigate();
 
   // 커스텀 문장 리스트 조회 API
   const getPronunciationIssueDetail = async () => {
@@ -40,6 +47,10 @@ const CustomSentencesPage: React.FC = () => {
     getPronunciationIssueDetail();
   }, []);
 
+  const handleWrongButtonClick = () => {
+    navigate(`/custom-sentences/${issueId}/errors`);
+  };
+
   return (
     <Container>
       <TopBar />
@@ -55,6 +66,29 @@ const CustomSentencesPage: React.FC = () => {
             <span>{issueDetail?.accuracy ?? 0}%</span>
           </IssueScoreBadge>
         </HeaderSection>
+
+        <ErrorLogSummaryCard onClick={handleWrongButtonClick}>
+          <LeftWrapper>
+            <Info />
+            <StyledText
+              $variant="captionRegular"
+              color={theme.colors.text.secondary}
+            >
+              Where did I pronounce wrong?
+            </StyledText>
+          </LeftWrapper>
+          <RightWrapper>
+            <ErrorCountBadge>
+              <StyledText
+                $variant="captionRegular"
+                color={theme.colors.brand.primary}
+              >
+                {issueDetail?.totalErrorLogCount ?? 0}
+              </StyledText>
+            </ErrorCountBadge>
+            <ArrowRight color="#D1D1D1" />
+          </RightWrapper>
+        </ErrorLogSummaryCard>
 
         <StyledText $variant="captionMedium" color={theme.colors.text.tertiary}>
           Try Saying This
