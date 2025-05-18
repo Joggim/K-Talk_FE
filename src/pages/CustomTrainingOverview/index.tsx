@@ -80,7 +80,7 @@ const CustomTrainingOverviewPage: React.FC = () => {
         </StyledText>
         {pronunciationIssueList.map((item, index) => (
           <IssueCard key={index}>
-            <IssueHeader>
+            <IssueHeader onClick={() => handleMoreBtnClick(item.id)}>
               <IssueTitle
                 $variant="bodyLargeBold"
                 color={theme.colors.brand.primary}
