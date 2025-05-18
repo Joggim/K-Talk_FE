@@ -20,8 +20,8 @@ import { StyledText } from '../../components/StyledText/StyledText.styles';
 import theme from '../../styles/theme';
 import { useSetRecoilState } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
-import { getPronunciationIssueListApi } from '../../apis/customs';
-import { PronunciationIssue } from '../../apis/customs/dto';
+import { getPronunciationIssueListApi } from '../../apis/pronunciation';
+import { PronunciationIssue } from '../../apis/pronunciation/dto';
 
 const CustomTrainingOverviewPage: React.FC = () => {
   const navigate = useNavigate();
