@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -18,16 +18,36 @@ import NavBar from '../../components/NavBar/NavBar';
 import ArrowRight from '../../components/Icons/ArrowRight';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
 import theme from '../../styles/theme';
-import { dummyPronunciationIssues } from './dummyCustoms';
 import { useSetRecoilState } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
+import { getPronunciationIssueListApi } from '../../apis/customs';
+import { PronunciationIssue } from '../../apis/customs/dto';
 
 const CustomTrainingOverviewPage: React.FC = () => {
   const navigate = useNavigate();
+  const [pronunciationIssueList, setPronunciationIssueList] = useState<
+    PronunciationIssue[]
+  >([]);
   const setSentenceList = useSetRecoilState(sentenceListState);
 
+  // 문장 리스트 조회 API
+  const getPronunciationIssues = async () => {
+    try {
+      const response = await getPronunciationIssueListApi();
+      if (response.success) {
+        setPronunciationIssueList(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching pronunciation issue:', error);
+    }
+  };
+
+  useEffect(() => {
+    getPronunciationIssues();
+  }, []);
+
   const handleMoreBtnClick = (issueId: Number) => {
-    const targetGroup = dummyPronunciationIssues.find(
+    const targetGroup = pronunciationIssueList.find(
       (group) => group.id === issueId
     );
     if (!targetGroup) return;
@@ -42,7 +62,7 @@ const CustomTrainingOverviewPage: React.FC = () => {
   };
 
   const handleSentenceClick = (sentenceId: Number, issueId: Number) => {
-    const targetGroup = dummyPronunciationIssues.find(
+    const targetGroup = pronunciationIssueList.find(
       (group) => group.id === issueId
     );
     if (!targetGroup) return;
@@ -69,7 +89,7 @@ const CustomTrainingOverviewPage: React.FC = () => {
           Practice your pronunciation more! We’ve prepared some recommended
           sentences for you.
         </StyledText>
-        {dummyPronunciationIssues.map((item, index) => (
+        {pronunciationIssueList.map((item, index) => (
           <IssueCard key={index}>
             <IssueHeader>
               <IssueTitle
