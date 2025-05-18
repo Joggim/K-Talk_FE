@@ -66,3 +66,36 @@ export const IssueScoreBadge = styled.div`
     font-weight: 700;
   }
 `;
+
+export const ErrorLogSummaryCard = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid var(--Bg-Black2, #e0e0eb);
+  background: ${({ theme }) => theme.colors.bg.secondary};
+`;
+
+export const LeftWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+export const RightWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+export const ErrorCountBadge = styled.div`
+  background-color: ${({ theme }) => theme.colors.brand.primaryLight};
+  display: flex;
+  width: 26px;
+  height: 26px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 13px;
+`;

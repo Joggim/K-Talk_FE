@@ -20,8 +20,8 @@ import { StyledText } from '../../components/StyledText/StyledText.styles';
 import theme from '../../styles/theme';
 import { useSetRecoilState } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
-import { getPronunciationIssueListApi } from '../../apis/customs';
-import { PronunciationIssue } from '../../apis/customs/dto';
+import { getPronunciationIssueListApi } from '../../apis/pronunciation';
+import { PronunciationIssue } from '../../apis/pronunciation/dto';
 
 const CustomTrainingOverviewPage: React.FC = () => {
   const navigate = useNavigate();
@@ -47,18 +47,7 @@ const CustomTrainingOverviewPage: React.FC = () => {
   }, []);
 
   const handleMoreBtnClick = (issueId: Number) => {
-    const targetGroup = pronunciationIssueList.find(
-      (group) => group.id === issueId
-    );
-    if (!targetGroup) return;
-
-    setSentenceList(targetGroup.sentences);
-
-    navigate(`/custom-sentences`, {
-      state: {
-        issueId: issueId,
-      },
-    });
+    navigate(`/custom-sentences/${issueId}`);
   };
 
   const handleSentenceClick = (sentenceId: Number, issueId: Number) => {
@@ -72,7 +61,7 @@ const CustomTrainingOverviewPage: React.FC = () => {
     navigate('/practice', {
       state: {
         sentenceId: sentenceId,
-        backTo: '/custom-sentences',
+        backTo: `/custom-sentences/${issueId}`,
       },
     });
   };
@@ -91,7 +80,7 @@ const CustomTrainingOverviewPage: React.FC = () => {
         </StyledText>
         {pronunciationIssueList.map((item, index) => (
           <IssueCard key={index}>
-            <IssueHeader>
+            <IssueHeader onClick={() => handleMoreBtnClick(item.id)}>
               <IssueTitle
                 $variant="bodyLargeBold"
                 color={theme.colors.brand.primary}
