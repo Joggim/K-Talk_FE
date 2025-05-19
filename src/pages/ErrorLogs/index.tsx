@@ -72,6 +72,7 @@ const ErrorLogsPage: React.FC = () => {
             correctIpa={error.correctIpa}
             userText={error.userText}
             userIpa={error.userIpa}
+            errors={error.errors}
           />
         ))}
       </ContentArea>

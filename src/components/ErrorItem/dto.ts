@@ -5,4 +5,8 @@ export interface ErrorItemProps {
   correctIpa: string;
   userText: string;
   userIpa: string;
+  errors: {
+    char: string;
+    index: number;
+  }[];
 }

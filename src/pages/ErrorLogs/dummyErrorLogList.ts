@@ -8,6 +8,7 @@ export const dummyErrorLogList = {
       correctIpa: '[ap͈aga p͈algɐn k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
       userText: '아바가 발간 꽃병을 꺼냈어요.',
       userIpa: '[abaga pargan k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
+      errors: [{ char: '바', index: 1 }],
     },
     {
       id: 102,
@@ -16,6 +17,7 @@ export const dummyErrorLogList = {
       correctIpa: '[ap͈aga p͈algɐn k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
       userText: '아바가 발간 꽃병을 꺼냈어요.',
       userIpa: '[abaga pargan k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
+      errors: [{ char: '발', index: 4 }],
     },
   ],
 };
