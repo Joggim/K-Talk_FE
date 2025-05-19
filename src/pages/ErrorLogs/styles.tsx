@@ -34,8 +34,8 @@ export const ErrorLogSummaryCard = styled.div`
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
-  border: 1px solid var(--Bg-Black2, #e0e0eb);
-  background: ${({ theme }) => theme.colors.bg.black4};
+  border: 1px solid #e0e0eb;
+  //background: ${({ theme }) => theme.colors.bg.black4};
 `;
 
 export const LeftWrapper = styled.div`
