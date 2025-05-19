@@ -9,6 +9,7 @@ import SentencesPage from './pages/Sentences';
 import PracticePage from './pages/Practice';
 import CustomTrainingOverviewPage from './pages/CustomTrainingOverview';
 import CustomSentencesPage from './pages/CustomSentences';
+import ErrorLogsPage from './pages/ErrorLogs';
 import TalkBotPage from './pages/TalkBot';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -80,6 +81,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <CustomSentencesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/custom-sentences/:issueId/error-logs"
+          element={
+            <ProtectedRoute>
+              <ErrorLogsPage />
             </ProtectedRoute>
           }
         />

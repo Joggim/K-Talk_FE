@@ -48,7 +48,7 @@ const CustomSentencesPage: React.FC = () => {
   }, []);
 
   const handleWrongButtonClick = () => {
-    navigate(`/custom-sentences/${issueId}/errors`);
+    navigate(`/custom-sentences/${issueId}/error-logs`);
   };
 
   return (
@@ -74,7 +74,7 @@ const CustomSentencesPage: React.FC = () => {
               $variant="captionRegular"
               color={theme.colors.text.secondary}
             >
-              Where did I pronounced wrong?
+              Where did I pronounce wrong?
             </StyledText>
           </LeftWrapper>
           <RightWrapper>

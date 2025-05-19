@@ -1,11 +1,11 @@
-export const dummyCustomIssue = {
+export const dummyPronunciationIssue = {
   id: 1,
   title: 'Difficulty pronouncing tense sounds (ㄲ, ㅃ, ㅉ)',
   accuracy: 35,
   totalErrorLogCount: 12,
   errorLogs: [
     {
-      sentenceId: 101,
+      errorId: 101,
       translation: 'Dad took out the red flower vase.',
       correctText: '아빠가 빨간 꽃병을 꺼냈어요.',
       correctIpa: '[ap͈aga p͈algɐn k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
@@ -14,7 +14,7 @@ export const dummyCustomIssue = {
       timestamp: '2025-05-17T10:33:00Z',
     },
     {
-      sentenceId: 102,
+      errorId: 102,
       translation: 'Dad took out the red flower vase.',
       correctText: '아빠가 빨간 꽃병을 꺼냈어요.',
       correctIpa: '[ap͈aga p͈algɐn k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
