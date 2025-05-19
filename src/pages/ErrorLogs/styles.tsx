@@ -27,46 +27,6 @@ export const ContentArea = styled.div`
   background-color: ${({ theme }) => theme.colors.bg.black3};
 `;
 
-export const Title = styled.h1`
-  font-size: 20px;
-  font-weight: 700;
-  color: ${theme.colors.text.primary};
-`;
-
-export const HeaderSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  padding: 16px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  gap: 10px;
-  align-self: stretch;
-  background: ${theme.colors.brand.primaryLight};
-`;
-
-export const IssueTitle = styled(StyledText)`
-  flex: 1 0 0;
-`;
-
-export const IssueScoreBadge = styled.div`
-  display: flex;
-  padding: 6px 10px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  border-radius: 22px;
-  color: ${theme.colors.state.error};
-  border: 1px solid ${theme.colors.state.error};
-  background: ${theme.colors.state.errorLight};
-
-  span {
-    color: ${theme.colors.state.error};
-    font-weight: 700;
-  }
-`;
-
 export const ErrorLogSummaryCard = styled.div`
   display: flex;
   width: 100%;
@@ -74,7 +34,7 @@ export const ErrorLogSummaryCard = styled.div`
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
-  border: 1px solid var(--Bg-Black2, #e0e0eb);
+  border: 1px solid #e0e0eb;
   //background: ${({ theme }) => theme.colors.bg.black4};
 `;
 
