@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const MoreBtn = styled.button`
+export const MoreBtnWrapper = styled.button`
   display: flex;
   padding: 4px 0px;
   justify-content: center;
