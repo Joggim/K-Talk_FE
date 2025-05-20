@@ -6,6 +6,9 @@ import {
   ProfileContainer,
   NameContainer,
   ProfileImage,
+  OverviewContainer,
+  OverviewItem,
+  OverviewTitleText,
 } from './styles';
 import NavBar from '../../components/NavBar/NavBar';
 import Setting from '../../components/Icons/Setting';
@@ -13,9 +16,12 @@ import { getUserInfoApi } from '../../apis/user';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
 import { UserInfo } from '../../apis/user/dto';
 import theme from '../../styles/theme';
+import { dummyOverview } from './dummyOverview';
+import { OverviewProps } from './dummyOverview';
 
 const MyPage: React.FC = () => {
   const [user, setUser] = useState<UserInfo | null>(null);
+  const [overiew, setOverview] = useState<OverviewProps>();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -28,6 +34,8 @@ const MyPage: React.FC = () => {
     };
 
     fetchUser();
+
+    setOverview(dummyOverview);
   }, []);
 
   return (
@@ -49,6 +57,26 @@ const MyPage: React.FC = () => {
           사용자 정보를 불러오지 못했습니다.
         </StyledText>
       )}
+      <OverviewContainer>
+        <OverviewItem>
+          <OverviewTitleText $variant="captionMedium">
+            Sentences Practiced
+          </OverviewTitleText>
+          <StyledText $variant="headingL">{overiew?.sentenceCount}</StyledText>
+        </OverviewItem>
+        <OverviewItem>
+          <OverviewTitleText $variant="captionMedium">
+            Pronunciation Accuracy
+          </OverviewTitleText>
+          <StyledText $variant="headingL">{overiew?.accuaracy}%</StyledText>
+        </OverviewItem>
+        <OverviewItem>
+          <OverviewTitleText $variant="captionMedium">
+            Days Practiced
+          </OverviewTitleText>
+          <StyledText $variant="headingL">{overiew?.days}</StyledText>
+        </OverviewItem>
+      </OverviewContainer>
       <NavBar />
     </Container>
   );
