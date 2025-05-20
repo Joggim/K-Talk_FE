@@ -11,7 +11,7 @@ import {
 import TopBar from '../../components/TopBar';
 import ErrorItem from '../../components/ErrorItem';
 import { ErrorItemProps } from '../../components/ErrorItem/dto';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../components/StyledText/styles';
 import theme from '../../styles/theme';
 import Info from '../../components/Icons/Info';
 import { dummyErrorLogList } from './dummyErrorLogList';

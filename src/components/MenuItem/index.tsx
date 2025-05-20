@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Left } from './styles';
 import { MenuItemProps } from './dto';
-import { StyledText } from '../StyledText/StyledText.styles';
+import { StyledText } from '../StyledText/styles';
 import ArrowRight from '../Icons/ArrowRight';
 import theme from '../../styles/theme';
 
@@ -12,12 +12,12 @@ const MenuItem: React.FC<MenuItemProps> = ({
   title,
   content,
   route,
-  state
+  state,
 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(route, {state});
+    navigate(route, { state });
   };
 
   return (

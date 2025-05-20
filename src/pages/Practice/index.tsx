@@ -13,7 +13,7 @@ import {
   ButtonContainer,
 } from './styles';
 import TopBar from '../../components/TopBar';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../components/StyledText/styles';
 import CircleButton from '../../components/CircleButton';
 import HighlightedText from '../../components/HighlightedText';
 import Loading from '../../components/Loader';
@@ -209,26 +209,19 @@ const PracticePage: React.FC = () => {
           </Passed>
           <InnerCard>
             <Korean>
-              {feedback ? (
-                <HighlightedText
-                  correct={sentence.korean}
-                  isFeedback={true}
-                  errors={feedback.pronunciationErrors.map(
-                    ({ correct, index }) => ({
-                      char: correct,
-                      index,
-                    })
-                  )}
-                  size="headingXL"
-                />
-              ) : (
-                <StyledText
-                  $variant="headingXL"
-                  color={theme.colors.text.tertiary}
-                >
-                  {sentence.korean}
-                </StyledText>
-              )}
+              <HighlightedText
+                correct={sentence.korean}
+                isFeedback={feedback ? true : false}
+                errors={feedback?.pronunciationErrors.map(
+                  ({ correct, index }) => ({
+                    char: correct,
+                    index,
+                  })
+                )}
+                size="headingXL"
+                justifyCenter={true}
+                isPractice={true}
+              />
             </Korean>
 
             {sentence.ipa && (

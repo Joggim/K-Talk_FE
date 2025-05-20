@@ -1,5 +1,15 @@
-import styled from 'styled-components';
-import theme from '../../../styles/theme';
+import styled, { keyframes, css } from 'styled-components';
+
+const fadeInUp = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 export const Container = styled.div`
   display: flex;
@@ -10,6 +20,9 @@ export const Container = styled.div`
   position: fixed;
   bottom: 110px;
   z-index: 1;
+
+  animation: ${fadeInUp} 0.2s ease-out;
+  transform-origin: bottom center;
 `;
 
 export const Box = styled.div`
@@ -17,8 +30,8 @@ export const Box = styled.div`
   padding: 10px 16px;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  border-radius: 10px;
+  gap: 4px;
+  border-radius: 14px;
   background: ${({ theme }) => theme.colors.brand.primary};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 `;

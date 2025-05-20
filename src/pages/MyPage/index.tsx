@@ -10,38 +10,45 @@ import {
   OverviewTitleText,
   SectionHeader,
 } from './styles';
-import NavBar from '../../components/NavBar/NavBar';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import NavBar from '../../components/NavBar';
+import { StyledText } from '../../components/StyledText/styles';
 import MoreBtn from '../../components/MoreBtn';
 import Setting from '../../components/Icons/Setting';
 import HistorySentenceItem from './HistorySentenceItem';
 import theme from '../../styles/theme';
-import { getUserInfoApi } from '../../apis/user';
+import { getUserInfoApi, getUserLearningHistoryApi } from '../../apis/user';
 import { UserInfo } from '../../apis/user/dto';
+import { LearningHistory } from '../../apis/user/dto';
 import { OverviewProps } from './dummyOverview';
-import { HistorySentenceItemProps } from './HistorySentenceItem/dto';
 import { dummyOverview } from './dummyOverview';
-import { dummyHistorySentences } from './dummyHistorySentences';
 
 const MyPage: React.FC = () => {
   const [user, setUser] = useState<UserInfo | null>(null);
   const [overiew, setOverview] = useState<OverviewProps>();
-  const [practiceHistory, setPracticeHistory] =
-    useState<HistorySentenceItemProps[]>();
+  const [practiceHistory, setPracticeHistory] = useState<LearningHistory[]>();
 
-  const fetchUser = async () => {
+  const getUser = async () => {
     try {
-      const response = await getUserInfoApi(); // 사용자 정보 호출
-      setUser(response.data); // user 정보 저장
+      const response = await getUserInfoApi();
+      setUser(response.data);
+      setOverview(dummyOverview);
     } catch (error) {
       console.error('사용자 정보를 불러오는 데 실패했습니다:', error);
     }
-    setOverview(dummyOverview);
-    setPracticeHistory(dummyHistorySentences);
+  };
+
+  const getUserLearningHistory = async () => {
+    try {
+      const response = await getUserLearningHistoryApi();
+      setPracticeHistory(response.data);
+    } catch (error) {
+      console.error('사용자 학습 이력을 불러오는 데 실패했습니다:', error);
+    }
   };
 
   useEffect(() => {
-    fetchUser();
+    getUser();
+    getUserLearningHistory();
   }, []);
 
   const handleMoreBtnClick = () => {
@@ -90,7 +97,7 @@ const MyPage: React.FC = () => {
 
       <SectionHeader>
         <StyledText $variant="bodyLargeBold">Practice History </StyledText>
-        <MoreBtn onClick={() => handleMoreBtnClick()} />
+        {/*<MoreBtn onClick={() => handleMoreBtnClick()} />*/}
       </SectionHeader>
 
       {practiceHistory?.map((item) => (

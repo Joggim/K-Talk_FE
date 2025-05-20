@@ -7,14 +7,9 @@ import Like from '../Icons/Like';
 import Chat from '../Icons/Chat';
 import Profile from '../Icons/Profile';
 
-import { StyledText } from '../StyledText/StyledText.styles';
+import { StyledText } from '../StyledText/styles';
 
-import {
-  NavBarContainer,
-  NavBarWrapper,
-  IconWrapper,
-  Icon,
-} from './NavBar.styles';
+import { NavBarContainer, NavBarWrapper, IconWrapper, Icon } from './styles';
 
 const NavBar: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('');

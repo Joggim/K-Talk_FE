@@ -19,6 +19,7 @@ export const NavBarContainer = styled.nav`
 export const NavBarWrapper = styled.div`
   display: flex;
   justify-content: space-around;
+  padding: 0 30px;
 `;
 
 export const IconWrapper = styled.div`
@@ -27,6 +28,7 @@ export const IconWrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 70px;
+  width: 60px;
   cursor: pointer;
 `;
 
