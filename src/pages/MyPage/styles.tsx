@@ -8,10 +8,10 @@ export const Container = styled.div`
   width: 100%;
   position: relative;
   flex-direction: column;
-  padding-top: 60px;
-  padding: 20px;
+  padding: 60px 20px 90px 20px;
   background-color: ${({ theme }) => theme.colors.bg.black3};
   gap: 20px;
+  overflow-y: auto;
 `;
 
 export const TopBarContainer = styled.nav`
@@ -38,19 +38,9 @@ export const ProfileContainer = styled.div`
   display: flex;
   width: auto;
   //justify-content: flex-start;
-  margin-top: 46px;
   align-items: center;
   flex-direction: row;
-  gap: 10px;
-`;
-
-export const NameContainer = styled.div`
-  display: flex;
-  width: auto;
-  //justify-content: flex-start;
-  align-items: flex-start;
-  padding: 10px;
-  gap: 10px;
+  gap: 16px;
 `;
 
 export const ProfileImage = styled.div`

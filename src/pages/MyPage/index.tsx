@@ -4,7 +4,6 @@ import {
   TopBarContainer,
   Icon,
   ProfileContainer,
-  NameContainer,
   ProfileImage,
   OverviewContainer,
   OverviewItem,
@@ -60,9 +59,7 @@ const MyPage: React.FC = () => {
       {user ? (
         <ProfileContainer>
           <ProfileImage />
-          <NameContainer>
-            <StyledText $variant="headingL">{user.nickname}</StyledText>
-          </NameContainer>
+          <StyledText $variant="headingL">{user.nickname}</StyledText>
         </ProfileContainer>
       ) : (
         <StyledText $variant="captionRegular">
