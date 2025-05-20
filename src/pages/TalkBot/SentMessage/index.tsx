@@ -26,7 +26,6 @@ const SentMessage = memo(
         content,
         isFeedback = true,
         feedback,
-        userAudioUrl,
         modelAudioUrl,
         isLast = false,
         isNew,
@@ -50,12 +49,6 @@ const SentMessage = memo(
 
       const playModelPronunciation = () => {
         new Audio(modelAudioUrl).play();
-        console.log('model audio play click');
-      };
-
-      const playUserPronunciation = () => {
-        new Audio(userAudioUrl).play();
-        console.log('user audio play click');
       };
 
       // 발음 오류가 있는 경우 오류 인덱스 설정, 없으면 전체 초록색 표시
@@ -83,11 +76,6 @@ const SentMessage = memo(
                 {modelAudioUrl && (
                   <IconWrapper onClick={playModelPronunciation}>
                     <Sound color={theme.colors.brand.primary} width="20px" />
-                  </IconWrapper>
-                )}
-                {userAudioUrl && (
-                  <IconWrapper onClick={playUserPronunciation}>
-                    <MySound color={theme.colors.brand.primary} width="20px" />
                   </IconWrapper>
                 )}
                 {isFeedbackLoading && isLast && (
