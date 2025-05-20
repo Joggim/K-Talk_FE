@@ -9,19 +9,19 @@ import {
   IssueTitle,
   IssueScoreBadge,
   SentenceSectionHeader,
-  MoreBtn,
   SentenceList,
   SentenceItem,
 } from './styles';
 import TopBar from '../../components/TopBar';
 import NavBar from '../../components/NavBar/NavBar';
+import MoreBtn from '../../components/MoreBtn';
 import ArrowRight from '../../components/Icons/ArrowRight';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
 import theme from '../../styles/theme';
 import { useSetRecoilState } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
-import { getPronunciationIssueListApi } from '../../apis/pronunciation';
-import { PronunciationIssue } from '../../apis/pronunciation/dto';
+import { getPronunciationIssueListApi } from '../../apis/pronunciationIssue';
+import { PronunciationIssue } from '../../apis/pronunciationIssue/dto';
 
 const CustomTrainingOverviewPage: React.FC = () => {
   const navigate = useNavigate();
@@ -99,10 +99,7 @@ const CustomTrainingOverviewPage: React.FC = () => {
                 >
                   Try Saying This
                 </StyledText>
-                <MoreBtn onClick={() => handleMoreBtnClick(item.id)}>
-                  <StyledText $variant="captionMedium">more</StyledText>
-                  <ArrowRight color="black" width="18" height="18" />
-                </MoreBtn>
+                <MoreBtn onClick={() => handleMoreBtnClick(item.id)} />
               </SentenceSectionHeader>
               {item.sentences.slice(0, 2).map((sentence, idx) => (
                 <SentenceItem

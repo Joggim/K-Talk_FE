@@ -232,12 +232,7 @@ const PracticePage: React.FC = () => {
             </Korean>
 
             {sentence.ipa && (
-              <StyledText
-                $variant="captionRegular"
-                color={theme.colors.text.primary}
-              >
-                {sentence.ipa}
-              </StyledText>
+              <StyledText $variant="captionRegular">{sentence.ipa}</StyledText>
             )}
 
             <AudioContainer>
@@ -273,7 +268,7 @@ const PracticePage: React.FC = () => {
 
           <Translation
             $variant="captionRegular"
-            color={theme.colors.text.primary}
+            color={theme.colors.text.tertiary}
           >
             {sentence.translation}
           </Translation>

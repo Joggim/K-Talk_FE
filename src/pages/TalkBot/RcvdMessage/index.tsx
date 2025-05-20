@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react';
 import theme from '../../../styles/theme';
 import Sound from '../../../components/Icons/Sound';
 
-import type { RcvdMessageProps } from '../../../apis/talkbot/dto';
+import type { RcvdMessageProps } from '../../../apis/chat/dto';
 
 import {
   RcvdMessageLayout,

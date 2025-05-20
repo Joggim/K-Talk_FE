@@ -17,8 +17,8 @@ import { StyledText } from '../../components/StyledText/StyledText.styles';
 import theme from '../../styles/theme';
 import { useRecoilState } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
-import { getPronunciationIssueDetailApi } from '../../apis/pronunciation';
-import { PronunciationIssueDetail } from '../../apis/pronunciation/dto';
+import { getPronunciationIssueDetailApi } from '../../apis/pronunciationIssue';
+import { PronunciationIssueDetail } from '../../apis/pronunciationIssue/dto';
 import Info from '../../components/Icons/Info';
 import ArrowRight from '../../components/Icons/ArrowRight';
 

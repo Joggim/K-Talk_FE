@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { StyledText } from '../../components/StyledText/StyledText.styles';
 
 export const Container = styled.div`
   display: flex;
@@ -7,7 +8,10 @@ export const Container = styled.div`
   width: 100%;
   position: relative;
   flex-direction: column;
-  padding-top: 60px;
+  padding: 60px 20px 90px 20px;
+  background-color: ${({ theme }) => theme.colors.bg.black3};
+  gap: 20px;
+  overflow-y: auto;
 `;
 
 export const TopBarContainer = styled.nav`
@@ -20,10 +24,10 @@ export const TopBarContainer = styled.nav`
   height: 46px;
   align-items: center;
   justify-content: flex-end;
-  padding: 10px;
+  padding: 10px 20px;
   gap: 10px;
   z-index: 10;
-  background: ${({ theme }) => theme.colors.bg.white};
+  background-color: ${({ theme }) => theme.colors.bg.black3};
 `;
 
 export const Icon = styled.div`
@@ -36,19 +40,7 @@ export const ProfileContainer = styled.div`
   //justify-content: flex-start;
   align-items: center;
   flex-direction: row;
-  margin: 20px;
-  gap: 10px;
-  background: ${({ theme }) => theme.colors.bg.white};
-`;
-
-export const NameContainer = styled.div`
-  display: flex;
-  width: auto;
-  //justify-content: flex-start;
-  align-items: flex-start;
-  padding: 10px;
-  gap: 10px;
-  background: ${({ theme }) => theme.colors.bg.white};
+  gap: 16px;
 `;
 
 export const ProfileImage = styled.div`
@@ -56,5 +48,36 @@ export const ProfileImage = styled.div`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors.bg.black2};
+  background: ${({ theme }) => theme.colors.brand.primaryLight};
+  border: 0.5px solid ${({ theme }) => theme.colors.white};
+`;
+
+export const OverviewContainer = styled.div`
+  display: flex;
+  padding: 20px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 16px;
+  background: ${({ theme }) => theme.colors.white};
+`;
+
+export const OverviewItem = styled.div`
+  display: flex;
+  width: 90px;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+`;
+
+export const OverviewTitleText = styled(StyledText)`
+  color: ${({ theme }) => theme.colors.text.tertiary};
+  text-align: center;
+`;
+
+export const SectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
 `;
