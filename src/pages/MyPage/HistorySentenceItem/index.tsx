@@ -33,7 +33,7 @@ const HistorySentenceItem: React.FC<LearningHistory> = ({
           {errorTypes.map((error, idx) => (
             <ErrorTypeItem key={idx}>
               <StyledText
-                $variant="captionSemiBold"
+                $variant="captionBold"
                 color={theme.colors.state.error}
               >
                 {error}
