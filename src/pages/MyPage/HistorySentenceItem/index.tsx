@@ -8,14 +8,14 @@ import { LearningHistory } from '../../../apis/user/dto';
 const HistorySentenceItem: React.FC<LearningHistory> = ({
   korean,
   translation,
-  correct,
   pronunciationErrors,
   errorTypes,
 }) => {
-  const errors = pronunciationErrors.map((e) => ({
-    char: e.correct,
-    index: e.index,
-  }));
+  const errors =
+    pronunciationErrors?.map((e) => ({
+      char: e.correct,
+      index: e.index,
+    })) ?? [];
 
   return (
     <Container>
@@ -28,7 +28,7 @@ const HistorySentenceItem: React.FC<LearningHistory> = ({
       <StyledText $variant="captionRegular" color={theme.colors.text.tertiary}>
         {translation}
       </StyledText>
-      {errorTypes && (
+      {errorTypes && errorTypes.length > 0 && (
         <ErrorTypeList>
           {errorTypes.map((error, idx) => (
             <ErrorTypeItem key={idx}>

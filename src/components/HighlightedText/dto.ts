@@ -3,4 +3,6 @@ export interface HighlightedTextProps {
   isFeedback?: boolean;
   errors?: { char: string; index: number }[]; // 틀린 글자 정보
   size: string;
+  justifyCenter?: boolean;
+  isPractice?: boolean;
 }

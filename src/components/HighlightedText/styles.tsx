@@ -3,6 +3,7 @@ import { StyledText } from '../StyledText/styles';
 
 interface TextContainerProps {
   size: string;
+  $justifyCenter: boolean;
 }
 
 // 글자 크기에 따라 gap 값을 결정하는 함수
@@ -19,7 +20,8 @@ const getGapBySize = (size: string) => {
 export const TextContainer = styled.div<TextContainerProps>`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: ${({ $justifyCenter }) =>
+    $justifyCenter ? 'center' : 'flex-start'};
   gap: ${({ size }) => getGapBySize(size)}px; // gap을 props로 받음
 `;
 
@@ -32,13 +34,16 @@ interface CharSpanProps {
   $isError?: boolean;
   $isSpace?: boolean;
   $isFeedback?: boolean;
+  $isPractice?: boolean;
 }
 
 export const CharSpan = styled(StyledText)<CharSpanProps>`
   display: inline-block;
-  color: ${({ $isFeedback, $isError, theme }) =>
+  color: ${({ $isFeedback, $isError, $isPractice, theme }) =>
     !$isFeedback
-      ? theme.colors.text.primary
+      ? $isPractice
+        ? theme.colors.text.tertiary
+        : theme.colors.text.primary
       : $isError
         ? theme.colors.state.error
         : theme.colors.state.success};

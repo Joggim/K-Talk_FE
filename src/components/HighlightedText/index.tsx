@@ -7,12 +7,14 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
   isFeedback,
   errors = [],
   size = 'bodyMediumLight',
+  justifyCenter = false,
+  isPractice = false,
 }) => {
   const words = correct.split(' ');
   let globalIndex = 0;
 
   return (
-    <TextContainer size={size}>
+    <TextContainer size={size} $justifyCenter={justifyCenter}>
       {words.map((word, wordIndex) => {
         const wordChars = word.split('');
         const wordSpans = wordChars.map((char) => {
@@ -22,6 +24,7 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
               key={globalIndex}
               $isError={isError}
               $isFeedback={isFeedback}
+              $isPractice={isPractice}
               $isSpace={false}
               $variant={size}
             >
