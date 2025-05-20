@@ -97,7 +97,7 @@ const MyPage: React.FC = () => {
 
       <SectionHeader>
         <StyledText $variant="bodyLargeBold">Practice History </StyledText>
-        <MoreBtn onClick={() => handleMoreBtnClick()} />
+        {/*<MoreBtn onClick={() => handleMoreBtnClick()} />*/}
       </SectionHeader>
 
       {practiceHistory?.map((item) => (
