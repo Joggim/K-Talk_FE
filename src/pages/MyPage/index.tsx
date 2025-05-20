@@ -30,20 +30,19 @@ const MyPage: React.FC = () => {
   const [practiceHistory, setPracticeHistory] =
     useState<HistorySentenceItemProps[]>();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await getUserInfoApi(); // 사용자 정보 호출
-        setUser(response.data); // user 정보 저장
-      } catch (error) {
-        console.error('사용자 정보를 불러오는 데 실패했습니다:', error);
-      }
-    };
-
-    fetchUser();
-
+  const fetchUser = async () => {
+    try {
+      const response = await getUserInfoApi(); // 사용자 정보 호출
+      setUser(response.data); // user 정보 저장
+    } catch (error) {
+      console.error('사용자 정보를 불러오는 데 실패했습니다:', error);
+    }
     setOverview(dummyOverview);
     setPracticeHistory(dummyHistorySentences);
+  };
+
+  useEffect(() => {
+    fetchUser();
   }, []);
 
   const handleMoreBtnClick = () => {

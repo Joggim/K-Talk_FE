@@ -8,14 +8,14 @@ export const dummyHistorySentences: HistorySentenceItemProps[] = [
     correct: false,
     pronunciationErrors: [
       {
-        wrong: 'ㅂ',
-        correct: 'ㅃ',
+        wrong: '바',
+        correct: '빠',
         index: 1,
       },
       {
-        wrong: 'ㄱ',
-        correct: 'ㄲ',
-        index: 20,
+        wrong: '곷',
+        correct: '꽃',
+        index: 7,
       },
     ],
     errorTypes: ['된소리 발음 오류', '경음화 누락'],
@@ -35,9 +35,9 @@ export const dummyHistorySentences: HistorySentenceItemProps[] = [
     correct: false,
     pronunciationErrors: [
       {
-        wrong: 'ㅈ',
-        correct: 'ㅊ',
-        index: 8,
+        wrong: '짐',
+        correct: '침',
+        index: 6,
       },
     ],
     errorTypes: ['유성음화 오류'],
