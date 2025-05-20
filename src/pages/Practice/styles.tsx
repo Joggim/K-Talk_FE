@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../components/StyledText/styles';
 import theme from '../../styles/theme';
 
 export const Container = styled.div`

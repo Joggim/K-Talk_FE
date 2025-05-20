@@ -1,6 +1,6 @@
 import styled, { keyframes, css } from 'styled-components';
 
-import { StyledText } from '../../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../../components/StyledText/styles';
 
 const bubbleSlideIn = keyframes`
   0% {

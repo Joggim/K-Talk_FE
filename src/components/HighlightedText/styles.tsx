@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { StyledText } from '../StyledText/StyledText.styles';
+import { StyledText } from '../StyledText/styles';
 
 interface TextContainerProps {
   size: string;

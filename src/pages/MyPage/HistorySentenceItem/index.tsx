@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, ErrorTypeList, ErrorTypeItem } from './styles';
-import { StyledText } from '../../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../../components/StyledText/styles';
 import HighlightedText from '../../../components/HighlightedText';
 import theme from '../../../styles/theme';
 import { LearningHistory } from '../../../apis/user/dto';

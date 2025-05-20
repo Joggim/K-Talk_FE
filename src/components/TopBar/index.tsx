@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import theme from '../../styles/theme';
 
-import { StyledText } from '../StyledText/StyledText.styles';
+import { StyledText } from '../StyledText/styles';
 import { TopBarContainer, Icon } from './styles';
 
 import ArrowLeft from '../Icons/ArrowLeft';

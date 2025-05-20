@@ -13,7 +13,7 @@ import {
 } from './styles';
 import TopBar from '../../components/TopBar';
 import SentenceItem from '../../components/SentenceItem';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../components/StyledText/styles';
 import theme from '../../styles/theme';
 import { useRecoilState } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';

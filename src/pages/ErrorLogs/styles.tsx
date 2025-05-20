@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../components/StyledText/styles';
 
 export const Container = styled.div`
   flex-grow: 1;

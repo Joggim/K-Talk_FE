@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Container, SentenceList } from './styles';
-import NavBar from '../../components/NavBar/NavBar';
+import NavBar from '../../components/NavBar';
 import TopBar from '../../components/TopBar';
 import SentenceItem from '../../components/SentenceItem';
 import { getSentenceListApi } from '../../apis/topics';

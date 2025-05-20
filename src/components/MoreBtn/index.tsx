@@ -1,6 +1,6 @@
 import React from 'react';
 import { MoreBtnWrapper } from './styles';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import { StyledText } from '../StyledText/styles';
 import ArrowRight from '../Icons/ArrowRight';
 import { MoreBtnProps } from './dto';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, MenuContainer, LogoImage } from './styles';
-import NavBar from '../../components/NavBar/NavBar';
+import NavBar from '../../components/NavBar';
 import MenuItem from '../../components/MenuItem';
 import theme from '../../styles/theme';
 import kTalkLogo from '../../assets/kTalkLogo.svg';

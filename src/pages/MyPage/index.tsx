@@ -10,8 +10,8 @@ import {
   OverviewTitleText,
   SectionHeader,
 } from './styles';
-import NavBar from '../../components/NavBar/NavBar';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import NavBar from '../../components/NavBar';
+import { StyledText } from '../../components/StyledText/styles';
 import MoreBtn from '../../components/MoreBtn';
 import Setting from '../../components/Icons/Setting';
 import HistorySentenceItem from './HistorySentenceItem';

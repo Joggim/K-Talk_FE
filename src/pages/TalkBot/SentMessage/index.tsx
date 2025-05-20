@@ -16,7 +16,7 @@ import BounceLoader from '../../../components/BounceLoader';
 import Sound from '../../../components/Icons/Sound';
 import MySound from '../../../components/Icons/MySound';
 import Error from '../../../components/Icons/Error';
-import { StyledText } from '../../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../../components/StyledText/styles';
 import HighlightedText from '../../../components/HighlightedText';
 
 const SentMessage = memo(

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Left, Passed } from './styles';
 import { SentenceItemProps } from './dto';
-import { StyledText } from '../StyledText/StyledText.styles';
+import { StyledText } from '../StyledText/styles';
 import theme from '../../styles/theme';
 import XIcon from '../../components/Icons/X';
 import CheckIcon from '../../components/Icons/Check';

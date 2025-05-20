@@ -10,7 +10,7 @@ import {
 } from './styles';
 import { SentMessageLayout } from './SentMessage/styles';
 import { RcvdMessageLayout } from './RcvdMessage/styles';
-import NavBar from '../../components/NavBar/NavBar';
+import NavBar from '../../components/NavBar';
 import CircleButton from '../../components/CircleButton';
 import BounceLoader from '../../components/BounceLoader';
 import RcvdMessage from './RcvdMessage';
@@ -20,7 +20,7 @@ import Pause from '../../components/Icons/Pause';
 import Setting from '../../components/Icons/Setting';
 import theme from '../../styles/theme';
 import { MessageData, SentMessageProps } from '../../apis/chat/dto';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../components/StyledText/styles';
 import {
   getMessageListApi,
   postSTTApi,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Box } from './styles';
-import { StyledText } from '../../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../../components/StyledText/styles';
 import theme from '../../../styles/theme';
 import { TooltipDTO } from './dto';
 

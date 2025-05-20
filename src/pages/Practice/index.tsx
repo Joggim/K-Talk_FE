@@ -13,7 +13,7 @@ import {
   ButtonContainer,
 } from './styles';
 import TopBar from '../../components/TopBar';
-import { StyledText } from '../../components/StyledText/StyledText.styles';
+import { StyledText } from '../../components/StyledText/styles';
 import CircleButton from '../../components/CircleButton';
 import HighlightedText from '../../components/HighlightedText';
 import Loading from '../../components/Loader';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, SentenceWrapper, IconWrapper, Right } from './styles';
 import { ErrorItemProps } from './dto';
-import { StyledText } from '../StyledText/StyledText.styles';
+import { StyledText } from '../StyledText/styles';
 import HighlightedText from '../HighlightedText';
 import theme from '../../styles/theme';
 import Microphone from '../Icons/Microphone';
