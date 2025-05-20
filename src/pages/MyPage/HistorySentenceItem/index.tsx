@@ -1,11 +1,11 @@
 import React from 'react';
 import { Container, ErrorTypeList, ErrorTypeItem } from './styles';
-import { HistorySentenceItemProps } from './dto';
 import { StyledText } from '../../../components/StyledText/StyledText.styles';
 import HighlightedText from '../../../components/HighlightedText';
 import theme from '../../../styles/theme';
+import { LearningHistory } from '../../../apis/user/dto';
 
-const HistorySentenceItem: React.FC<HistorySentenceItemProps> = ({
+const HistorySentenceItem: React.FC<LearningHistory> = ({
   korean,
   translation,
   correct,
@@ -28,7 +28,7 @@ const HistorySentenceItem: React.FC<HistorySentenceItemProps> = ({
       <StyledText $variant="captionRegular" color={theme.colors.text.tertiary}>
         {translation}
       </StyledText>
-      {!correct && (
+      {errorTypes && (
         <ErrorTypeList>
           {errorTypes.map((error, idx) => (
             <ErrorTypeItem key={idx}>
