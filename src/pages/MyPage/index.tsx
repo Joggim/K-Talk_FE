@@ -9,19 +9,26 @@ import {
   OverviewContainer,
   OverviewItem,
   OverviewTitleText,
+  SectionHeader,
 } from './styles';
 import NavBar from '../../components/NavBar/NavBar';
-import Setting from '../../components/Icons/Setting';
-import { getUserInfoApi } from '../../apis/user';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
-import { UserInfo } from '../../apis/user/dto';
+import MoreBtn from '../../components/MoreBtn';
+import Setting from '../../components/Icons/Setting';
+import HistorySentenceItem from './HistorySentenceItem';
 import theme from '../../styles/theme';
-import { dummyOverview } from './dummyOverview';
+import { getUserInfoApi } from '../../apis/user';
+import { UserInfo } from '../../apis/user/dto';
 import { OverviewProps } from './dummyOverview';
+import { HistorySentenceItemProps } from './HistorySentenceItem/dto';
+import { dummyOverview } from './dummyOverview';
+import { dummyHistorySentences } from './dummyHistorySentences';
 
 const MyPage: React.FC = () => {
   const [user, setUser] = useState<UserInfo | null>(null);
   const [overiew, setOverview] = useState<OverviewProps>();
+  const [practiceHistory, setPracticeHistory] =
+    useState<HistorySentenceItemProps[]>();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,7 +43,12 @@ const MyPage: React.FC = () => {
     fetchUser();
 
     setOverview(dummyOverview);
+    setPracticeHistory(dummyHistorySentences);
   }, []);
+
+  const handleMoreBtnClick = () => {
+    console.log('click');
+  };
 
   return (
     <Container>
@@ -45,6 +57,7 @@ const MyPage: React.FC = () => {
           <Setting color={theme.colors.text.tertiary} />
         </Icon>
       </TopBarContainer>
+
       {user ? (
         <ProfileContainer>
           <ProfileImage />
@@ -57,6 +70,7 @@ const MyPage: React.FC = () => {
           사용자 정보를 불러오지 못했습니다.
         </StyledText>
       )}
+
       <OverviewContainer>
         <OverviewItem>
           <OverviewTitleText $variant="captionMedium">
@@ -77,6 +91,15 @@ const MyPage: React.FC = () => {
           <StyledText $variant="headingL">{overiew?.days}</StyledText>
         </OverviewItem>
       </OverviewContainer>
+
+      <SectionHeader>
+        <StyledText $variant="bodyLargeBold">Practice History </StyledText>
+        <MoreBtn onClick={() => handleMoreBtnClick()} />
+      </SectionHeader>
+
+      {practiceHistory?.map((item) => (
+        <HistorySentenceItem key={item.id} {...item} />
+      ))}
       <NavBar />
     </Container>
   );

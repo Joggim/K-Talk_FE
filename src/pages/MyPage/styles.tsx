@@ -84,3 +84,10 @@ export const OverviewTitleText = styled(StyledText)`
   color: ${({ theme }) => theme.colors.text.tertiary};
   text-align: center;
 `;
+
+export const SectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+`;
