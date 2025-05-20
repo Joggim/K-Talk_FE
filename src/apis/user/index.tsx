@@ -5,4 +5,7 @@ export const getUserInfoApi = () =>
   newRequest.get<GetUserInfoResponse>(`/api/user`, {});
 
 export const getUserLearningHistoryApi = () =>
-  newRequest.get<GetUserLearningHistoryResponse>(`/api/learning/history`, {});
+  newRequest.get<GetUserLearningHistoryResponse>(
+    `/api/user/learing-history`,
+    {}
+  );

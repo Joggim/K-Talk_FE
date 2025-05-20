@@ -19,6 +19,7 @@ const getGapBySize = (size: string) => {
 export const TextContainer = styled.div<TextContainerProps>`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: ${({ size }) => getGapBySize(size)}px; // gap을 props로 받음
 `;
 
