@@ -1,4 +1,4 @@
-import { SentMessageProps as ApiSentMessageProps } from '../../../apis/talkbot/dto';
+import { SentMessageProps as ApiSentMessageProps } from '../../../apis/chat/dto';
 import React from 'react';
 
 export interface SentMessageProps extends ApiSentMessageProps {

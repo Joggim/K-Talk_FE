@@ -4,7 +4,7 @@ import { BaseSuccessResponse } from '../util/dto';
 //request
 export type GoolgeLoginRequest = GoogleLogin;
 //response
-export type GoogleLoginResponse = BaseSuccessResponse<GoogleLoginData>;
+export type GoogleLoginResponse = BaseSuccessResponse<GoogleLoginResponseData>;
 
 export type TokenRefreshResponse =
   BaseSuccessResponse<TokenRefreshResponseData>;
@@ -13,7 +13,7 @@ export interface GoogleLogin {
   token: string;
 }
 
-export interface GoogleLoginData {
+export interface GoogleLoginResponseData {
   accessToken: string;
   refreshToken: string;
 }

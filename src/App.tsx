@@ -16,7 +16,12 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
 
-  if (!accessToken || !refreshToken) {
+  if (
+    !accessToken ||
+    !refreshToken ||
+    accessToken === 'undefined' ||
+    refreshToken === 'undefined'
+  ) {
     return <Navigate to="/login" />;
   }
 

@@ -19,14 +19,14 @@ import Microphone from '../../components/Icons/Microphone';
 import Pause from '../../components/Icons/Pause';
 import Setting from '../../components/Icons/Setting';
 import theme from '../../styles/theme';
-import { MessageData, SentMessageProps } from '../../apis/talkbot/dto';
+import { MessageData, SentMessageProps } from '../../apis/chat/dto';
 import { StyledText } from '../../components/StyledText/StyledText.styles';
 import {
   getMessageListApi,
   postSTTApi,
   getFeedbackApi,
   postChatReplyApi,
-} from '../../apis/talkbot';
+} from '../../apis/chat';
 
 const TalkBotPage: React.FC = () => {
   const firstLoadRef = useRef(true);
