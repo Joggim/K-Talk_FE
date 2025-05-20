@@ -67,14 +67,11 @@ export const FeedbackText = styled(StyledText)`
 `;
 
 export const Korean = styled.div`
-  //position: absolute;
-  //bottom: 150px;
   display: flex;
   width: auto;
   max-width: 90%;
   text-align: center;
   gap: 2px;
-  //margin: 60px 0;
   word-wrap: break-word;
   word-break: break-all;
   overflow: hidden;

@@ -1,22 +1,5 @@
 import styled, { keyframes, css } from 'styled-components';
 
-import { StyledText } from '../../../components/StyledText/styles';
-
-const bubbleSlideIn = keyframes`
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) scale(0.8);
-  }
-  60% {
-    opacity: 0.8;
-    transform: translateX(10%) scale(1.05);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0%) scale(1);
-  }
-`;
-
 const fadeInUp = keyframes`
   0% {
     opacity: 0;
@@ -48,10 +31,6 @@ export const MessageContainer = styled.div<{ $isNew?: boolean }>`
     css`
       animation: ${fadeInUp} 0.4s ease-out;
       transform-origin: bottom center;
-      /*
-      animation: {bubbleSlideIn} 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-      transform-origin: right center;
-      */
     `};
 `;
 
