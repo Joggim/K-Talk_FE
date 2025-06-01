@@ -86,9 +86,10 @@ const CustomTrainingOverviewPage: React.FC = () => {
               >
                 {item.title}
               </IssueTitle>
-              <IssueScoreBadge>
+              {/*<IssueScoreBadge>
                 <span>{item.accuracy}%</span>
               </IssueScoreBadge>
+              */}
             </IssueHeader>
             <SentenceList>
               <SentenceSectionHeader>
