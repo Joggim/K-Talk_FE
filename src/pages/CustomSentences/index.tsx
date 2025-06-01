@@ -62,9 +62,11 @@ const CustomSentencesPage: React.FC = () => {
           >
             {issueDetail?.title}
           </IssueTitle>
+          {/*    
           <IssueScoreBadge>
             <span>{issueDetail?.accuracy ?? 0}%</span>
           </IssueScoreBadge>
+          */}
         </HeaderSection>
 
         <ErrorLogSummaryCard onClick={handleWrongButtonClick}>

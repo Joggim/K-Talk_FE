@@ -74,7 +74,7 @@ const MyPage: React.FC = () => {
         </StyledText>
       )}
 
-      <OverviewContainer>
+      {/*<OverviewContainer>
         <OverviewItem>
           <OverviewTitleText $variant="captionMedium">
             Sentences Practiced
@@ -93,7 +93,7 @@ const MyPage: React.FC = () => {
           </OverviewTitleText>
           <StyledText $variant="headingL">{overiew?.days}</StyledText>
         </OverviewItem>
-      </OverviewContainer>
+      </OverviewContainer>*/}
 
       <SectionHeader>
         <StyledText $variant="bodyLargeBold">Practice History </StyledText>
