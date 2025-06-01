@@ -35,18 +35,21 @@ interface CharSpanProps {
   $isSpace?: boolean;
   $isFeedback?: boolean;
   $isPractice?: boolean;
+  $isOmitted?: boolean;
 }
 
 export const CharSpan = styled(StyledText)<CharSpanProps>`
   display: inline-block;
-  color: ${({ $isFeedback, $isError, $isPractice, theme }) =>
+  color: ${({ $isFeedback, $isError, $isPractice, $isOmitted, theme }) =>
     !$isFeedback
       ? $isPractice
         ? theme.colors.text.tertiary
         : theme.colors.text.primary
-      : $isError
-        ? theme.colors.state.error
-        : theme.colors.state.success};
+      : $isOmitted
+        ? theme.colors.text.tertiary
+        : $isError
+          ? theme.colors.state.error
+          : theme.colors.state.success};
 
   ${({ $isSpace }) =>
     $isSpace &&
@@ -55,5 +58,5 @@ export const CharSpan = styled(StyledText)<CharSpanProps>`
     font-size: iherit;
     line-height: inherit;
     letter-spacing: inherit;
-  `}
+  `};
 `;

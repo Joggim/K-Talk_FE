@@ -52,7 +52,12 @@ const ErrorItem: React.FC<ErrorItemProps> = ({
           <HighlightedText
             correct={userText}
             isFeedback
-            errors={errors}
+            errors={
+              errors?.map(({ character, index }) => ({
+                char: character,
+                index,
+              })) ?? []
+            }
             size="headingM"
           />
           <StyledText

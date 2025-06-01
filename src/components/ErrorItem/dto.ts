@@ -6,7 +6,7 @@ export interface ErrorItemProps {
   userText: string;
   userIpa: string;
   errors: {
-    char: string;
+    character: string;
     index: number;
   }[];
 }
