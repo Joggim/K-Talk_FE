@@ -18,11 +18,15 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
       {words.map((word, wordIndex) => {
         const wordChars = word.split('');
         const wordSpans = wordChars.map((char) => {
+          const error = errors.find((error) => error.index === globalIndex);
           const isError = errors.some((error) => error.index === globalIndex);
+          const isOmitted = error?.wrong === ' ' || error?.wrong === ''; // 정답 글자가 '' → 사용자가 발음 안 한 경우
+
           const span = (
             <CharSpan
               key={globalIndex}
               $isError={isError}
+              $isOmitted={isOmitted}
               $isFeedback={isFeedback}
               $isPractice={isPractice}
               $isSpace={false}

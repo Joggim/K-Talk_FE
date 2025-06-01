@@ -213,8 +213,9 @@ const PracticePage: React.FC = () => {
                 correct={sentence.korean}
                 isFeedback={feedback ? true : false}
                 errors={feedback?.pronunciationErrors.map(
-                  ({ correct, index }) => ({
+                  ({ correct, wrong, index }) => ({
                     char: correct,
+                    wrong: wrong,
                     index,
                   })
                 )}

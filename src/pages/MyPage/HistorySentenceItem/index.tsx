@@ -14,6 +14,7 @@ const HistorySentenceItem: React.FC<LearningHistory> = ({
   const errors =
     pronunciationErrors?.map((e) => ({
       char: e.correct,
+      wrong: e.wrong,
       index: e.index,
     })) ?? [];
 
