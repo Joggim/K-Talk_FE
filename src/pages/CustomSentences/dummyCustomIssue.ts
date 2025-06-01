@@ -1,28 +1,8 @@
 export const dummyPronunciationIssue = {
   id: 1,
-  title: 'Difficulty pronouncing tense sounds (ㄲ, ㅃ, ㅉ)',
+  title: 'Difficulty pronouncing tense sounds (ㄲ)',
   accuracy: 35,
   totalErrorLogCount: 12,
-  errorLogs: [
-    {
-      errorId: 101,
-      translation: 'Dad took out the red flower vase.',
-      correctText: '아빠가 빨간 꽃병을 꺼냈어요.',
-      correctIpa: '[ap͈aga p͈algɐn k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
-      userText: '아바가 발간 꽃병을 꺼냈어요.',
-      userIpa: '[abaga pargan k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
-      timestamp: '2025-05-17T10:33:00Z',
-    },
-    {
-      errorId: 102,
-      translation: 'Dad took out the red flower vase.',
-      correctText: '아빠가 빨간 꽃병을 꺼냈어요.',
-      correctIpa: '[ap͈aga p͈algɐn k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
-      userText: '아바가 발간 꽃병을 꺼냈어요.',
-      userIpa: '[abaga pargan k͈o̞p̚pjʌŋɯl kkʌnɛsʌjo]',
-      timestamp: '2025-05-17T10:33:00Z',
-    },
-  ],
   recommendSentences: [
     {
       id: 11,
@@ -55,26 +35,6 @@ export const dummyPronunciationIssue = {
       audioUrl: '',
       ipa: '',
       isPassed: null,
-    },
-    {
-      id: 15,
-      korean: '리모컨을 눌러서 TV를 켰어요.',
-      translation: 'I pressed the remote control to turn on the TV.',
-    },
-    {
-      id: 16,
-      korean: '달리기가 끝난 후 물을 마셨어요.',
-      translation: 'I drank water after finishing the run.',
-    },
-    {
-      id: 17,
-      korean: '리모컨을 눌러서 TV를 켰어요.',
-      translation: 'I pressed the remote control to turn on the TV.',
-    },
-    {
-      id: 18,
-      korean: '달리기가 끝난 후 물을 마셨어요.',
-      translation: 'I drank water after finishing the run.',
     },
   ],
 };

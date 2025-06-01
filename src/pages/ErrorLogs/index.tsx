@@ -14,7 +14,8 @@ import { ErrorItemProps } from '../../components/ErrorItem/dto';
 import { StyledText } from '../../components/StyledText/styles';
 import theme from '../../styles/theme';
 import Info from '../../components/Icons/Info';
-import { dummyErrorLogList } from './dummyErrorLogList';
+import { getErrorLogsApi } from '../../apis/pronunciationIssue';
+//import { dummyErrorLogList } from './dummyErrorLogList';
 
 const ErrorLogsPage: React.FC = () => {
   const { issueId } = useParams<{ issueId: string }>();
@@ -26,8 +27,18 @@ const ErrorLogsPage: React.FC = () => {
     if (!issueId) return;
 
     try {
-      setErrorCount(dummyErrorLogList.totalErrorLogCount);
-      setErrorLogList(dummyErrorLogList.errorLogs);
+      const response = await getErrorLogsApi(Number(issueId));
+      if (response.success) {
+        setErrorCount(response.data.totalErrorLogCount);
+        const errorItems: ErrorItemProps[] = response.data.errorLogs.map(
+          (log) => ({
+            ...log,
+            errors: log.error ? [log.error] : [], // errors가 undefined일 경우 빈 배열
+          })
+        );
+
+        setErrorLogList(errorItems);
+      }
     } catch (error) {
       console.error('Error fetching error log list:', error);
     }

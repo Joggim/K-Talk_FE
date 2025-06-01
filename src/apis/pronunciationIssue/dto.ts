@@ -7,6 +7,8 @@ export type GetPronunciationIssueListResponse = BaseSuccessResponse<
 export type GetPronunciationIssueDetailResponse =
   BaseSuccessResponse<PronunciationIssueDetail>;
 
+export type GetErrorLogsResponse = BaseSuccessResponse<ErrorLogs>;
+
 export interface PronunciationIssue {
   id: number;
   title: string;
@@ -24,11 +26,16 @@ export interface PronunciationIssueDetail {
 }
 
 export interface ErrorLog {
-  errorId: number;
-  korean: string;
+  id: number;
   translation: string;
-  correctIpa: string;
-  userIpa: string;
   correctText: string; // 정답 전체 문장
+  correctIpa: string;
   userText: string; // 사용자의 발음 추정 전체 문장
+  userIpa: string;
+  errors: { character: string; index: number };
+}
+
+export interface ErrorLogs {
+  totalErrorLogCount: number;
+  errorLogs: ErrorLog[];
 }

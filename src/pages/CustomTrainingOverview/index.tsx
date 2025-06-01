@@ -15,7 +15,6 @@ import {
 import TopBar from '../../components/TopBar';
 import NavBar from '../../components/NavBar';
 import MoreBtn from '../../components/MoreBtn';
-import ArrowRight from '../../components/Icons/ArrowRight';
 import { StyledText } from '../../components/StyledText/styles';
 import theme from '../../styles/theme';
 import { useSetRecoilState } from 'recoil';
