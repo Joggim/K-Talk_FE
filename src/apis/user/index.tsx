@@ -6,6 +6,6 @@ export const getUserInfoApi = () =>
 
 export const getUserLearningHistoryApi = () =>
   newRequest.get<GetUserLearningHistoryResponse>(
-    `/api/user/learing-history`,
+    `/api/user/learning-history`,
     {}
   );

@@ -32,7 +32,7 @@ export interface ErrorLog {
   correctIpa: string;
   userText: string; // 사용자의 발음 추정 전체 문장
   userIpa: string;
-  errors: { character: string; index: number };
+  error: { character: string; index: number };
 }
 
 export interface ErrorLogs {
