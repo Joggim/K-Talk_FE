@@ -32,7 +32,10 @@ import { useRecoilValue } from 'recoil';
 import { sentenceListState } from '../../recoil/atoms/sentenceListAtom';
 import { SentenceItemDTO } from '../../apis/topics/dto';
 import { FeedbackResponseData } from '../../apis/sentences/dto';
-import { postSentenceFeedbackApi } from '../../apis/sentences';
+import {
+  postSentenceAudioApi,
+  postSentenceFeedbackApi,
+} from '../../apis/sentences';
 
 const PracticePage: React.FC = () => {
   const location = useLocation();
@@ -53,9 +56,28 @@ const PracticePage: React.FC = () => {
     if (found) setSentence(found);
   };
 
+  const postSentenceAudio = async (sentenceId: number) => {
+    try {
+      const response = await postSentenceAudioApi(sentenceId);
+      if (response.success) {
+        setSentence((prev) =>
+          prev ? { ...prev, audioUrl: response.data.audioUrl } : prev
+        );
+      }
+    } catch (error) {
+      console.error('문장 오디오를 불러오는 데 실패했습니다:', error);
+    }
+  };
+
   useEffect(() => {
     getSentence();
   }, [sentenceId]);
+
+  useEffect(() => {
+    if (sentence && !sentence.audioUrl) {
+      postSentenceAudio(sentence.id);
+    }
+  }, [sentence]);
 
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState<string | null>(null);

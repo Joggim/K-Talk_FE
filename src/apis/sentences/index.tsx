@@ -1,10 +1,11 @@
 import { newRequest } from '../util';
-import { FeedbackResponse } from './dto';
+import { PostSentenceAudioResponse, FeedbackResponse } from './dto';
 
-/*
-export const getSentenceApi = (sentenceId: number) =>
-  newRequest.get<GetSentenceResponse>(`/api/sentences/${sentenceId}`, {});
-*/
+export const postSentenceAudioApi = (sentenceId: number) =>
+  newRequest.post<PostSentenceAudioResponse>(
+    `/api/sentences/${sentenceId}/audio`,
+    {}
+  );
 
 export const postSentenceFeedbackApi = (
   sentenceId: number,

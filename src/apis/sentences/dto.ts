@@ -1,17 +1,8 @@
 import { BaseSuccessResponse } from '../util/dto';
 
-//export type GetSentenceResponse = BaseSuccessResponse<GetSentenceData>;
+export type PostSentenceAudioResponse =
+  BaseSuccessResponse<PostSentenceAudioData>;
 export type FeedbackResponse = BaseSuccessResponse<FeedbackResponseData>;
-
-/*
-export interface GetSentenceData {
-  id: number;
-  korean: string;
-  translation: string;
-  audioUrl: string;
-  ipa?: string;
-}
-*/
 
 export interface PronunciationError {
   wrong: string;
@@ -25,4 +16,8 @@ export interface FeedbackResponseData {
   userText: string;
   userIpa?: string;
   pronunciationErrors: PronunciationError[];
+}
+
+export interface PostSentenceAudioData {
+  audioUrl: string;
 }
