@@ -13,10 +13,10 @@
 ## ✨ 주요 기능
 
 - 구글 로그인 기반 사용자 인증
-- 학습 주제 탐색 및 문장 연습
+- 학습 주제 및 문장 조회
 - 실시간 발음 평가 및 피드백
 - 사용자 맞춤 발음 분석 대시보드
-- 챗봇 기반 자유 회화 및 교정 기능
+- 챗봇 기반 자유 회화 및 문법 교정 기능
 
 <br>
 
@@ -28,7 +28,7 @@
 | 프레임워크 | React (CRA 기반)                 |
 | 상태관리 | Recoil                             |
 | 스타일링 | styled-components + theme.ts        |
-| 요청 | Axios, RESR API 기반 통신        |
+| 요청 | Axios, REST API 기반 통신        |
 | 음성 기능 | Web Audio API (녹음), HTML5 Audio (재생)    |
 | 기타 | react-router-dom, react-icons 등       |
 
@@ -91,19 +91,20 @@ yarn dev
 
 <br>
 
-## 📌 주요 페이지
+## 📌 페이지 설명
 
 | 페이지 | 설명 |
 |--------|------|
-| Home | 서비스 소개 및 진입 페이지 |
 | Login | Google OAuth2 기반 로그인 |
+| Home | 메인 화면, 문장 연습 및 맞춤 학습 진입 |
 | Topics | 학습 주제 목록 조회 및 선택 |
-| Sentences | 선택한 주제의 문장 학습 목록 |
-| Practice | 문장 단위 음성 녹음 및 발음 평가 수행 |
-| MyPage | 나의 학습 기록, 발음 오류 히스토리 |
-| TalkBot | 자유 대화형 챗봇 및 문법 교정 기능 |
-| CustomSentences | 사용자의 주요 발음 오류 유형 기반 맞춤 문장 학습 |
-| ErrorLogs | 발음 오류 유형별 기록 확인 |
+| Sentences | 선택한 주제의 문장 리스트 표시 및 선택 |
+| Practice | 문장 녹음 및 발음 피드백 제공 |
+| TalkBot | 자유 대화형 챗봇 및 문법 교정 |
+| MyPage | 나의 발음 학습 기록 확인 |
+| CustomTrainingOverview | 사용자의 주요 발음 오류 유형 요약 및 분석 대시보드 |
+| CustomSentences | 발음 오류 유형별 맞춤 문장 추천 |
+| ErrorLogs | 사용자가 해당 발음 오류 유형을 실수한 과거 발음 기록 확인 |
 
 <br>
 
